@@ -5,6 +5,7 @@ Types Of Routes [
     event
     order
     catagory
+    img
 ]
 _________________________________________
 

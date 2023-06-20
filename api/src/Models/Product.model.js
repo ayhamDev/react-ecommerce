@@ -16,10 +16,18 @@ const Schema = new mongoose.Schema(
     },
     size: {
       type: Array,
+      default: "",
       required: true,
     },
     catagory: { type: mongoose.Schema.Types.ObjectId, ref: "catagory" },
-    images: { type: String, required: true },
+    image: {
+      type: [
+        {
+          type: String,
+        },
+      ],
+      required: true,
+    },
   },
   { timeseries: true, timestamps: true }
 );

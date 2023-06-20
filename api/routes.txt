@@ -3,7 +3,8 @@ Types Of Routes [
     user
     auth
     event
-    deal
+    order
+    catagory
 ]
 _________________________________________
 
@@ -33,6 +34,10 @@ _________________________________________
     - get a single order
         /order/:id
 
+    - get all Catagories
+        /catagory
+
+
 =============================================
 
 { POST }
@@ -50,6 +55,9 @@ _________________________________________
 
     - create new order 
         /order
+        
+    - create new catagory
+        /catagory
 
 =============================================
 
@@ -63,6 +71,9 @@ _________________________________________
 
     - Update Event Or deals 
         /event/:id
+
+    - Update a single catagory
+        /catagory/:id
 
 =============================================
 
@@ -82,5 +93,8 @@ _________________________________________
 
     - cancel an order 
         /order/:id
+
+    - delete a single catagory
+        /catagory/:id
 
 

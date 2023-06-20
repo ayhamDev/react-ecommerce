@@ -8,6 +8,7 @@ import EventRouter from "./Router/Event.js";
 import OrderRouter from "./Router/Order.js";
 import UserRouter from "./Router/User.js";
 import AuthRouter from "./Router/Auth.js";
+import CatagoryRouter from "./Router/Catagory.js";
 
 // Config
 dotenv.config();
@@ -21,6 +22,7 @@ app.use("/event", EventRouter);
 app.use("/order", OrderRouter);
 app.use("/user", UserRouter);
 app.use("/auth", AuthRouter);
+app.use("/catagory", CatagoryRouter);
 
 // Defualt route
 app.get("/", (req, res) => {

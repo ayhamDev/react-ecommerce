@@ -2,7 +2,6 @@ Types Of Routes [
     product 
     user
     auth
-    event
     order
     catagory
     img
@@ -22,12 +21,6 @@ _________________________________________
 
     - get a single Users
         /user/:id
-
-    - get all Event Or deals 
-        /event
-
-    - get a single Event Or deals 
-        /event/:id
 
     - get all orders 
         /order
@@ -51,8 +44,7 @@ _________________________________________
     - Login New User 
         /auth/login
     
-    - add New Event Or deals 
-        /event
+
 
     - create new order 
         /order
@@ -70,8 +62,6 @@ _________________________________________
     - Update a single User
         /user/:id
 
-    - Update Event Or deals 
-        /event/:id
 
     - Update a single catagory
         /catagory/:id
@@ -88,9 +78,6 @@ _________________________________________
 
     - Delete a single User
         /product/:id
-
-    - Delete Event Or deals 
-        /event/:id
 
     - cancel an order 
         /order/:id

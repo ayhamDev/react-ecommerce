@@ -17,6 +17,10 @@ const app = express();
 const PORT = process.env.PORT || 5500;
 
 // API Routes
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 app.use("/product", ProductRouter);
 app.use("/event", EventRouter);
 app.use("/order", OrderRouter);

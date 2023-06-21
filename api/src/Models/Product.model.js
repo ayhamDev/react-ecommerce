@@ -11,12 +11,7 @@ const Schema = new mongoose.Schema(
       required: true,
     },
     price: {
-      type: Array,
-      required: true,
-    },
-    size: {
-      type: Array,
-      default: "",
+      type: Number,
       required: true,
     },
     catagory: { type: mongoose.Schema.Types.ObjectId, ref: "catagory" },

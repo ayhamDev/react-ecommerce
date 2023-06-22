@@ -14,4 +14,4 @@ const Schema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("catagory", Schema);
+export default mongoose.model("img", Schema);

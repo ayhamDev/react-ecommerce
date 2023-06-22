@@ -17,7 +17,7 @@ Router.post(
   body("address.lineTwo").isString(),
   (req, res) => {
     const results = validationResult(req);
-    if (!results.isEmpty()) return res.send(results.array());
+    if (!results.isEmpty()) return res.json(results.array());
     bcrypt
       .hash(req.body.password, 10)
       .then((HashedPassword) => {
@@ -69,7 +69,7 @@ Router.post(
   body("password").isStrongPassword(),
   async (req, res) => {
     const results = validationResult(req);
-    if (!results.isEmpty()) return res.send(results.array());
+    if (!results.isEmpty()) return res.json(results.array());
 
     const FoundUser = await User.findOne({ email: req.body.email });
     if (!FoundUser)

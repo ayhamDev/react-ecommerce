@@ -9,7 +9,7 @@
     "start": "node src/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "ayham",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.1.0",

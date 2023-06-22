@@ -10,21 +10,37 @@ const Schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
-      type: Number,
-      required: true,
-    },
-    catagory: { type: mongoose.Schema.Types.ObjectId, ref: "catagory" },
-    image: {
+    options: {
       type: [
         {
-          type: String,
+          name: {
+            type: String,
+            required: true,
+          },
+          price: {
+            type: Number,
+            required: true,
+          },
         },
       ],
       required: true,
     },
+    images: {
+      type: [
+        {
+          type: String,
+          required: true,
+        },
+      ],
+      required: true,
+    },
+    catagory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "catagory",
+      required: true,
+    },
   },
-  { timeseries: true, timestamps: true }
+  { timestamps: true }
 );
 
 export default mongoose.model("product", Schema);

@@ -10,7 +10,8 @@ _________________________________________
 
 { GET }
 
-    - get all products
+    - get all p
+    roducts
         /product
 
     - get a single product
@@ -86,3 +87,67 @@ _________________________________________
         /catagory/:id
 
 
+
+    {
+      resource: UserModel,
+      options: {
+        listProperties: ["name", "phoneNo", "email"],
+        sort: {
+          sortBy: "createdAt",
+          direction: "desc",
+        },
+      },
+    },
+    {
+      resource: CartModel,
+      options: {
+        listProperties: ["userId", "products", "updatedAt"],
+        sort: {
+          sortBy: "updatedAt",
+          direction: "desc",
+        },
+      },
+    },
+    {
+      resource: ProductModel,
+      options: {
+        listProperties: [
+          "title",
+          "catagory",
+          "options",
+          "createdAt",
+          "updatedAt",
+        ],
+        properties: {
+          description: {
+            type: "textarea",
+            props: {
+              rows: 8,
+            },
+          },
+        },
+        sort: {
+          sortBy: "updatedAt",
+          direction: "desc",
+        },
+      },
+    },
+    {
+      resource: CatagoryModel,
+      options: {
+        sort: {
+          sortBy: "updatedAt",
+          direction: "desc",
+        },
+      },
+    },
+    {
+      resource: OrderModel,
+      options: {
+        listProperties: ["userId"],
+        sort: {
+          sortBy: "updatedAt",
+          direction: "desc",
+        },
+      },
+    },

@@ -18,9 +18,13 @@ const Schema = new mongoose.Schema(
         },
       },
     ],
-    status: {
+    amount: {
       type: Number,
-      default: 0,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["Canceled", "Pending", "Shipping", "compoleted"],
     },
   },
   { timestamps: true }

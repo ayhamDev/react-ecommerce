@@ -1,6 +1,8 @@
 import express from "express";
 import CatagoryModel from "../Models/Catagory.model.js";
 import { body, validationResult } from "express-validator";
+import IsAuthenticated from "../middleware/IsAuthenticated.js";
+import IsAdmin from "../middleware/IsAdmin.js";
 const Router = express.Router();
 
 Router.get("/", async (req, res) => {

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export default function IsAuthenticated(req, res, next) {
+export default function IsAdmin(req, res, next) {
   const bearerHeader = req.headers.authorization;
   if (!bearerHeader || !bearerHeader?.split(" ")[1])
     return res.status(403).json({ msg: "not authorized." });
@@ -9,7 +9,9 @@ export default function IsAuthenticated(req, res, next) {
   try {
     const IsVerified = jwt.verify(Token, process.env.JWT_SECRET);
     if (!IsVerified) return res.status(403).json({ msg: "jwt is invaild" });
-    req.user = jwt.decode(Token);
+    const User = jwt.decode(Token);
+    if (!User.IsAdmin) return res.status(403).json({ msg: "not admin." });
+    req.admin = User;
     next();
   } catch (e) {
     return res.status(403).json({ msg: e });

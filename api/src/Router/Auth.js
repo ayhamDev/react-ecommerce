@@ -41,8 +41,9 @@ Router.post(
             UserCart.save()
               .then(() => {
                 const AccessToken = Jwt.sign(
-                  { userId: user.id, email: user.email },
-                  process.env.JWT_SECRET
+                  { userId: user.id, email: user.email, admin: false },
+                  process.env.JWT_SECRET,
+                  { expiresIn: "3d" }
                 );
                 res.status(201).json({
                   User: NewUser,
@@ -82,8 +83,9 @@ Router.post(
       if (err) return res.status(400).json(err);
       if (!same) return res.status(400).json({ msg: "Incorrect Password." });
       const AccessToken = Jwt.sign(
-        { userId: FoundUser.id, email: FoundUser.email },
-        process.env.JWT_SECRET
+        { userId: FoundUser.id, email: FoundUser.email, admin: false },
+        process.env.JWT_SECRET,
+        { expiresIn: "3d" }
       );
       res.status(201).json({
         User: FoundUser,

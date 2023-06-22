@@ -17,8 +17,8 @@ const PORT = process.env.PORT || 5500;
 
 // API Routes
 
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use("/product", ProductRouter);
 app.use("/order", OrderRouter);
@@ -28,9 +28,8 @@ app.use("/catagory", CatagoryRouter);
 
 // Defualt route
 app.get("/", (req, res) => {
-  res.send("Welcome To The Api.");
+  res.send("Welcome");
 });
-
 app.listen(PORT, () => {
   console.log(`Running at http://localhost:${PORT}`);
 });

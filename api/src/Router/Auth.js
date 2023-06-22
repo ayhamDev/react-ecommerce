@@ -41,13 +41,14 @@ Router.post(
             UserCart.save()
               .then(() => {
                 const AccessToken = Jwt.sign(
-                  { userId: user.id, email: user.email, admin: false },
+                  { userId: user.id, admin: false },
                   process.env.JWT_SECRET,
-                  { expiresIn: "3d" }
+                  { expiresIn: "1d" }
                 );
                 res.status(201).json({
                   User: NewUser,
                   AccessToken,
+                  admin: false,
                 });
               })
               .catch((err) => {
@@ -83,13 +84,14 @@ Router.post(
       if (err) return res.status(400).json(err);
       if (!same) return res.status(400).json({ msg: "Incorrect Password." });
       const AccessToken = Jwt.sign(
-        { userId: FoundUser.id, email: FoundUser.email, admin: false },
+        { userId: FoundUser.id, admin: false },
         process.env.JWT_SECRET,
-        { expiresIn: "3d" }
+        { expiresIn: "1d" }
       );
       res.status(201).json({
         User: FoundUser,
         AccessToken,
+        admin: false,
       });
     });
   }

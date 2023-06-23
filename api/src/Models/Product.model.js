@@ -28,7 +28,8 @@ const Schema = new mongoose.Schema(
     images: {
       type: [
         {
-          type: String,
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "image",
           required: true,
         },
       ],

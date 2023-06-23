@@ -1,16 +1,88 @@
 import express from "express";
-import ProductModel from "../Models/Product.model.js";
-import { body } from "express-validator";
+import Product from "../Models/Product.model.js";
+import { body, validationResult } from "express-validator";
+import mongoose from "mongoose";
 const Router = express.Router();
 
 Router.get("/", async (req, res) => {
-  res.json(await ProductModel.find());
+  res.json(await Product.find());
 });
 
 Router.get("/:id", async (req, res) => {
-  res.json(await ProductModel.findById(req.params.id));
+  res.json(await Product.findById(req.params.id));
 });
+Router.delete("/:id", async (req, res) => {
+  try {
+    const DeletedProduct = await Product.findByIdAndDelete(req.params.id);
+    res.json(DeletedProduct);
+  } catch (err) {
+    res.status(401).json(err);
+  }
+});
+Router.put(
+  "/:id",
+  body("title").isString(),
+  body("description").isString(),
+  body("options").isArray(),
+  body("catagory").isString(),
+  async (req, res) => {
+    const results = validationResult(req);
+    if (!results.isEmpty()) return res.status(400).json(results.array());
+    try {
+      const updatedProduct = await Product.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: {
+            title: req.body.title,
+            description: req.body.description,
+            options: req.body.options.map((option) => {
+              return { name: option.name, price: option.price };
+            }),
+            catagory: req.body.catagory,
+            images: req.body.images.map((img) => {
+              return img;
+            }),
+          },
+        },
+        { new: true }
+      );
 
-Router.post("/", async (req, res) => {});
+      res.json(updatedProduct);
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  }
+);
+
+Router.post(
+  "/",
+  body("title").isString(),
+  body("description").isString(),
+  body("options").isArray(),
+  body("catagory").isString(),
+  body("images").isArray(),
+  async (req, res) => {
+    const results = validationResult(req);
+    if (!results.isEmpty()) return res.status(400).json(results.array());
+    const NewProduct = new Product({
+      title: req.body.title,
+      description: req.body.description,
+      options: req.body.options.map((option) => {
+        return { name: option.name, price: option.price };
+      }),
+      catagory: req.body.catagory,
+      images: req.body.images.map((img) => {
+        return img;
+      }),
+    });
+    NewProduct.save()
+      .then((Product) => {
+        res.json(Product);
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
+  }
+);
 
 export default Router;

@@ -25,7 +25,10 @@ Router.put(
         {
           $set: {
             products: req.body.products.map((product) => {
-              return { productId: product.id, quantity: product.quantity };
+              return {
+                productId: product.productId,
+                quantity: product.quantity,
+              };
             }),
           },
         },

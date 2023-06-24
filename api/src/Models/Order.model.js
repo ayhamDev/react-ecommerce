@@ -25,7 +25,7 @@ const Schema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Canceled", "Pending", "Accepted", "Shipping", "completed"],
+      enum: ["Canceled", "Pending", "Accepted", "Shipping", "Completed"],
     },
   },
   { timestamps: true }

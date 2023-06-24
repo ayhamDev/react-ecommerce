@@ -13,7 +13,7 @@ const OrderStatus = [
   "Pending",
   "Accepted",
   "Shipping",
-  "completed",
+  "Completed",
 ];
 
 Router.get("/", IsAdmin, async (req, res) => {
@@ -94,16 +94,17 @@ Router.put(
     if (!OrderStatus.includes(req.body.status))
       return res.status(400).json({ msg: "invaild Order Status" });
     try {
-      const UpdatedOrder = await Order.findByIdAndUpdate(
-        req.params.orderId,
-        {
-          $set: {
-            status: req.body.status,
-          },
-        },
-        { new: true }
-      );
-      res.json(UpdatedOrder);
+      const UserOrder = await Order.findById(req.params.orderId);
+      if (UserOrder.status == "Canceled")
+        return res.status(400).json({ msg: "This Order is Canceled" });
+      UserOrder.status = req.body.status;
+      UserOrder.save()
+        .then((UpdatedOrder) => {
+          res.json(UpdatedOrder);
+        })
+        .catch((err) => {
+          res.json(err);
+        });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -155,4 +156,19 @@ Router.put(
       });
   }
 );
+Router.delete("/:orderId", IsAuthenticated, async (req, res) => {
+  const UserOrder = await Order.findById(req.params.orderId);
+  if (UserOrder.userId.toString() !== req.user.id)
+    return res.status(403).json({ msg: "Not Authorized" });
+  if (UserOrder.status !== "Pending")
+    return res.status(403).json({ msg: "Cant Cancel This Order" });
+  UserOrder.status = "Canceled";
+  UserOrder.save()
+    .then(() => {
+      res.json({ msg: "Order Canceled" });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
 export default Router;

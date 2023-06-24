@@ -44,8 +44,6 @@ _________________________________________
 
     - Login New User 
         /auth/login
-    
-
 
     - create new order 
         /order

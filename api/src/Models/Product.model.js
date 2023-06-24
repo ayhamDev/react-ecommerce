@@ -10,19 +10,8 @@ const Schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    options: {
-      type: [
-        {
-          name: {
-            type: String,
-            required: true,
-          },
-          price: {
-            type: Number,
-            required: true,
-          },
-        },
-      ],
+    price: {
+      type: Number,
       required: true,
     },
     images: {

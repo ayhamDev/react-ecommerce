@@ -12,6 +12,7 @@ export default async function IsAuthenticated(req, res, next) {
     const IsVerified = jwt.verify(Token, process.env.JWT_SECRET);
     if (!IsVerified) return res.status(403).json({ msg: "jwt is invaild" });
     const DecodedToken = jwt.decode(Token);
+    if (DecodedToken.admin) return next();
     try {
       req.user = await UserModel.findById(DecodedToken.userId);
       next();

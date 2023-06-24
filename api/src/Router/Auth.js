@@ -101,4 +101,26 @@ Router.post(
     });
   }
 );
+Router.post(
+  "/admin",
+  body("email").isEmail(),
+  body("password").isString(),
+  (req, res) => {
+    if (
+      process.env.ADMIN_EMAIL !== req.body.email &&
+      process.env.ADMIN_PASSWORD !== req.body.password
+    )
+      return res.status(403).json({ msg: "Incorrect Email or Password" });
+    const AccessToken = Jwt.sign(
+      { email: process.env.ADMIN_EMAIL, admin: true },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+    res.status(201).json({
+      User: { email: process.env.ADMIN_EMAIL },
+      AccessToken,
+      admin: true,
+    });
+  }
+);
 export default Router;

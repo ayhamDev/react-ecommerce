@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const Schema = new mongoose.Schema(
   {
     userId: {
+      required: true,
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
@@ -24,7 +25,7 @@ const Schema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Canceled", "Pending", "Shipping", "compoleted"],
+      enum: ["Canceled", "Pending", "Accepted", "Shipping", "completed"],
     },
   },
   { timestamps: true }

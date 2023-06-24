@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-
+import dotenv from "dotenv";
+dotenv.config();
 export default function IsAdmin(req, res, next) {
   const bearerHeader = req.headers.authorization;
   if (!bearerHeader || !bearerHeader?.split(" ")[1])
@@ -10,8 +11,8 @@ export default function IsAdmin(req, res, next) {
     const IsVerified = jwt.verify(Token, process.env.JWT_SECRET);
     if (!IsVerified) return res.status(403).json({ msg: "jwt is invaild" });
     const User = jwt.decode(Token);
-    if (!User.IsAdmin) return res.status(403).json({ msg: "not admin." });
-    req.admin = User;
+    if (!User.admin) return res.status(403).json({ msg: "not admin." });
+    req.user = User;
     next();
   } catch (e) {
     return res.status(403).json({ msg: e });

@@ -8,6 +8,7 @@ import ImageRouter from "./Router/Image.js";
 import OrderRouter from "./Router/Order.js";
 import UserRouter from "./Router/User.js";
 import AuthRouter from "./Router/Auth.js";
+import CartRouter from "./Router/Cart.js";
 import CatagoryRouter from "./Router/Catagory.js";
 
 import fs from "fs";
@@ -24,11 +25,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/product", ProductRouter);
-app.use("/image", ImageRouter);
+app.use("/cart", CartRouter);
 app.use("/order", OrderRouter);
 app.use("/user", UserRouter);
 app.use("/auth", AuthRouter);
 app.use("/catagory", CatagoryRouter);
+app.use("/image", ImageRouter);
 
 // Defualt route
 app.get("/", (req, res) => {

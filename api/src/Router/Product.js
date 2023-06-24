@@ -1,7 +1,9 @@
 import express from "express";
 import Product from "../Models/Product.model.js";
 import { body, validationResult } from "express-validator";
-import mongoose from "mongoose";
+import IsAdmin from "../middleware/IsAdmin.js";
+import dotenv from "dotenv";
+dotenv.config();
 const Router = express.Router();
 
 Router.get("/", async (req, res) => {
@@ -11,6 +13,8 @@ Router.get("/", async (req, res) => {
 Router.get("/:id", async (req, res) => {
   res.json(await Product.findById(req.params.id));
 });
+
+Router.use(IsAdmin);
 Router.delete("/:id", async (req, res) => {
   try {
     const DeletedProduct = await Product.findByIdAndDelete(req.params.id);

@@ -4,8 +4,13 @@ import Cart from "../Models/Cart.model.js";
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
+import dotenv from "dotenv";
+dotenv.config();
 const Router = express.Router();
 
+Router.post("/", (req, res) => {
+  res.send("fe");
+});
 Router.post(
   "/register",
   body("name").isString().isLength({ min: 3 }),

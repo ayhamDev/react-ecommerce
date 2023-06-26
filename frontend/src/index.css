@@ -1,0 +1,13 @@
+body,
+html,
+#root {
+  height: 100%;
+}
+* {
+  user-select: none;
+  user-zoom: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  padding: 0px;
+  margin: 0px;
+}

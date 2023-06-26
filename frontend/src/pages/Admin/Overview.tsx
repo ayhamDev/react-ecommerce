@@ -3,11 +3,7 @@ import { useLocation } from "react-router-dom";
 import Dashboard from "./Dashboard";
 
 const Overview = () => {
-  return (
-    <Dashboard>
-      <div>lorem</div>
-    </Dashboard>
-  );
+  return <div>lorem</div>;
 };
 
 export default Overview;

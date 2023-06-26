@@ -2,11 +2,7 @@ import React from "react";
 import Dashboard from "./Dashboard";
 
 const SendEmail = () => {
-  return (
-    <Dashboard>
-      <div> SendEmail </div>
-    </Dashboard>
-  );
+  return <div> SendEmail </div>;
 };
 
 export default SendEmail;

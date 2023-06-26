@@ -45,14 +45,14 @@ Router.post(
             });
             UserCart.save()
               .then(() => {
-                const AccessToken = Jwt.sign(
+                const accessToken = Jwt.sign(
                   { userId: user.id, admin: false },
                   process.env.JWT_SECRET,
                   { expiresIn: "1d" }
                 );
                 res.status(201).json({
                   User: NewUser,
-                  AccessToken,
+                  accessToken,
                   admin: false,
                 });
               })
@@ -88,14 +88,14 @@ Router.post(
     bcrypt.compare(req.body.password, FoundUser.password, (err, same) => {
       if (err) return res.status(400).json(err);
       if (!same) return res.status(400).json({ msg: "Incorrect Password." });
-      const AccessToken = Jwt.sign(
+      const accessToken = Jwt.sign(
         { userId: FoundUser.id, admin: false },
         process.env.JWT_SECRET,
         { expiresIn: "1d" }
       );
       res.status(201).json({
         User: FoundUser,
-        AccessToken,
+        accessToken,
         admin: false,
       });
     });
@@ -107,18 +107,18 @@ Router.post(
   body("password").isString(),
   (req, res) => {
     if (
-      process.env.ADMIN_EMAIL !== req.body.email &&
+      process.env.ADMIN_EMAIL !== req.body.email ||
       process.env.ADMIN_PASSWORD !== req.body.password
     )
       return res.status(403).json({ msg: "Incorrect Email or Password" });
-    const AccessToken = Jwt.sign(
+    const accessToken = Jwt.sign(
       { email: process.env.ADMIN_EMAIL, admin: true },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
     res.status(201).json({
       User: { email: process.env.ADMIN_EMAIL },
-      AccessToken,
+      accessToken,
       admin: true,
     });
   }

@@ -1,16 +1,38 @@
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { useRef } from "react";
+import { useRef, useState, FormEvent, useLayoutEffect } from "react";
+import axios from "axios";
 
-const Login = () => {
+import { useDispatch } from "react-redux";
+import { SetName } from "../../store/slice/Page";
+import { Login } from "../../store/slice/AdminAuthSlice";
+
+const LoginPage = () => {
   const Theme = useTheme();
+  const dispatch = useDispatch();
+  useLayoutEffect(() => {
+    dispatch(SetName("Admin Login"));
+  });
+  const [Error, SetError] = useState(undefined);
   const emailRef = useRef<null | HTMLInputElement>(null);
   const passwordRef = useRef<null | HTMLInputElement>(null);
-  const HandleSubmit = (e: Event) => {
+  const HandleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/auth/admin`, {
+        email,
+        password,
+      })
+      .then(function (response) {
+        SetError(undefined);
+        dispatch(Login(response.data));
+      })
+      .catch(function (error) {
+        if (error.response?.data?.msg) return SetError(error.response.data.msg);
+      });
   };
   return (
     <Box
@@ -80,6 +102,12 @@ const Login = () => {
               required
               fullWidth
             />
+            {Error ? (
+              <Typography variant="body2" color={"red"}>
+                {Error}
+              </Typography>
+            ) : null}
+
             <Button type="submit" variant="contained">
               log in
             </Button>
@@ -90,4 +118,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

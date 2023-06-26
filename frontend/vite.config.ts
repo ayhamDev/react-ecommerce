@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    fs: {
-      strict: false,
-    },
+    // fs: {
+    //   strict: false,
+    // },
   },
 });

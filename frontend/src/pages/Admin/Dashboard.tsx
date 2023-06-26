@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -21,14 +21,15 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import LogoutIcon from "@mui/icons-material/Logout";
 
 import isMobile from "is-mobile";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { AccountCircle, Settings } from "@mui/icons-material";
 import { Menu, MenuItem } from "@mui/material";
 
+import { useDispatch, useSelector } from "react-redux";
+import { LogOut } from "../../store/slice/AdminAuthSlice";
+import { RootState } from "../../store/Store";
 const drawerWidth = 240;
 
 interface Props {
@@ -80,22 +81,10 @@ export default function Dashboard(props: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const route = useLocation();
   const theme = useTheme();
-
-  const [RouteName, setRouteName] = useState(() => {
-    const SearchedItem =
-      ListItems.find((item) => {
-        return item.path === route.pathname;
-      }) != undefined
-        ? ListItems.find((item) => {
-            return item.path === route.pathname;
-          })
-        : CmsItems.find((item) => {
-            return item.path === route.pathname;
-          });
-    return SearchedItem?.text;
-  });
+  const RouteName = useSelector((state: RootState) => state.Page.value);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -134,6 +123,7 @@ export default function Dashboard(props: Props) {
             <ListItemButton
               onClick={() => {
                 navigate(item.path);
+                setMobileOpen(false);
               }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
@@ -163,6 +153,7 @@ export default function Dashboard(props: Props) {
             <ListItemButton
               onClick={() => {
                 navigate(item.path);
+                setMobileOpen(false);
               }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
@@ -231,8 +222,14 @@ export default function Dashboard(props: Props) {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>My Account</MenuItem>
-              <MenuItem onClick={handleClose}>LogOut</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose;
+                  dispatch(LogOut());
+                }}
+              >
+                LogOut
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>
@@ -283,11 +280,13 @@ export default function Dashboard(props: Props) {
           bgcolor: "#f3f3f3",
           flexGrow: 1,
           p: 3,
+          maxWidth: "100%",
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           height: "100%",
         }}
       >
         <Toolbar />
+
         {props.children}
       </Box>
     </Box>

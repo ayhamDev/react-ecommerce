@@ -7,14 +7,14 @@ dotenv.config();
 const Router = express.Router();
 
 Router.get("/", async (req, res) => {
-  res.json(await Product.find());
+  res.json(await Product.find().populate("catagory"));
 });
 
 Router.get("/:id", async (req, res) => {
   res.json(await Product.findById(req.params.id));
 });
 
-// Router.use(IsAdmin);
+Router.use(IsAdmin);
 Router.delete("/:id", async (req, res) => {
   try {
     const DeletedProduct = await Product.findByIdAndDelete(req.params.id);

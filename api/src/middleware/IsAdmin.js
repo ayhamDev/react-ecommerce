@@ -7,6 +7,7 @@ export default function IsAdmin(req, res, next) {
     return res.status(403).json({ msg: "not authorized." });
 
   const Token = bearerHeader.split(" ")[1];
+
   try {
     const IsVerified = jwt.verify(Token, process.env.JWT_SECRET);
     if (!IsVerified) return res.status(403).json({ msg: "jwt is invaild" });

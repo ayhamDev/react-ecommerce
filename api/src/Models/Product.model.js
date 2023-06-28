@@ -14,16 +14,7 @@ const Schema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    images: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "image",
-          required: true,
-        },
-      ],
-      required: true,
-    },
+    images: [],
     catagory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "catagory",

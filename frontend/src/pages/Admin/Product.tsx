@@ -86,11 +86,11 @@ const Product = () => {
         rows={rows}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
+            paginationModel: { page: 0, pageSize: 10 },
           },
         }}
         density="comfortable"
-        pageSizeOptions={[5, 10, 25, 50, 100]}
+        pageSizeOptions={[10, 25, 50, 100]}
         slots={{
           toolbar: ToolbarContainer,
         }}

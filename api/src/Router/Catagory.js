@@ -1,5 +1,6 @@
 import express from "express";
 import CatagoryModel from "../Models/Catagory.model.js";
+import Product from "../Models/Product.model.js";
 import { body, validationResult } from "express-validator";
 import IsAdmin from "../middleware/IsAdmin.js";
 import dotenv from "dotenv";
@@ -13,7 +14,7 @@ Router.get("/:id", async (req, res) => {
   res.json(await CatagoryModel.findById(req.params.id));
 });
 
-Router.use(IsAdmin);
+// Router.use(IsAdmin);
 Router.post("/", body("name").isString(), async (req, res) => {
   const results = validationResult(req);
   if (!results.isEmpty()) return res.json(results.array());

@@ -1,8 +1,10 @@
-import express from "express";
+import express, { json } from "express";
 import IsAdmin from "../middleware/IsAdmin.js";
 import ImageModel from "../Models/Image.model.js";
 import multer from "multer";
 import dotenv from "dotenv";
+import ProductModel from "../Models/Product.model.js";
+import mongoose from "mongoose";
 dotenv.config();
 const imageTypes = ["image/jpeg", "image/png"];
 
@@ -23,6 +25,7 @@ Router.get("/:id", async (req, res) => {
 });
 
 Router.post("/", IsAdmin, upload.single("image"), (req, res) => {
+  if (!req.file) return res.status(400).json({ msg: "undefind file" });
   if (!imageTypes.includes(req.file.mimetype))
     return res.status(400).json({ msg: "invaild Image Format" });
   const NewImage = new ImageModel(req.file);
@@ -35,10 +38,10 @@ Router.post("/", IsAdmin, upload.single("image"), (req, res) => {
     });
 });
 
-Router.delete("/:id", IsAdmin, upload.single("image"), async (req, res) => {
+Router.delete("/:id", IsAdmin, async (req, res) => {
   try {
-    const NewImage = await ImageModel.findByIdAndDelete(req.params.id);
-    return res.json({ id: NewImage.id });
+    const deletedImage = await ImageModel.findByIdAndDelete(req.params.id);
+    return res.json({ id: deletedImage.id });
   } catch (err) {
     return res.status(400).json(err);
   }

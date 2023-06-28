@@ -69,7 +69,12 @@ const OrderPage = () => {
     },
   ];
   return (
-    <Paper elevation={2}>
+    <Paper
+      elevation={2}
+      sx={{
+        maxWidth: "100%",
+      }}
+    >
       <DataGrid
         sx={{
           border: 0,

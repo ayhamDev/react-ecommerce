@@ -61,7 +61,13 @@ const UserPage = () => {
     },
   ];
   return (
-    <Paper elevation={2}>
+    <Paper
+      elevation={2}
+      sx={{
+        maxWidth: "100%",
+        marginBottom: Theme.spacing(2),
+      }}
+    >
       <DataGrid
         sx={{
           border: 0,

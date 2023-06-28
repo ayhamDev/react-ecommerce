@@ -1,7 +1,5 @@
-import axios from "axios";
+import api from "./API";
 
 export default function GetProducts() {
-  return axios
-    .get(`${import.meta.env.VITE_API_URL}/product`)
-    .then((res) => res.data);
+  return api.get(`/product`).then((res) => res.data);
 }

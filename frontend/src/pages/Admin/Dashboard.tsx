@@ -277,12 +277,16 @@ export default function Dashboard(props: Props) {
       <Box
         component="main"
         sx={{
-          bgcolor: "#f3f3f3",
           flexGrow: 1,
-          p: 3,
+          overflow: "auto",
+          bgcolor: theme.palette.grey[100],
+          p: {
+            xs: 2,
+            sm: 4,
+          },
           maxWidth: "100%",
+          maxHeight: "100%",
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          height: "100%",
         }}
       >
         <Toolbar />

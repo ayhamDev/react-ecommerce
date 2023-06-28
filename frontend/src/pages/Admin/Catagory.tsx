@@ -53,7 +53,12 @@ const CatagoryPage = () => {
     },
   ];
   return (
-    <Paper elevation={2}>
+    <Paper
+      elevation={2}
+      sx={{
+        marginBottom: Theme.spacing(2),
+      }}
+    >
       <DataGrid
         sx={{
           border: 0,

@@ -11,7 +11,15 @@ Router.get("/", async (req, res) => {
 });
 
 Router.get("/:id", async (req, res) => {
-  res.json(await Product.findById(req.params.id));
+  try {
+    const FondProduct = await Product.findById(req.params.id).populate(
+      "catagory"
+    );
+    res.json(FondProduct);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
 });
 
 Router.use(IsAdmin);
@@ -29,6 +37,7 @@ Router.put(
   body("description").isString(),
   body("price").isNumeric(),
   body("catagory").isString(),
+  body("images").isArray(),
   async (req, res) => {
     const results = validationResult(req);
     if (!results.isEmpty()) return res.status(400).json(results.array());

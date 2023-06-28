@@ -1,10 +1,8 @@
-import axios from "axios";
+import api from "./API";
 
 export default function GetOrder(token: string | undefined) {
-  console.log(token);
-
-  return axios
-    .get(`${import.meta.env.VITE_API_URL}/user`, {
+  return api
+    .get(`/user`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

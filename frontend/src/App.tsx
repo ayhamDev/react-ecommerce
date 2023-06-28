@@ -112,6 +112,7 @@ const App = () => {
       >
         <Route path="/admin/login" element={<Login />} />
       </Route>
+      <Route path="*" element={<h1>404</h1>}></Route>
     </Routes>
   );
 };

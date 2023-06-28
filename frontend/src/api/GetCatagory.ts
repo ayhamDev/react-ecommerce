@@ -1,7 +1,5 @@
-import axios from "axios";
+import api from "./API";
 
 export default function GetCatagory() {
-  return axios
-    .get(`${import.meta.env.VITE_API_URL}/catagory`)
-    .then((res) => res.data);
+  return api.get(`/catagory`).then((res) => res.data);
 }

@@ -21,18 +21,16 @@ import {
   Select,
   SelectChangeEvent,
   Button,
-  NativeSelect,
   IconButton,
 } from "@mui/material";
 import CircularProgressWithLabel from "../../../components/CircularProgressWithLabel";
 import GetProduct from "../../../api/GetProduct";
 import { useQuery } from "@tanstack/react-query";
-import GetCatagory from "../../../api/GetCatagory";
+import GetCatagory from "../../../api/GetCatagories";
 import { useSelector } from "react-redux";
 import api from "../../../api/API";
 import { RootState } from "../../../store/Store";
-import isMobile from "is-mobile";
-import { Clear, CloudUpload } from "@mui/icons-material";
+import { Clear, CloudUpload, Description } from "@mui/icons-material";
 type ImageUploadLoading = {
   url: string;
   isLoading: boolean;
@@ -41,12 +39,11 @@ type ImageUploadLoading = {
   urlID?: string;
   file?: object;
 };
-const ProductDetails = () => {
-  const { id } = useParams();
+const ProductCreate = () => {
   const dispacth = useDispatch();
   const navigate = useNavigate();
   useLayoutEffect(() => {
-    dispacth(SetName("Product Details"));
+    dispacth(SetName("Create Product"));
   });
   const FileTypes = ["image/png", "image/jpg", "image/jpeg"];
 
@@ -67,22 +64,42 @@ const ProductDetails = () => {
   const [ProgressValue, SetProgressValue] = useState({});
   const [Drag, SetDrag] = useState(false);
   const [SelectedCatagory, SetSelectedCatagory] = useState<string | undefined>(
-    undefined
+    ""
   );
-  const [TitleState, SetTitleState] = useState<string>("loading...");
-  const [descriptionState, SetDescriptionState] =
-    useState<string>("loading...");
-  const [priceState, SetPriceState] = useState<string>("loading...");
+  const [TitleState, SetTitleState] = useState<string>("");
 
+  const [descriptionState, SetDescriptionState] = useState<string>("");
+
+  const [priceState, SetPriceState] = useState<number>(0);
+  const [TitleError, SetTitleError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
+  const [DescriptionError, SetDescriptionError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
+  const [PriceError, SetPriceError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
+  const [SelectCatagoryError, SetSelectCatagoryError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
   // Quarys
-  const { status, error, data } = useQuery({
-    queryKey: ["product", id],
-    queryFn: () => GetProduct(id),
-  });
-  const { data: CatagoryData } = useQuery({
-    queryKey: ["catagory"],
-    queryFn: GetCatagory,
-  });
 
   const CatagoryChangeHandler = (event: SelectChangeEvent) => {
     SetSelectedCatagory(event.target.value);
@@ -95,27 +112,22 @@ const ProductDetails = () => {
       SetCopied(false);
     }
   };
+  const { data: CatagoryData } = useQuery({
+    queryKey: ["catagory"],
+    queryFn: GetCatagory,
+  });
 
   const UpdateProductHandler = async () => {
     SetIsUpdating(true);
-    console.log({
-      TitleState,
-      descriptionState,
-      priceState,
-      SelectedCatagory,
-      ImageLoading,
-    });
     let images_id: string[] | [] = ImageLoading.map((img) => {
       if (!img.urlID) return;
       return img.urlID;
     });
     images_id = images_id.filter((img) => img !== undefined);
     if (ImageLoading.length == 0) {
-      console.log(ImageLoading);
-
       try {
-        await api.put(
-          `/product/${id}`,
+        await api.post(
+          `/product`,
           {
             title: TitleState,
             description: descriptionState,
@@ -141,8 +153,26 @@ const ProductDetails = () => {
             console.log(err);
           }
         });
-        navigate("/admin/cms/product");
+        navigate("/admin/product");
       } catch (err) {
+        TitleState.length == 0
+          ? SetTitleError({ error: true, text: "This Field Is Required." })
+          : null;
+        descriptionState.length == 0
+          ? SetDescriptionError({
+              error: true,
+              text: "This Field Is Required.",
+            })
+          : null;
+        priceState <= 0
+          ? SetPriceError({ error: true, text: "This Field Is Required." })
+          : null;
+        SelectedCatagory?.length == 0
+          ? SetSelectCatagoryError({
+              error: true,
+              text: "This Field Is Required.",
+            })
+          : null;
         console.log(err);
       }
     }
@@ -150,8 +180,8 @@ const ProductDetails = () => {
       const file = ImageLoading.find((img) => img.file != undefined);
       if (!file) {
         try {
-          await api.put(
-            `/product/${id}`,
+          await api.post(
+            `/product`,
             {
               title: TitleState,
               description: descriptionState,
@@ -177,9 +207,27 @@ const ProductDetails = () => {
             } catch (err) {
               console.log(err);
             }
-            navigate("/admin/cms/product");
           });
+          navigate("/admin/product");
         } catch (err) {
+          TitleState.length == 0
+            ? SetTitleError({ error: true, text: "This Field Is Required." })
+            : null;
+          descriptionState.length == 0
+            ? SetDescriptionError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          priceState <= 0
+            ? SetPriceError({ error: true, text: "This Field Is Required." })
+            : null;
+          SelectedCatagory?.length == 0
+            ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
           console.log(err);
         }
       }
@@ -210,8 +258,8 @@ const ProductDetails = () => {
             });
             if (index == ImageLoading.length - 1) {
               try {
-                await api.put(
-                  `/product/${id}`,
+                await api.post(
+                  `/product`,
                   {
                     title: TitleState,
                     description: descriptionState,
@@ -227,13 +275,55 @@ const ProductDetails = () => {
                     },
                   }
                 );
-                navigate("/admin/cms/product");
+                navigate("/admin/product");
               } catch (err) {
+                TitleState.length == 0
+                  ? SetTitleError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
+                descriptionState.length == 0
+                  ? SetDescriptionError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
+                priceState <= 0
+                  ? SetPriceError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
+                SelectedCatagory?.length == 0
+                  ? SetSelectCatagoryError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
                 console.log(err);
               }
             }
           }
         } catch (err) {
+          TitleState.length == 0
+            ? SetTitleError({ error: true, text: "This Field Is Required." })
+            : null;
+          descriptionState.length == 0
+            ? SetDescriptionError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          priceState <= 0
+            ? SetPriceError({ error: true, text: "This Field Is Required." })
+            : null;
+          SelectedCatagory?.length == 0
+            ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
           console.log(err);
         }
       }
@@ -255,27 +345,6 @@ const ProductDetails = () => {
     };
   };
 
-  useEffect(() => {
-    SetTitleState(data?.title);
-    SetDescriptionState(data?.description);
-    SetPriceState(data?.price);
-    SetSelectedCatagory(data?.catagory._id);
-    SetImageLoading([]);
-
-    data?.images.forEach((image) => {
-      SetImageLoading((prev) => [
-        ...prev,
-        {
-          id: Math.floor(Date.now() + Math.random() * 1000),
-          isLoading: false,
-          progress: 100,
-          url: `${import.meta.env.VITE_API_URL}/image/${image}`,
-          urlID: image,
-        },
-      ]);
-    });
-  }, [data]);
-
   const HandleDelete = async (id, urlID, isLoading) => {
     ImageLoading.forEach((img, index) => {
       if (img.id === id) {
@@ -286,8 +355,6 @@ const ProductDetails = () => {
     });
   };
 
-  if (status == "loading") return <div>loading...</div>;
-  if (status == "error") return <div>{JSON.stringify(error)}</div>;
   return (
     <Box>
       <Box
@@ -313,48 +380,6 @@ const ProductDetails = () => {
               flexDirection={"column"}
               gap={Theme.spacing(4)}
             >
-              <Typography
-                variant="h6"
-                component={"h6"}
-                display={"flex"}
-                alignItems={"center"}
-                flexWrap={"wrap"}
-                sx={{
-                  fontSize: {
-                    xs: "0.85rem",
-                    md: "1.25rem",
-                  },
-                  justifyContent: {
-                    xs: "center",
-                    md: "start",
-                  },
-                }}
-              >
-                <Box>Product ID: </Box>
-                <Box
-                  ref={ProductIdElementRef}
-                  onClick={async () => {
-                    console.log(ProductIdElementRef.current?.textContent);
-
-                    navigator.clipboard
-                      .writeText(ProductIdElementRef.current?.textContent)
-                      .then(() => {
-                        SetCopied(true);
-                      });
-                  }}
-                  sx={{
-                    userSelect: "none",
-                    cursor: "pointer",
-                    marginLeft: Theme.spacing(1),
-                    paddingX: Theme.spacing(2),
-                    paddingY: Theme.spacing(1),
-                    bgcolor: Theme.palette.grey[300],
-                    borderRadius: "24px",
-                  }}
-                >
-                  {id}
-                </Box>
-              </Typography>
               <TextField
                 id="titleRef"
                 name="title"
@@ -365,18 +390,21 @@ const ProductDetails = () => {
                 autoFocus
                 fullWidth
                 required
+                error={TitleError.error}
+                helperText={TitleError.text}
               />
               <TextField
                 id="description"
                 name="description"
                 label="Description"
                 variant="outlined"
-                value={descriptionState}
                 onChange={(e) => SetDescriptionState(e.target.value)}
                 fullWidth
                 required
                 multiline
                 rows={5}
+                error={DescriptionError.error}
+                helperText={DescriptionError.text}
               />
               <TextField
                 id="price"
@@ -384,10 +412,11 @@ const ProductDetails = () => {
                 type="number"
                 label="Price (In Cents)"
                 variant="outlined"
-                value={priceState}
                 onChange={(e) => SetPriceState(e.target.value)}
                 fullWidth
                 required
+                error={PriceError.error}
+                helperText={PriceError.text}
               />
               <FormControl fullWidth required>
                 <InputLabel id="select-catagory">Catagory</InputLabel>
@@ -396,8 +425,9 @@ const ProductDetails = () => {
                   labelId="select-catagory"
                   id="catagory"
                   label="Catagory"
-                  value={SelectedCatagory || data?.catagory._id}
+                  value={SelectedCatagory}
                   onChange={CatagoryChangeHandler}
+                  error={SelectCatagoryError.error}
                   MenuProps={{
                     PaperProps: {
                       sx: {
@@ -586,18 +616,18 @@ const ProductDetails = () => {
         gap={Theme.spacing(2)}
       >
         <Button
-          onClick={() => navigate("/admin/cms/product/")}
+          onClick={() => navigate("/admin/product/")}
           variant="outlined"
           disabled={isUpdating}
         >
           Cancel
         </Button>
         <Button onClick={UpdateProductHandler} variant="contained">
-          Update
+          Create
         </Button>
       </Box>
     </Box>
   );
 };
 
-export default ProductDetails;
+export default ProductCreate;

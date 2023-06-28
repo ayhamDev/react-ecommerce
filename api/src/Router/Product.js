@@ -1,5 +1,6 @@
 import express from "express";
 import Product from "../Models/Product.model.js";
+import ImageModel from "../Models/Image.model.js";
 import { body, validationResult } from "express-validator";
 import IsAdmin from "../middleware/IsAdmin.js";
 import dotenv from "dotenv";
@@ -26,6 +27,7 @@ Router.use(IsAdmin);
 Router.delete("/:id", async (req, res) => {
   try {
     const DeletedProduct = await Product.findByIdAndDelete(req.params.id);
+
     res.json(DeletedProduct);
   } catch (err) {
     res.status(401).json(err);
@@ -33,8 +35,8 @@ Router.delete("/:id", async (req, res) => {
 });
 Router.put(
   "/:id",
-  body("title").isString(),
-  body("description").isString(),
+  body("title").isString().isLength({ min: 1 }),
+  body("description").isString().isLength({ min: 1 }),
   body("price").isNumeric(),
   body("catagory").isString(),
   body("images").isArray(),
@@ -67,8 +69,8 @@ Router.put(
 
 Router.post(
   "/",
-  body("title").isString(),
-  body("description").isString(),
+  body("title").isString().isLength({ min: 1 }),
+  body("description").isString().isLength({ min: 1 }),
   body("price").isNumeric(),
   body("catagory").isString(),
   body("images").isArray(),

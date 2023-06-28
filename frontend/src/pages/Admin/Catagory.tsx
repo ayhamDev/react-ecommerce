@@ -7,8 +7,9 @@ import { useDispatch } from "react-redux";
 import { SetName } from "../../store/slice/Page";
 
 import ToolbarContainer from "../../components/Admin/CatagoryToolbar";
-import GetCatagory from "../../api/GetCatagory";
+import GetCatagory from "../../api/GetCatagories";
 import { useLayoutEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Catagory = {
   _id: string;
@@ -17,6 +18,7 @@ type Catagory = {
 };
 const CatagoryPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useLayoutEffect(() => {
     dispatch(SetName("Catagories"));
   });
@@ -63,6 +65,9 @@ const CatagoryPage = () => {
         sx={{
           border: 0,
           padding: Theme.spacing(2),
+        }}
+        onRowClick={(product) => {
+          navigate(product.id);
         }}
         columns={columns}
         rows={rows}

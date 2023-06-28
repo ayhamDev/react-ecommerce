@@ -1,16 +1,26 @@
 import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "./store/Store";
-import GuardedRoute from "./components/GuardedRoute";
-import Overview from "./pages/Admin/Overview";
-import SendEmail from "./pages/Admin/SendEmail";
-import Product from "./pages/Admin/Product";
-import Order from "./pages/Admin/Order";
-import Catagory from "./pages/Admin/Catagory";
-import User from "./pages/Admin/User";
-import Login from "./pages/Admin/Login";
-import Dashboard from "./pages/Admin/Dashboard";
-import ProductDetails from "./pages/Admin/Details/product";
+import loadable from "@loadable/component";
+import UserDetails from "./pages/Admin/Details/User";
+
+const GuardedRoute = loadable(() => import("./components/GuardedRoute"));
+const Overview = loadable(() => import("./pages/Admin/Overview"));
+const SendEmail = loadable(() => import("./pages/Admin/SendEmail"));
+const Product = loadable(() => import("./pages/Admin/Product"));
+const Order = loadable(() => import("./pages/Admin/Order"));
+const Catagory = loadable(() => import("./pages/Admin/Catagory"));
+const User = loadable(() => import("./pages/Admin/User"));
+const Login = loadable(() => import("./pages/Admin/Login"));
+const Dashboard = loadable(() => import("./pages/Admin/Dashboard"));
+
+const ProductDetails = loadable(() => import("./pages/Admin/Details/product"));
+const ProductCreate = loadable(() => import("./pages/Admin/Create/product"));
+
+const CatagoryDetails = loadable(
+  () => import("./pages/Admin/Details/Catagory")
+);
+const CatagoryCreate = loadable(() => import("./pages/Admin/create/Catagory"));
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth.value);
@@ -61,7 +71,7 @@ const App = () => {
         />
         {/* CMS */}
         <Route
-          path="/admin/cms/product"
+          path="/admin/product"
           element={
             <Dashboard>
               <Product />
@@ -69,15 +79,24 @@ const App = () => {
           }
         />
         <Route
-          path="/admin/cms/product/:id"
+          path="/admin/product/create"
+          element={
+            <Dashboard>
+              <ProductCreate />
+            </Dashboard>
+          }
+        />
+        <Route
+          path="/admin/product/:id"
           element={
             <Dashboard>
               <ProductDetails />
             </Dashboard>
           }
         />
+
         <Route
-          path="/admin/cms/catagory"
+          path="/admin/catagory"
           element={
             <Dashboard>
               <Catagory />
@@ -85,7 +104,23 @@ const App = () => {
           }
         />
         <Route
-          path="/admin/cms/order"
+          path="/admin/catagory/create"
+          element={
+            <Dashboard>
+              <CatagoryCreate />
+            </Dashboard>
+          }
+        />
+        <Route
+          path="/admin/catagory/:id"
+          element={
+            <Dashboard>
+              <CatagoryDetails />
+            </Dashboard>
+          }
+        />
+        <Route
+          path="/admin/order"
           element={
             <Dashboard>
               <Order />
@@ -93,10 +128,18 @@ const App = () => {
           }
         />
         <Route
-          path="/admin/cms/user"
+          path="/admin/user"
           element={
             <Dashboard>
               <User />
+            </Dashboard>
+          }
+        />
+        <Route
+          path="/admin/user/:id"
+          element={
+            <Dashboard>
+              <UserDetails />
             </Dashboard>
           }
         />

@@ -58,22 +58,22 @@ export default function Dashboard(props: Props) {
     {
       text: "Products",
       icon: <InventoryIcon />,
-      path: "/admin/cms/product",
+      path: "/admin/product",
     },
     {
       text: "Catagories",
       icon: <BookmarkIcon />,
-      path: "/admin/cms/catagory",
+      path: "/admin/catagory",
     },
     {
       text: "Orders",
       icon: <ShoppingCartIcon />,
-      path: "/admin/cms/order",
+      path: "/admin/order",
     },
     {
       text: "Users",
       icon: <AccountCircleIcon />,
-      path: "/admin/cms/user",
+      path: "/admin/user",
     },
   ];
 

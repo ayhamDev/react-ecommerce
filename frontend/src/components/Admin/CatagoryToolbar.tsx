@@ -5,7 +5,7 @@ const ToolbarContainer = () => {
     <CustomToolbar
       createBtn={true}
       createText="Create Catagory"
-      createPage="/admin/cms/catagory/create"
+      createPage="/admin/catagory/create"
     />
   );
 };

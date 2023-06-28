@@ -1,5 +1,5 @@
 import api from "./API";
 
-export default function GetCatagory() {
-  return api.get(`/catagory`).then((res) => res.data);
+export default function GetCatagory(id) {
+  return api.get(`/catagory/${id}`).then((res) => res.data);
 }

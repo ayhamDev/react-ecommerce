@@ -7,7 +7,7 @@ import {
 } from "react";
 import { useDispatch } from "react-redux";
 import { SetName } from "../../../store/slice/Page";
-import { useParams, useNavigate, Form } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -27,7 +27,7 @@ import {
 import CircularProgressWithLabel from "../../../components/CircularProgressWithLabel";
 import GetProduct from "../../../api/GetProduct";
 import { useQuery } from "@tanstack/react-query";
-import GetCatagory from "../../../api/GetCatagory";
+import GetCatagory from "../../../api/GetCatagories";
 import { useSelector } from "react-redux";
 import api from "../../../api/API";
 import { RootState } from "../../../store/Store";
@@ -72,7 +72,36 @@ const ProductDetails = () => {
   const [TitleState, SetTitleState] = useState<string>("loading...");
   const [descriptionState, SetDescriptionState] =
     useState<string>("loading...");
-  const [priceState, SetPriceState] = useState<string>("loading...");
+  const [priceState, SetPriceState] = useState<number>(0);
+
+  const [TitleError, SetTitleError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
+  const [DescriptionError, SetDescriptionError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
+  const [PriceError, SetPriceError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
+  const [SelectCatagoryError, SetSelectCatagoryError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
 
   // Quarys
   const { status, error, data } = useQuery({
@@ -95,7 +124,30 @@ const ProductDetails = () => {
       SetCopied(false);
     }
   };
-
+  const DeleteProductHandler = async () => {
+    try {
+      const result = await api.delete(`/product/${id}`, {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
+      });
+      Promise.all(
+        result.data.images.map(async (img) => {
+          return await api.delete(`/image/${img}`, {
+            headers: { Authorization: `Bearer ${auth.accessToken}` },
+          });
+        })
+      )
+        .then((value) => {
+          navigate("/admin/product");
+        })
+        .catch(() => {
+          navigate("/admin/product");
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const UpdateProductHandler = async () => {
     SetIsUpdating(true);
     console.log({
@@ -111,8 +163,6 @@ const ProductDetails = () => {
     });
     images_id = images_id.filter((img) => img !== undefined);
     if (ImageLoading.length == 0) {
-      console.log(ImageLoading);
-
       try {
         await api.put(
           `/product/${id}`,
@@ -141,8 +191,26 @@ const ProductDetails = () => {
             console.log(err);
           }
         });
-        navigate("/admin/cms/product");
+        navigate("/admin/product");
       } catch (err) {
+        TitleState.length == 0
+          ? SetTitleError({ error: true, text: "This Field Is Required." })
+          : null;
+        descriptionState.length == 0
+          ? SetDescriptionError({
+              error: true,
+              text: "This Field Is Required.",
+            })
+          : null;
+        priceState <= 0
+          ? SetPriceError({ error: true, text: "This Field Is Required." })
+          : null;
+        SelectedCatagory?.length == 0
+          ? SetSelectCatagoryError({
+              error: true,
+              text: "This Field Is Required.",
+            })
+          : null;
         console.log(err);
       }
     }
@@ -177,9 +245,27 @@ const ProductDetails = () => {
             } catch (err) {
               console.log(err);
             }
-            navigate("/admin/cms/product");
           });
+          navigate("/admin/product");
         } catch (err) {
+          TitleState.length == 0
+            ? SetTitleError({ error: true, text: "This Field Is Required." })
+            : null;
+          descriptionState.length == 0
+            ? SetDescriptionError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          priceState <= 0
+            ? SetPriceError({ error: true, text: "This Field Is Required." })
+            : null;
+          SelectedCatagory?.length == 0
+            ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
           console.log(err);
         }
       }
@@ -227,13 +313,55 @@ const ProductDetails = () => {
                     },
                   }
                 );
-                navigate("/admin/cms/product");
+                navigate("/admin/product");
               } catch (err) {
+                TitleState.length == 0
+                  ? SetTitleError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
+                descriptionState.length == 0
+                  ? SetDescriptionError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
+                priceState <= 0
+                  ? SetPriceError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
+                SelectedCatagory?.length == 0
+                  ? SetSelectCatagoryError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
                 console.log(err);
               }
             }
           }
         } catch (err) {
+          TitleState.length == 0
+            ? SetTitleError({ error: true, text: "This Field Is Required." })
+            : null;
+          descriptionState.length == 0
+            ? SetDescriptionError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          priceState <= 0
+            ? SetPriceError({ error: true, text: "This Field Is Required." })
+            : null;
+          SelectedCatagory?.length == 0
+            ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
           console.log(err);
         }
       }
@@ -285,9 +413,9 @@ const ProductDetails = () => {
       }
     });
   };
-
   if (status == "loading") return <div>loading...</div>;
-  if (status == "error") return <div>{JSON.stringify(error)}</div>;
+  if (data == null) return navigate("/admin/product");
+  if (status == "error") return navigate("/admin/product");
   return (
     <Box>
       <Box
@@ -334,8 +462,6 @@ const ProductDetails = () => {
                 <Box
                   ref={ProductIdElementRef}
                   onClick={async () => {
-                    console.log(ProductIdElementRef.current?.textContent);
-
                     navigator.clipboard
                       .writeText(ProductIdElementRef.current?.textContent)
                       .then(() => {
@@ -365,6 +491,8 @@ const ProductDetails = () => {
                 autoFocus
                 fullWidth
                 required
+                error={TitleError.error}
+                helperText={TitleError.text}
               />
               <TextField
                 id="description"
@@ -377,6 +505,8 @@ const ProductDetails = () => {
                 required
                 multiline
                 rows={5}
+                error={DescriptionError.error}
+                helperText={DescriptionError.text}
               />
               <TextField
                 id="price"
@@ -388,6 +518,8 @@ const ProductDetails = () => {
                 onChange={(e) => SetPriceState(e.target.value)}
                 fullWidth
                 required
+                error={PriceError.error}
+                helperText={PriceError.text}
               />
               <FormControl fullWidth required>
                 <InputLabel id="select-catagory">Catagory</InputLabel>
@@ -398,6 +530,7 @@ const ProductDetails = () => {
                   label="Catagory"
                   value={SelectedCatagory || data?.catagory._id}
                   onChange={CatagoryChangeHandler}
+                  error={SelectCatagoryError.error}
                   MenuProps={{
                     PaperProps: {
                       sx: {
@@ -586,11 +719,18 @@ const ProductDetails = () => {
         gap={Theme.spacing(2)}
       >
         <Button
-          onClick={() => navigate("/admin/cms/product/")}
+          onClick={() => navigate("/admin/product/")}
           variant="outlined"
           disabled={isUpdating}
         >
           Cancel
+        </Button>
+        <Button
+          onClick={DeleteProductHandler}
+          variant="contained"
+          color="error"
+        >
+          Delete
         </Button>
         <Button onClick={UpdateProductHandler} variant="contained">
           Update

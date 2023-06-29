@@ -34,7 +34,12 @@ interface GuardedRouteProps {
 const GuardedRoute = ({
   isRouteAccessible = false,
   redirectRoute = "/",
-}: GuardedRouteProps): JSX.Element =>
-  isRouteAccessible ? <Outlet /> : <Navigate to={redirectRoute} replace />;
+}: GuardedRouteProps): JSX.Element => {
+  return isRouteAccessible ? (
+    <Outlet />
+  ) : (
+    <Navigate to={redirectRoute} replace />
+  );
+};
 
 export default GuardedRoute;

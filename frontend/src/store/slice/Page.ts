@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface AuthState {
+export interface PageState {
   value: string;
 }
 
-const initialState: AuthState = {
+const initialState: PageState = {
   value: "home",
 };
 export const Page = createSlice({

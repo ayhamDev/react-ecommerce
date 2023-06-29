@@ -30,7 +30,12 @@ import GetCatagory from "../../../api/GetCatagories";
 import { useSelector } from "react-redux";
 import api from "../../../api/API";
 import { RootState } from "../../../store/Store";
-import { Clear, CloudUpload, Description } from "@mui/icons-material";
+import {
+  Clear,
+  CloudUpload,
+  Description,
+  SettingsSuggestOutlined,
+} from "@mui/icons-material";
 type ImageUploadLoading = {
   url: string;
   isLoading: boolean;
@@ -55,6 +60,8 @@ const ProductCreate = () => {
   const ProductIdElementRef = useRef<HTMLElement | null>(null);
   const inputFile = useRef<HTMLInputElement | null>(null);
   // States
+  const [SelectedAvailability, SetSelectedAvailability] = useState<number>();
+
   const [ImageRemoved, SetImageRemoved] = useState<string[]>([]);
   const [isUpdating, SetIsUpdating] = useState(false);
   const [ImageLoading, SetImageLoading] = useState<ImageUploadLoading[] | []>(
@@ -71,6 +78,7 @@ const ProductCreate = () => {
   const [descriptionState, SetDescriptionState] = useState<string>("");
 
   const [priceState, SetPriceState] = useState<number>(0);
+  const [UnitState, SetUnitState] = useState<string>("");
   const [TitleError, SetTitleError] = useState<{
     error: boolean;
     text: string;
@@ -99,8 +107,18 @@ const ProductCreate = () => {
     error: false,
     text: "",
   });
+  const [UnitStateError, SetUnitStateError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
   // Quarys
 
+  const AvailabilityChangeHandler = (event: SelectChangeEvent) => {
+    SetSelectedAvailability(event.target.value);
+  };
   const CatagoryChangeHandler = (event: SelectChangeEvent) => {
     SetSelectedCatagory(event.target.value);
   };
@@ -133,6 +151,8 @@ const ProductCreate = () => {
             description: descriptionState,
             price: priceState,
             catagory: SelectedCatagory,
+            availability: SelectedAvailability,
+            unit: UnitState,
             images: [],
           },
           {
@@ -173,6 +193,18 @@ const ProductCreate = () => {
               text: "This Field Is Required.",
             })
           : null;
+        ![0, 1].includes(SelectedAvailability)
+          ? SetSelectCatagoryError({
+              error: true,
+              text: "This Field Is Required.",
+            })
+          : null;
+        UnitState?.length == 0
+          ? SetUnitStateError({
+              error: true,
+              text: "This Field Is Required.",
+            })
+          : null;
         console.log(err);
       }
     }
@@ -187,6 +219,8 @@ const ProductCreate = () => {
               description: descriptionState,
               price: priceState,
               catagory: SelectedCatagory,
+              availability: SelectedAvailability,
+              unit: UnitState,
               images: images_id.map((img) => {
                 return img;
               }),
@@ -228,6 +262,18 @@ const ProductCreate = () => {
                 text: "This Field Is Required.",
               })
             : null;
+          ![0, 1].includes(SelectedAvailability)
+            ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          UnitState?.length == 0
+            ? SetUnitStateError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
           console.log(err);
         }
       }
@@ -265,6 +311,8 @@ const ProductCreate = () => {
                     description: descriptionState,
                     price: priceState,
                     catagory: SelectedCatagory,
+                    availability: SelectedAvailability,
+                    unit: UnitState,
                     images: images_id.map((img) => {
                       return img;
                     }),
@@ -301,6 +349,18 @@ const ProductCreate = () => {
                       text: "This Field Is Required.",
                     })
                   : null;
+                ![0, 1].includes(SelectedAvailability)
+                  ? SetSelectCatagoryError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
+                UnitState?.length == 0
+                  ? SetUnitStateError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
                 console.log(err);
               }
             }
@@ -320,6 +380,18 @@ const ProductCreate = () => {
             : null;
           SelectedCatagory?.length == 0
             ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          ![0, 1].includes(SelectedAvailability)
+            ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          UnitState?.length == 0
+            ? SetUnitStateError({
                 error: true,
                 text: "This Field Is Required.",
               })
@@ -398,6 +470,7 @@ const ProductCreate = () => {
                 name="description"
                 label="Description"
                 variant="outlined"
+                value={descriptionState}
                 onChange={(e) => SetDescriptionState(e.target.value)}
                 fullWidth
                 required
@@ -412,12 +485,50 @@ const ProductCreate = () => {
                 type="number"
                 label="Price (In Cents)"
                 variant="outlined"
-                onChange={(e) => SetPriceState(e.target.value)}
+                value={priceState}
+                onChange={(e) => SetPriceState(eval(e.target.value))}
                 fullWidth
                 required
                 error={PriceError.error}
                 helperText={PriceError.text}
               />
+              <TextField
+                id="Unit"
+                name="Unit"
+                label="Unit"
+                variant="outlined"
+                value={UnitState}
+                onChange={(e) => SetUnitState(e.target.value)}
+                fullWidth
+                required
+                error={UnitStateError.error}
+                helperText={UnitStateError.text}
+              />
+
+              <FormControl fullWidth required>
+                <InputLabel id="select-availability">availability</InputLabel>
+
+                <Select
+                  labelId="select-availability"
+                  id="availability"
+                  label="availability"
+                  value={SelectedAvailability}
+                  onChange={AvailabilityChangeHandler}
+                  error={SelectCatagoryError.error}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        maxHeight: "200px",
+                        overflowY: "auto",
+                      },
+                    },
+                  }}
+                  required
+                >
+                  <MenuItem value={1}>In Stock</MenuItem>
+                  <MenuItem value={0}>Out Of Stock</MenuItem>
+                </Select>
+              </FormControl>
               <FormControl fullWidth required>
                 <InputLabel id="select-catagory">Catagory</InputLabel>
 
@@ -536,7 +647,7 @@ const ProductCreate = () => {
               <CloudUpload sx={{ fontSize: "80px" }} />
               <Typography variant="subtitle2">
                 {Drag
-                  ? "Drop The Image Here"
+                  ? "! Drop The Image Here !"
                   : "Drag & Drop Here To Upload Images"}
               </Typography>
             </Box>
@@ -616,7 +727,7 @@ const ProductCreate = () => {
         gap={Theme.spacing(2)}
       >
         <Button
-          onClick={() => navigate("/admin/product/")}
+          onClick={() => navigate("/admin/product")}
           variant="outlined"
           disabled={isUpdating}
         >

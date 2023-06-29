@@ -7,39 +7,51 @@ import { useSelector, useDispatch } from "react-redux";
 import { SetName } from "../../store/slice/Page";
 import type { RootState } from "../../store/Store";
 import ToolbarContainer from "../../components/Admin/OrderToolbar";
-import GetOrder from "../../api/GetOrder";
+import GetOrders from "../../api/GetOrders";
+import { useNavigate } from "react-router-dom";
+import { LogOut } from "../../store/slice/AdminAuthSlice";
+import CalculateAmount from "../../utils/CalculateAmount";
+import GetSettings from "../../api/GetSettings";
 
 type Order = {
   _id: string;
   userId: string;
   amount: number;
   status: string;
+  products: { productId: object; quantity: number }[];
   createdAt: string;
   updatedAt: string;
 };
 const OrderPage = () => {
   const auth = useSelector((state: RootState) => state.adminAuth.value);
-  const dispacth = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   useLayoutEffect(() => {
-    dispacth(SetName("Orders"));
+    dispatch(SetName("Orders"));
   });
   const { status, error, data } = useQuery({
     queryKey: ["order"],
     enabled: auth.accessToken != undefined,
-    queryFn: () => GetOrder(auth.accessToken),
+    queryFn: () => GetOrders(auth.accessToken),
   });
+
   const Theme = useTheme();
+
   if (status == "loading") return <div>Loading...</div>;
-  if (status == "error") return <div>{JSON.stringify(error)}</div>;
-  const rows = data?.map((order: Order) => {
-    return {
-      id: order._id,
-      userId: order.userId,
-      amount: order.amount,
-      status: order.status,
-      createdAt: order.updatedAt,
-    };
-  });
+  if (status == "error") return <div>loading...</div>;
+  const rows =
+    data && typeof data.map == "function"
+      ? data?.map((order: Order) => {
+          return {
+            id: order._id,
+            userId: order.userId,
+            amount: order.amount,
+            status: order.status,
+            amount: order.amount.Total,
+            createdAt: order.createdAt,
+          };
+        })
+      : [];
 
   const columns = [
     {
@@ -79,6 +91,9 @@ const OrderPage = () => {
         sx={{
           border: 0,
           padding: Theme.spacing(2),
+        }}
+        onRowClick={(order) => {
+          navigate(`/admin/order/${order.row.userId}/${order.id}`);
         }}
         columns={columns}
         rows={rows}

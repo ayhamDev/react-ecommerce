@@ -1,11 +1,8 @@
 import api from "./API";
 
-export default function GetOrder(
-  token: string | undefined,
-  id: string | undefined
-) {
+export default function GetOrders(token: string | undefined) {
   return api
-    .get(`/user/${id}`, {
+    .get(`/order`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

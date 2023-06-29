@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "./store/Store";
 import loadable from "@loadable/component";
-import UserDetails from "./pages/Admin/Details/User";
 
 const GuardedRoute = loadable(() => import("./components/GuardedRoute"));
 const Overview = loadable(() => import("./pages/Admin/Overview"));
@@ -21,6 +20,11 @@ const CatagoryDetails = loadable(
   () => import("./pages/Admin/Details/Catagory")
 );
 const CatagoryCreate = loadable(() => import("./pages/Admin/create/Catagory"));
+
+const UserDetails = loadable(() => import("./pages/Admin/Details/User"));
+const OrderDetails = loadable(() => import("./pages/Admin/Details/order"));
+
+const Settings = loadable(() => import("./pages/Admin/Settings"));
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth.value);
@@ -128,6 +132,14 @@ const App = () => {
           }
         />
         <Route
+          path="/admin/order/:userId/:orderId"
+          element={
+            <Dashboard>
+              <OrderDetails />
+            </Dashboard>
+          }
+        />
+        <Route
           path="/admin/user"
           element={
             <Dashboard>
@@ -140,6 +152,14 @@ const App = () => {
           element={
             <Dashboard>
               <UserDetails />
+            </Dashboard>
+          }
+        />
+        <Route
+          path="/admin/settings"
+          element={
+            <Dashboard>
+              <Settings />
             </Dashboard>
           }
         />

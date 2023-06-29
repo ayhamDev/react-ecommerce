@@ -58,6 +58,7 @@ const ProductDetails = () => {
   const ProductIdElementRef = useRef<HTMLElement | null>(null);
   const inputFile = useRef<HTMLInputElement | null>(null);
   // States
+  const [SelectedAvailability, SetSelectedAvailability] = useState<number>(0);
   const [ImageRemoved, SetImageRemoved] = useState<string[]>([]);
   const [isUpdating, SetIsUpdating] = useState(false);
   const [ImageLoading, SetImageLoading] = useState<ImageUploadLoading[] | []>(
@@ -73,6 +74,7 @@ const ProductDetails = () => {
   const [descriptionState, SetDescriptionState] =
     useState<string>("loading...");
   const [priceState, SetPriceState] = useState<number>(0);
+  const [UnitState, SetUnitState] = useState<string>("");
 
   const [TitleError, SetTitleError] = useState<{
     error: boolean;
@@ -95,7 +97,21 @@ const ProductDetails = () => {
     error: false,
     text: "",
   });
+  const [SelectedAvailabilityError, SetSelectedAvailabilityError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
   const [SelectCatagoryError, SetSelectCatagoryError] = useState<{
+    error: boolean;
+    text: string;
+  }>({
+    error: false,
+    text: "",
+  });
+  const [UnitStateError, SetUnitStateError] = useState<{
     error: boolean;
     text: string;
   }>({
@@ -112,7 +128,9 @@ const ProductDetails = () => {
     queryKey: ["catagory"],
     queryFn: GetCatagory,
   });
-
+  const AvailabilityChangeHandler = (event: SelectChangeEvent) => {
+    SetSelectedAvailability(event.target.value);
+  };
   const CatagoryChangeHandler = (event: SelectChangeEvent) => {
     SetSelectedCatagory(event.target.value);
   };
@@ -150,13 +168,6 @@ const ProductDetails = () => {
   };
   const UpdateProductHandler = async () => {
     SetIsUpdating(true);
-    console.log({
-      TitleState,
-      descriptionState,
-      priceState,
-      SelectedCatagory,
-      ImageLoading,
-    });
     let images_id: string[] | [] = ImageLoading.map((img) => {
       if (!img.urlID) return;
       return img.urlID;
@@ -171,6 +182,8 @@ const ProductDetails = () => {
             description: descriptionState,
             price: priceState,
             catagory: SelectedCatagory,
+            availability: SelectedAvailability,
+            unit: UnitState,
             images: [],
           },
           {
@@ -211,6 +224,18 @@ const ProductDetails = () => {
               text: "This Field Is Required.",
             })
           : null;
+        ![0, 1].includes(SelectedAvailability)
+          ? SetSelectCatagoryError({
+              error: true,
+              text: "This Field Is Required.",
+            })
+          : null;
+        UnitState?.length == 0
+          ? SetUnitStateError({
+              error: true,
+              text: "This Field Is Required.",
+            })
+          : null;
         console.log(err);
       }
     }
@@ -225,6 +250,8 @@ const ProductDetails = () => {
               description: descriptionState,
               price: priceState,
               catagory: SelectedCatagory,
+              availability: SelectedAvailability,
+              unit: UnitState,
               images: images_id.map((img) => {
                 return img;
               }),
@@ -266,6 +293,18 @@ const ProductDetails = () => {
                 text: "This Field Is Required.",
               })
             : null;
+          ![0, 1].includes(SelectedAvailability)
+            ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          UnitState?.length == 0
+            ? SetUnitStateError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
           console.log(err);
         }
       }
@@ -303,6 +342,7 @@ const ProductDetails = () => {
                     description: descriptionState,
                     price: priceState,
                     catagory: SelectedCatagory,
+                    unit: UnitState,
                     images: images_id.map((img) => {
                       return img;
                     }),
@@ -339,6 +379,18 @@ const ProductDetails = () => {
                       text: "This Field Is Required.",
                     })
                   : null;
+                ![0, 1].includes(SelectedAvailability)
+                  ? SetSelectCatagoryError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
+                UnitState?.length == 0
+                  ? SetUnitStateError({
+                      error: true,
+                      text: "This Field Is Required.",
+                    })
+                  : null;
                 console.log(err);
               }
             }
@@ -358,6 +410,18 @@ const ProductDetails = () => {
             : null;
           SelectedCatagory?.length == 0
             ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          ![0, 1].includes(SelectedAvailability)
+            ? SetSelectCatagoryError({
+                error: true,
+                text: "This Field Is Required.",
+              })
+            : null;
+          UnitState?.length == 0
+            ? SetUnitStateError({
                 error: true,
                 text: "This Field Is Required.",
               })
@@ -384,10 +448,13 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
+    if (!data) return;
     SetTitleState(data?.title);
     SetDescriptionState(data?.description);
     SetPriceState(data?.price);
     SetSelectedCatagory(data?.catagory._id);
+    SetSelectedAvailability(data?.availability);
+    SetUnitState(data?.unit);
     SetImageLoading([]);
 
     data?.images.forEach((image) => {
@@ -431,7 +498,7 @@ const ProductDetails = () => {
               xs: "260px",
               sm: "300px",
             },
-            padding: Theme.spacing(2),
+            padding: isMobile() ? Theme.spacing(2) : Theme.spacing(4),
             flex: "1",
           }}
         >
@@ -521,6 +588,43 @@ const ProductDetails = () => {
                 error={PriceError.error}
                 helperText={PriceError.text}
               />
+              <TextField
+                id="Unit"
+                name="Unit"
+                label="Unit"
+                variant="outlined"
+                value={UnitState}
+                onChange={(e) => SetUnitState(e.target.value)}
+                fullWidth
+                required
+                error={UnitStateError.error}
+                helperText={UnitStateError.text}
+              />
+
+              <FormControl fullWidth required>
+                <InputLabel id="select-availability">Availability</InputLabel>
+
+                <Select
+                  labelId="select-availability"
+                  id="availability"
+                  label="availability"
+                  value={SelectedAvailability}
+                  onChange={AvailabilityChangeHandler}
+                  error={SelectedAvailabilityError.error}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        maxHeight: "200px",
+                        overflowY: "auto",
+                      },
+                    },
+                  }}
+                  required
+                >
+                  <MenuItem value={1}>In Stock</MenuItem>
+                  <MenuItem value={0}>Out Of Stock</MenuItem>
+                </Select>
+              </FormControl>
               <FormControl fullWidth required>
                 <InputLabel id="select-catagory">Catagory</InputLabel>
 
@@ -567,7 +671,7 @@ const ProductDetails = () => {
               sm: "300px",
             },
             minHeight: "300px",
-            padding: Theme.spacing(2),
+            padding: isMobile() ? Theme.spacing(2) : Theme.spacing(4),
             flex: "1",
             display: "flex",
             flexDirection: "column",
@@ -719,7 +823,7 @@ const ProductDetails = () => {
         gap={Theme.spacing(2)}
       >
         <Button
-          onClick={() => navigate("/admin/product/")}
+          onClick={() => navigate("/admin/product")}
           variant="outlined"
           disabled={isUpdating}
         >

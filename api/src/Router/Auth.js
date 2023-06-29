@@ -114,7 +114,7 @@ Router.post(
     const accessToken = Jwt.sign(
       { email: process.env.ADMIN_EMAIL, admin: true },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "6h" }
     );
     res.status(201).json({
       User: { email: process.env.ADMIN_EMAIL },

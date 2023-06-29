@@ -39,6 +39,8 @@ Router.put(
   body("description").isString().isLength({ min: 1 }),
   body("price").isNumeric(),
   body("catagory").isString(),
+  body("availability").isNumeric(),
+  body("unit").isString(),
   body("images").isArray(),
   async (req, res) => {
     const results = validationResult(req);
@@ -52,6 +54,8 @@ Router.put(
             description: req.body.description,
             price: req.body.price,
             catagory: req.body.catagory,
+            availability: req.body.availability,
+            unit: req.body.unit,
             images: req.body.images.map((img) => {
               return img;
             }),
@@ -73,6 +77,8 @@ Router.post(
   body("description").isString().isLength({ min: 1 }),
   body("price").isNumeric(),
   body("catagory").isString(),
+  body("availability").isNumeric(),
+  body("unit").isString(),
   body("images").isArray(),
   async (req, res) => {
     const results = validationResult(req);
@@ -82,6 +88,9 @@ Router.post(
       description: req.body.description,
       price: req.body.price,
       catagory: req.body.catagory,
+      availability: req.body.availability,
+      unit: req.body.unit,
+
       images: req.body.images.map((img) => {
         return img;
       }),

@@ -10,6 +10,7 @@ import ToolbarContainer from "../../components/Admin/CatagoryToolbar";
 import GetCatagory from "../../api/GetCatagories";
 import { useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { LogOut } from "../../store/slice/AdminAuthSlice";
 
 type Catagory = {
   _id: string;
@@ -25,10 +26,15 @@ const CatagoryPage = () => {
   const { status, error, data } = useQuery({
     queryKey: ["catagory"],
     queryFn: GetCatagory,
+    onError: (err) => {
+      if (err.response.status == 403) {
+        dispatch(LogOut());
+      }
+    },
   });
   const Theme = useTheme();
   if (status == "loading") return <div>Loading...</div>;
-  if (status == "error") return <div>{JSON.stringify(error)}</div>;
+  if (status == "error") return <div>Loading...</div>;
   const rows = data?.map((catagory: Catagory) => {
     return {
       id: catagory._id,
@@ -54,6 +60,7 @@ const CatagoryPage = () => {
       width: 250,
     },
   ];
+
   return (
     <Paper
       elevation={2}
@@ -66,8 +73,8 @@ const CatagoryPage = () => {
           border: 0,
           padding: Theme.spacing(2),
         }}
-        onRowClick={(product) => {
-          navigate(product.id);
+        onRowClick={(catagory) => {
+          navigate(catagory.id);
         }}
         columns={columns}
         rows={rows}

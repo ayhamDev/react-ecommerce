@@ -1,6 +1,7 @@
 import express from "express";
 import CatagoryModel from "../Models/Catagory.model.js";
 import Product from "../Models/Product.model.js";
+import OrderModel from "../Models/Order.model.js";
 import { body, validationResult } from "express-validator";
 import IsAdmin from "../middleware/IsAdmin.js";
 import dotenv from "dotenv";

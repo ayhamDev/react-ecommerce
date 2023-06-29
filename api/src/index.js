@@ -10,8 +10,11 @@ import UserRouter from "./Router/User.js";
 import AuthRouter from "./Router/Auth.js";
 import CartRouter from "./Router/Cart.js";
 import CatagoryRouter from "./Router/Catagory.js";
+import SettingsRouter from "./Router/Settings.js";
 
 import fs from "fs";
+import IsAuthenticated from "./middleware/IsAuthenticated.js";
+import IsSameUserOrAdmin from "./middleware/isSameUserOrAdmin.js";
 // Config
 dotenv.config();
 ConnectToDatabase();
@@ -24,6 +27,9 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.get("/verifyToken", IsSameUserOrAdmin, (req, res) => {
+  res.json(req.user);
+});
 app.use("/product", ProductRouter);
 app.use("/cart", CartRouter);
 app.use("/order", OrderRouter);
@@ -32,6 +38,7 @@ app.use("/auth", AuthRouter);
 app.use("/catagory", CatagoryRouter);
 app.use("/image", ImageRouter);
 
+app.use("/settings", SettingsRouter);
 // Defualt route
 app.get("/", (req, res) => {
   res.send("Welcome");

@@ -12,14 +12,20 @@ export default async function IsSameUserOrAdmin(req, res, next) {
     const IsVerified = jwt.verify(Token, process.env.JWT_SECRET);
     if (!IsVerified) return res.status(403).json({ msg: "jwt is invaild" });
     const DecodedToken = jwt.decode(Token);
-    if (DecodedToken.admin) return next();
-    try {
-      req.user = await User.findById(DecodedToken.userId);
-      if (req.user.id !== req.params.id)
-        return res.status(403).send({ msg: "Cant Access Another User Data." });
-      next();
-    } catch (e) {
-      return res.status(403).json({ msg: e });
+    if (DecodedToken.admin) {
+      req.user = DecodedToken;
+      return next();
+    } else {
+      try {
+        req.user = await User.findById(DecodedToken.userId);
+        if (req.user.id !== req.params.id)
+          return res
+            .status(403)
+            .send({ msg: "Cant Access Another User Data." });
+        next();
+      } catch (e) {
+        return res.status(403).json({ msg: e });
+      }
     }
   } catch (e) {
     return res.status(403).json(e);

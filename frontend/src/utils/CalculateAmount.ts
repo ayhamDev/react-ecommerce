@@ -1,6 +1,7 @@
 const CalculateAmount = (UserCart) => {
   let amount = 0;
   let prices = [];
+
   prices = UserCart?.products?.map((product) => {
     return (product.productId.price * product.quantity) / 100;
   });

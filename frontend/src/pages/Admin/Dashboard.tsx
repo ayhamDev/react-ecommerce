@@ -30,6 +30,7 @@ import { Menu, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { LogOut } from "../../store/slice/AdminAuthSlice";
 import { RootState } from "../../store/Store";
+import api from "../../api/API";
 const drawerWidth = 240;
 
 interface Props {
@@ -42,6 +43,8 @@ interface Props {
 }
 
 export default function Dashboard(props: Props) {
+  const auth = useSelector((state: RootState) => state.adminAuth.value);
+
   const ListItems = [
     {
       text: "Overview",
@@ -82,6 +85,18 @@ export default function Dashboard(props: Props) {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  api
+    .get("/verifytoken", {
+      headers: {
+        Authorization: `Bearer ${auth?.accessToken}`,
+      },
+    })
+    .catch((err) => {
+      if (err.response.status != 200) {
+        dispatch(LogOut());
+      }
+    });
+
   const route = useLocation();
   const theme = useTheme();
   const RouteName = useSelector((state: RootState) => state.Page.value);
@@ -173,8 +188,7 @@ export default function Dashboard(props: Props) {
       <CssBaseline />
       <AppBar
         position="fixed"
-        variant={isMobile() ? "elevation" : "outlined"}
-        elevation={isMobile() ? 2 : 0}
+        elevation={2}
         sx={{
           bgcolor: "white",
           color: "GrayText",
@@ -211,7 +225,7 @@ export default function Dashboard(props: Props) {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: "top",
+                vertical: "bottom",
                 horizontal: "right",
               }}
               keepMounted
@@ -224,11 +238,19 @@ export default function Dashboard(props: Props) {
             >
               <MenuItem
                 onClick={() => {
-                  handleClose;
+                  handleClose();
+                  navigate("/admin/settings");
+                }}
+              >
+                Settings
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
                   dispatch(LogOut());
                 }}
               >
-                LogOut
+                Log Out
               </MenuItem>
             </Menu>
           </div>

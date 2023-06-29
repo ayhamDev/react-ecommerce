@@ -10,7 +10,7 @@ const Schema = new mongoose.Schema(
     products: [
       {
         productId: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Object,
           ref: "product",
         },
         quantity: {
@@ -20,12 +20,34 @@ const Schema = new mongoose.Schema(
       },
     ],
     amount: {
-      type: Number,
-      required: true,
+      subTotal: {
+        type: Number,
+        required: true,
+      },
+      addons: {
+        type: Number,
+        required: true,
+      },
+      Total: {
+        type: Number,
+        required: true,
+      },
+      deliveryFee: {
+        type: Number,
+        required: true,
+      },
+      Tax: {
+        type: Number,
+        required: true,
+      },
+      currency: {
+        type: Object,
+        required: true,
+      },
     },
     status: {
       type: String,
-      enum: ["Canceled", "Pending", "Accepted", "Shipping", "Completed"],
+      enum: ["Canceled", "Pending", "Accepted", "Shipping", "Delivered"],
     },
   },
   { timestamps: true }

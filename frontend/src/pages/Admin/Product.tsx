@@ -10,12 +10,15 @@ import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { SetName } from "../../store/slice/Page";
+import { LogOut } from "../../store/slice/AdminAuthSlice";
+const availabilityString = ["Out Of Stock", "In Stock"];
 type Product = {
   _id: string;
   title: string;
   catagory: { name: string };
   price: number;
   updatedAt: string;
+  availability: number;
 };
 const Product = () => {
   const dispatch = useDispatch();
@@ -25,18 +28,24 @@ const Product = () => {
   const { status, error, data } = useQuery({
     queryKey: ["product"],
     queryFn: GetProducts,
+    onError: (err) => {
+      if (err.response.status == 403) {
+        dispatch(LogOut());
+      }
+    },
   });
   const navigate = useNavigate();
   const Theme = useTheme();
   if (status == "loading") return <div>Loading...</div>;
-  if (status == "error") return <div>{JSON.stringify(error)}</div>;
+  if (status == "error") return <div>Loading...</div>;
   const rows = data?.map((product: Product) => {
     return {
       id: product._id,
       title: product.title,
       catagory: product.catagory.name,
-      price: product.price,
+      price: `${(product.price / 100).toFixed(2)} EGP`,
       updatedAt: product.updatedAt,
+      availability: availabilityString[product.availability],
     };
   });
 
@@ -60,6 +69,11 @@ const Product = () => {
       field: "price",
       headerName: "Price",
       width: 150,
+    },
+    {
+      field: "availability",
+      headerName: "Availability",
+      width: 200,
     },
     {
       field: "updatedAt",

@@ -16,13 +16,14 @@ import GetCatagory from "../../../api/GetCatagory";
 import { useSelector } from "react-redux";
 import api from "../../../api/API";
 import { RootState } from "../../../store/Store";
+import isMobile from "is-mobile";
 
 const CatagoryDetails = () => {
   const { id } = useParams();
   const dispacth = useDispatch();
   const navigate = useNavigate();
   useLayoutEffect(() => {
-    dispacth(SetName("Product Details"));
+    dispacth(SetName("Catagory Details"));
   });
   const FileTypes = ["image/png", "image/jpg", "image/jpeg"];
 
@@ -115,7 +116,7 @@ const CatagoryDetails = () => {
               xs: "260px",
               sm: "300px",
             },
-            padding: Theme.spacing(2),
+            padding: isMobile() ? Theme.spacing(2) : Theme.spacing(4),
             flex: "1",
           }}
         >
@@ -142,7 +143,7 @@ const CatagoryDetails = () => {
                   },
                 }}
               >
-                <Box>Product ID: </Box>
+                <Box>Catagory ID: </Box>
                 <Box
                   ref={ProductIdElementRef}
                   onClick={async () => {

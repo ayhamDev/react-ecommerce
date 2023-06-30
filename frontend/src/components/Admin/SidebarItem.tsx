@@ -27,7 +27,7 @@ export default function SidebarItemSmall({
 
   if (ismobile)
     return (
-      <Box key={role.title ? role.title : (Math.random() * 174183.6) / 32}>
+      <Box key={role.titl}>
         {role.title ? (
           <>
             <Divider style={{ background: "#d9d9d9", opacity: 0.2 }} />
@@ -86,7 +86,7 @@ export default function SidebarItemSmall({
       </Box>
     );
   return (
-    <Box key={role.title ? role.title : 1}>
+    <Box key={role.title}>
       {role.title ? (
         <>
           <Divider style={{ background: "#d9d9d9", opacity: 0.2 }} />

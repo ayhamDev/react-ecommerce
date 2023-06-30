@@ -38,6 +38,9 @@ import {
   CloudUpload,
 } from "@mui/icons-material";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { AdminMotionProps } from "../../../utils/ConfigMotion";
+import { motion } from "framer-motion";
+import useAdminAuth from "../../../hooks/useAdminAuth";
 type ImageUploadLoading = {
   url: string;
   isLoading: boolean;
@@ -50,8 +53,11 @@ const ProductDetails = () => {
   const { id } = useParams();
   const dispacth = useDispatch();
   const navigate = useNavigate();
+  const { VerifyToken } = useAdminAuth();
+
   useLayoutEffect(() => {
     dispacth(SetName("Product Details"));
+    VerifyToken();
   });
   const FileTypes = ["image/png", "image/jpg", "image/jpeg"];
 
@@ -487,382 +493,390 @@ const ProductDetails = () => {
       }
     });
   };
+
   if (status == "error") return <Navigate to="/admin/product" replace />;
   if (status == "loading") return <LoadingSpinner />;
   if (data == null) return <Navigate to="/admin/product" replace />;
   return (
-    <Box>
-      <Box
-        paddingBottom={Theme.spacing(4)}
-        display={"flex"}
-        alignItems={"center"}
-        gap={Theme.spacing(2)}
-      >
-        <IconButton
-          onClick={() => {
-            navigate("/admin/product");
-          }}
+    <motion.div {...AdminMotionProps}>
+      <Box>
+        <Box
+          paddingBottom={Theme.spacing(4)}
+          display={"flex"}
+          alignItems={"center"}
+          gap={Theme.spacing(2)}
         >
-          <ArrowBackIosNewRounded fontSize="medium" />
-        </IconButton>
-        <Typography variant="h5">{page}</Typography>
-      </Box>
-      <Box
-        display={"flex"}
-        flexDirection={"column"}
-        gap={Theme.spacing(2)}
-        flexWrap={"wrap"}
-      >
-        <Paper
-          elevation={2}
-          sx={{
-            minWidth: {
-              xs: "260px",
-              sm: "300px",
-            },
-            padding: isMobile() ? Theme.spacing(2) : Theme.spacing(4),
-            flex: "1",
-          }}
+          <IconButton
+            onClick={() => {
+              navigate("/admin/product");
+            }}
+          >
+            <ArrowBackIosNewRounded fontSize="medium" />
+          </IconButton>
+          <Typography variant="h5">{page}</Typography>
+        </Box>
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          gap={Theme.spacing(2)}
+          flexWrap={"wrap"}
         >
-          <Box>
+          <Paper
+            elevation={2}
+            sx={{
+              minWidth: {
+                xs: "260px",
+                sm: "300px",
+              },
+              padding: isMobile() ? Theme.spacing(2) : Theme.spacing(4),
+              flex: "1",
+            }}
+          >
+            <Box>
+              <Box
+                display={"flex"}
+                flexDirection={"column"}
+                gap={Theme.spacing(4)}
+              >
+                <Typography
+                  variant="h6"
+                  component={"h6"}
+                  display={"flex"}
+                  alignItems={"center"}
+                  flexWrap={"wrap"}
+                  sx={{
+                    fontSize: {
+                      xs: "0.85rem",
+                      md: "1.25rem",
+                    },
+                    justifyContent: {
+                      xs: "center",
+                      md: "start",
+                    },
+                  }}
+                >
+                  <Box>Product ID: </Box>
+                  <Box
+                    ref={ProductIdElementRef}
+                    onClick={async () => {
+                      navigator.clipboard
+                        .writeText(ProductIdElementRef.current?.textContent)
+                        .then(() => {
+                          SetCopied(true);
+                        });
+                    }}
+                    sx={{
+                      userSelect: "none",
+                      cursor: "pointer",
+                      marginLeft: Theme.spacing(1),
+                      paddingX: Theme.spacing(2),
+                      paddingY: Theme.spacing(1),
+                      bgcolor: Theme.palette.grey[300],
+                      borderRadius: "24px",
+                    }}
+                  >
+                    {id}
+                  </Box>
+                </Typography>
+                <TextField
+                  id="titleRef"
+                  name="title"
+                  label="Title"
+                  variant="outlined"
+                  value={TitleState}
+                  onChange={(e) => SetTitleState(e.target.value)}
+                  autoFocus
+                  fullWidth
+                  required
+                  error={TitleError.error}
+                  helperText={TitleError.text}
+                />
+                <TextField
+                  id="description"
+                  name="description"
+                  label="Description"
+                  variant="outlined"
+                  value={descriptionState}
+                  onChange={(e) => SetDescriptionState(e.target.value)}
+                  fullWidth
+                  required
+                  multiline
+                  rows={5}
+                  error={DescriptionError.error}
+                  helperText={DescriptionError.text}
+                />
+                <TextField
+                  id="price"
+                  name="price"
+                  type="number"
+                  label="Price (In Cents)"
+                  variant="outlined"
+                  value={priceState}
+                  onChange={(e) => SetPriceState(e.target.value)}
+                  fullWidth
+                  required
+                  error={PriceError.error}
+                  helperText={PriceError.text}
+                />
+                <TextField
+                  id="Unit"
+                  name="Unit"
+                  label="Unit"
+                  variant="outlined"
+                  value={UnitState}
+                  onChange={(e) => SetUnitState(e.target.value)}
+                  fullWidth
+                  required
+                  error={UnitStateError.error}
+                  helperText={UnitStateError.text}
+                />
+
+                <FormControl fullWidth required>
+                  <InputLabel id="select-availability">Availability</InputLabel>
+
+                  <Select
+                    labelId="select-availability"
+                    id="availability"
+                    label="availability"
+                    value={SelectedAvailability}
+                    onChange={AvailabilityChangeHandler}
+                    error={SelectedAvailabilityError.error}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          maxHeight: "200px",
+                          overflowY: "auto",
+                        },
+                      },
+                    }}
+                    required
+                  >
+                    <MenuItem value={1}>In Stock</MenuItem>
+                    <MenuItem value={0}>Out Of Stock</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth required>
+                  <InputLabel id="select-catagory">Catagory</InputLabel>
+
+                  <Select
+                    labelId="select-catagory"
+                    id="catagory"
+                    label="Catagory"
+                    value={SelectedCatagory || data?.catagory._id}
+                    onChange={CatagoryChangeHandler}
+                    error={SelectCatagoryError.error}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          maxHeight: "200px",
+                          overflowY: "auto",
+                        },
+                      },
+                    }}
+                    required
+                  >
+                    {CatagoryData?.map((catagory, index) => (
+                      <MenuItem key={index} value={catagory._id}>
+                        {catagory.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            <Snackbar
+              open={copied}
+              message="Copied To Clipboard."
+              autoHideDuration={3000}
+              onClose={handleCloseSnakbar}
+              onClick={() => SetCopied(false)}
+            />
+          </Paper>
+          <Paper
+            elevation={2}
+            sx={{
+              position: "relative",
+              minWidth: {
+                xs: "260px",
+                sm: "300px",
+              },
+              minHeight: "300px",
+              padding: isMobile() ? Theme.spacing(2) : Theme.spacing(4),
+              flex: "1",
+              display: "flex",
+              flexDirection: "column",
+              gap: Theme.spacing(2),
+            }}
+          >
             <Box
               display={"flex"}
-              flexDirection={"column"}
-              gap={Theme.spacing(4)}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              position={"relative"}
+              zIndex={2}
             >
-              <Typography
-                variant="h6"
-                component={"h6"}
-                display={"flex"}
-                alignItems={"center"}
-                flexWrap={"wrap"}
-                sx={{
-                  fontSize: {
-                    xs: "0.85rem",
-                    md: "1.25rem",
-                  },
-                  justifyContent: {
-                    xs: "center",
-                    md: "start",
-                  },
+              <Typography variant="h6">Image Upload</Typography>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  inputFile.current?.click();
                 }}
               >
-                <Box>Product ID: </Box>
-                <Box
-                  ref={ProductIdElementRef}
-                  onClick={async () => {
-                    navigator.clipboard
-                      .writeText(ProductIdElementRef.current?.textContent)
-                      .then(() => {
-                        SetCopied(true);
-                      });
-                  }}
-                  sx={{
-                    userSelect: "none",
-                    cursor: "pointer",
-                    marginLeft: Theme.spacing(1),
-                    paddingX: Theme.spacing(2),
-                    paddingY: Theme.spacing(1),
-                    bgcolor: Theme.palette.grey[300],
-                    borderRadius: "24px",
-                  }}
-                >
-                  {id}
-                </Box>
-              </Typography>
-              <TextField
-                id="titleRef"
-                name="title"
-                label="Title"
-                variant="outlined"
-                value={TitleState}
-                onChange={(e) => SetTitleState(e.target.value)}
-                autoFocus
-                fullWidth
-                required
-                error={TitleError.error}
-                helperText={TitleError.text}
+                Choose Image
+              </Button>
+              <input
+                type="file"
+                ref={inputFile}
+                onChange={(e) => {
+                  const Files = e.target.files;
+                  [...Files].forEach(HandleFileUpload);
+                }}
+                style={{ display: "none" }}
+                multiple
               />
-              <TextField
-                id="description"
-                name="description"
-                label="Description"
-                variant="outlined"
-                value={descriptionState}
-                onChange={(e) => SetDescriptionState(e.target.value)}
-                fullWidth
-                required
-                multiline
-                rows={5}
-                error={DescriptionError.error}
-                helperText={DescriptionError.text}
-              />
-              <TextField
-                id="price"
-                name="price"
-                type="number"
-                label="Price (In Cents)"
-                variant="outlined"
-                value={priceState}
-                onChange={(e) => SetPriceState(e.target.value)}
-                fullWidth
-                required
-                error={PriceError.error}
-                helperText={PriceError.text}
-              />
-              <TextField
-                id="Unit"
-                name="Unit"
-                label="Unit"
-                variant="outlined"
-                value={UnitState}
-                onChange={(e) => SetUnitState(e.target.value)}
-                fullWidth
-                required
-                error={UnitStateError.error}
-                helperText={UnitStateError.text}
-              />
-
-              <FormControl fullWidth required>
-                <InputLabel id="select-availability">Availability</InputLabel>
-
-                <Select
-                  labelId="select-availability"
-                  id="availability"
-                  label="availability"
-                  value={SelectedAvailability}
-                  onChange={AvailabilityChangeHandler}
-                  error={SelectedAvailabilityError.error}
-                  MenuProps={{
-                    PaperProps: {
-                      sx: {
-                        maxHeight: "200px",
-                        overflowY: "auto",
-                      },
-                    },
-                  }}
-                  required
-                >
-                  <MenuItem value={1}>In Stock</MenuItem>
-                  <MenuItem value={0}>Out Of Stock</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl fullWidth required>
-                <InputLabel id="select-catagory">Catagory</InputLabel>
-
-                <Select
-                  labelId="select-catagory"
-                  id="catagory"
-                  label="Catagory"
-                  value={SelectedCatagory || data?.catagory._id}
-                  onChange={CatagoryChangeHandler}
-                  error={SelectCatagoryError.error}
-                  MenuProps={{
-                    PaperProps: {
-                      sx: {
-                        maxHeight: "200px",
-                        overflowY: "auto",
-                      },
-                    },
-                  }}
-                  required
-                >
-                  {CatagoryData?.map((catagory, index) => (
-                    <MenuItem key={index} value={catagory._id}>
-                      {catagory.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
             </Box>
-          </Box>
-          <Snackbar
-            open={copied}
-            message="Copied To Clipboard."
-            autoHideDuration={3000}
-            onClose={handleCloseSnakbar}
-            onClick={() => SetCopied(false)}
-          />
-        </Paper>
-        <Paper
-          elevation={Drag ? 12 : 2}
-          sx={{
-            position: "relative",
-            minWidth: {
-              xs: "260px",
-              sm: "300px",
-            },
-            minHeight: "300px",
-            padding: isMobile() ? Theme.spacing(2) : Theme.spacing(4),
-            flex: "1",
-            display: "flex",
-            flexDirection: "column",
-            gap: Theme.spacing(2),
-          }}
-        >
-          <Box
-            display={"flex"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-            position={"relative"}
-            zIndex={2}
-          >
-            <Typography variant="h6">Image Upload</Typography>
-            <Button
-              variant="contained"
-              onClick={() => {
-                inputFile.current?.click();
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (!Drag) return SetDrag(true);
               }}
-            >
-              Choose Image
-            </Button>
-            <input
-              type="file"
-              ref={inputFile}
-              onChange={(e) => {
-                const Files = e.target.files;
+              onDragLeave={() => {
+                if (Drag) return SetDrag(false);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                SetDrag(false);
+                const Files = e.dataTransfer.files;
                 [...Files].forEach(HandleFileUpload);
               }}
-              style={{ display: "none" }}
-              multiple
-            />
-          </Box>
-          <div
-            onDragOver={(e) => {
-              e.preventDefault();
-              if (!Drag) return SetDrag(true);
-            }}
-            onDragLeave={() => {
-              if (Drag) return SetDrag(false);
-            }}
-            onDrop={(e) => {
-              e.preventDefault();
-              SetDrag(false);
-              const Files = e.dataTransfer.files;
-              [...Files].forEach(HandleFileUpload);
-            }}
-            style={{
-              position: "absolute",
-              zIndex: 1,
-              inset: 0,
-            }}
-          ></div>
-          <Box
-            width={"100%"}
-            height={"100%"}
-            flex={"1"}
-            border={"5px dotted black"}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
+              style={{
+                position: "absolute",
+                zIndex: 1,
+                inset: 0,
+              }}
+            ></div>
             <Box
+              width={"100%"}
+              height={"100%"}
+              flex={"1"}
+              border={"5px dotted black"}
               display={"flex"}
               justifyContent={"center"}
               alignItems={"center"}
-              flexDirection={"column"}
             >
-              <CloudUpload sx={{ fontSize: "80px" }} />
-              <Typography variant="subtitle2">
-                {Drag
-                  ? "Drop The Image Here"
-                  : "Drag & Drop Here To Upload Images"}
-              </Typography>
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                flexDirection={"column"}
+              >
+                <CloudUpload sx={{ fontSize: "80px" }} />
+                <Typography variant="subtitle2">
+                  {Drag
+                    ? "Drop The Image Here"
+                    : "Drag & Drop Here To Upload Images"}
+                </Typography>
+              </Box>
             </Box>
-          </Box>
-        </Paper>
-        <Paper
-          elevation={2}
-          sx={{
-            position: "relative",
-            minWidth: {
-              xs: "260px",
-              sm: "300px",
-            },
-            padding: Theme.spacing(2),
-            flex: "1",
-          }}
-        >
-          <Typography variant="h6">Uploaded Images</Typography>
-          <Box
-            display={"flex"}
-            flexWrap={"wrap"}
-            paddingTop={Theme.spacing(2)}
+          </Paper>
+          <Paper
+            elevation={2}
             sx={{
-              justifyContent: {
-                xs: "center",
-                sm: "start",
+              position: "relative",
+              minWidth: {
+                xs: "260px",
+                sm: "300px",
               },
+              padding: Theme.spacing(2),
+              flex: "1",
             }}
-            gap={Theme.spacing(2)}
           >
-            {ImageLoading.map((image, index) => (
-              <Box key={index} position={"relative"}>
-                <Box position={"absolute"} top={"5px"} right={"5px"} zIndex={2}>
-                  <IconButton
-                    onClick={() =>
-                      HandleDelete(image.id, image.urlID, image.isLoading)
-                    }
-                  >
-                    <Clear color="warning" />
-                  </IconButton>
-                </Box>
-                {image.isLoading ? (
+            <Typography variant="h6">Uploaded Images</Typography>
+            <Box
+              display={"flex"}
+              flexWrap={"wrap"}
+              paddingTop={Theme.spacing(2)}
+              sx={{
+                justifyContent: {
+                  xs: "center",
+                  sm: "start",
+                },
+              }}
+              gap={Theme.spacing(2)}
+            >
+              {ImageLoading.map((image, index) => (
+                <Box key={index} position={"relative"}>
                   <Box
                     position={"absolute"}
-                    width={"100%"}
-                    height={"100%"}
-                    display={"flex"}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                    sx={{ inset: 0 }}
+                    top={"5px"}
+                    right={"5px"}
+                    zIndex={2}
                   >
-                    <CircularProgressWithLabel
-                      value={ProgressValue[image.id]?.value || 0}
-                    />
+                    <IconButton
+                      onClick={() =>
+                        HandleDelete(image.id, image.urlID, image.isLoading)
+                      }
+                    >
+                      <Clear color="warning" />
+                    </IconButton>
                   </Box>
-                ) : null}
+                  {image.isLoading ? (
+                    <Box
+                      position={"absolute"}
+                      width={"100%"}
+                      height={"100%"}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      sx={{ inset: 0 }}
+                    >
+                      <CircularProgressWithLabel
+                        value={ProgressValue[image.id]?.value || 0}
+                      />
+                    </Box>
+                  ) : null}
 
-                <img
-                  style={{
-                    flex: 1,
-                    width: "150px",
-                    height: "150px",
-                    borderRadius: "5px",
-                  }}
-                  src={image.url}
-                />
-              </Box>
-            ))}
-          </Box>
-        </Paper>
-      </Box>
-      <Box
-        width={"100%"}
-        justifyContent={"end"}
-        paddingY={Theme.spacing(3)}
-        display={"flex"}
-        gap={Theme.spacing(2)}
-      >
-        <Button
-          onClick={() => navigate("/admin/product")}
-          variant="outlined"
-          disabled={isUpdating}
+                  <img
+                    style={{
+                      flex: 1,
+                      width: "150px",
+                      height: "150px",
+                      borderRadius: "5px",
+                    }}
+                    src={image.url}
+                  />
+                </Box>
+              ))}
+            </Box>
+          </Paper>
+        </Box>
+        <Box
+          width={"100%"}
+          justifyContent={"end"}
+          paddingY={Theme.spacing(3)}
+          display={"flex"}
+          gap={Theme.spacing(2)}
         >
-          Cancel
-        </Button>
-        <Button
-          onClick={DeleteProductHandler}
-          variant="contained"
-          color="error"
-        >
-          Delete
-        </Button>
-        <Button onClick={UpdateProductHandler} variant="contained">
-          Update
-        </Button>
+          <Button
+            onClick={() => navigate("/admin/product")}
+            variant="outlined"
+            disabled={isUpdating}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={DeleteProductHandler}
+            variant="contained"
+            color="error"
+          >
+            Delete
+          </Button>
+          <Button onClick={UpdateProductHandler} variant="contained">
+            Update
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </motion.div>
   );
 };
 

@@ -11,6 +11,9 @@ import GetUsers from "../../api/GetUsers";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "../../store/slice/AdminAuthSlice";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { motion } from "framer-motion";
+import { AdminMotionProps } from "../../utils/ConfigMotion";
+import useAdminAuth from "../../hooks/useAdminAuth";
 
 type User = {
   _id: string;
@@ -21,13 +24,14 @@ type User = {
 const UserPage = () => {
   const auth = useSelector((state: RootState) => state.adminAuth.value);
   const page = useSelector((state: RootState) => state.Page.value);
-
+  const { VerifyToken } = useAdminAuth();
   const dispacth = useDispatch();
   const navigate = useNavigate();
   useLayoutEffect(() => {
     dispacth(SetName("Users"));
+    VerifyToken();
   });
-  const { status, error, data } = useQuery({
+  const { status, data } = useQuery({
     queryKey: ["user"],
     enabled: auth.accessToken != undefined,
     queryFn: () => GetUsers(auth.accessToken),
@@ -67,12 +71,12 @@ const UserPage = () => {
     },
   ];
   return (
-    <>
+    <motion.div {...AdminMotionProps}>
       <Typography variant="h5" paddingBottom={Theme.spacing(4)}>
         {page}
       </Typography>
       <Paper
-        elevation={2}
+        className="FancyBoxShadow"
         sx={{
           maxWidth: "100%",
           marginBottom: Theme.spacing(2),
@@ -100,7 +104,7 @@ const UserPage = () => {
           }}
         ></DataGrid>
       </Paper>
-    </>
+    </motion.div>
   );
 };
 

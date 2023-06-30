@@ -18,6 +18,9 @@ import isMobile from "is-mobile";
 import { SetName } from "../../../store/slice/Page";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { ArrowBackIosNewRounded } from "@mui/icons-material";
+import { motion } from "framer-motion";
+import { AdminMotionProps } from "../../../utils/ConfigMotion";
+import useAdminAuth from "../../../hooks/useAdminAuth";
 
 const UserDetails = () => {
   const { id } = useParams();
@@ -26,12 +29,15 @@ const UserDetails = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.adminAuth.value);
   const page = useSelector((state: RootState) => state.Page.value);
+
+  const { VerifyToken } = useAdminAuth();
   const { status, data } = useQuery({
     queryKey: ["user", id],
     queryFn: () => GetUser(auth.accessToken, id),
   });
   useLayoutEffect(() => {
     dispatch(SetName("User Details"));
+    VerifyToken();
   });
   // refs
   const ProductIdElementRef = useRef<HTMLElement | null>(null);
@@ -52,7 +58,7 @@ const UserDetails = () => {
   if (status == "loading") return <LoadingSpinner />;
   if (data == null) return <Navigate to="/admin/user" replace />;
   return (
-    <>
+    <motion.div {...AdminMotionProps}>
       <Box
         paddingBottom={Theme.spacing(4)}
         display={"flex"}
@@ -207,7 +213,7 @@ const UserDetails = () => {
           onClick={() => SetCopied(false)}
         />
       </Paper>
-    </>
+    </motion.div>
   );
 };
 

@@ -23,6 +23,8 @@ import {
   Typography,
 } from "@mui/material";
 import niceBg from "../../assets/img/nice.png";
+import { motion } from "framer-motion";
+import useAdminAuth from "../../hooks/useAdminAuth";
 const drawerWidth = 250;
 
 const iOS =
@@ -132,139 +134,143 @@ export default function Dashboard({
     handleResize();
   }, []);
   return (
-    <Box sx={{ display: "flex", height: "100%" }}>
-      {/* SideBar */}
-      <CssBaseline />
-      {ismobile ? (
-        <AppBar
-          variant="outlined"
-          elevation={0}
-          sx={{ bgcolor: "white", color: "black", zIndex: 9 }}
-        >
-          <Toolbar sx={{ justifyContent: "space-between" }}>
-            <IconButton
-              sx={{ p: "10px", color: "#9e9e9e", mr: "5px" }}
-              onClick={open ? handleDrawerClose : handleDrawerOpen}
+    <motion.div
+      style={{ height: "100%" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      <Box sx={{ display: "flex", height: "100%" }}>
+        {/* SideBar */}
+        <CssBaseline />
+        {ismobile ? (
+          <AppBar
+            variant="outlined"
+            elevation={0}
+            sx={{ bgcolor: "white", color: "black", zIndex: 9 }}
+          >
+            <Toolbar sx={{ justifyContent: "space-between" }}>
+              <IconButton
+                sx={{ p: "10px", color: "#9e9e9e", mr: "5px" }}
+                onClick={open ? handleDrawerClose : handleDrawerOpen}
+              >
+                {open ? (
+                  <Close sx={{ color: "#9e9e9e" }} />
+                ) : (
+                  <Menu sx={{ color: "#9e9e9e" }} />
+                )}
+                {/* theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon /> */}
+              </IconButton>
+              <AvatarMenu />
+            </Toolbar>
+          </AppBar>
+        ) : (
+          <AppBarDesktop
+            position="fixed"
+            open={open}
+            variant="outlined"
+            elevation={0}
+            sx={{ bgcolor: "white", color: "black", zIndex: 9 }}
+          >
+            <Toolbar
+              sx={{
+                justifyContent: "space-between",
+                ml: !open ? (ismobile ? "55px" : "65px") : "-10px",
+                transition: "0.5s all",
+              }}
             >
-              {open ? (
-                <Close sx={{ color: "#9e9e9e" }} />
-              ) : (
-                <Menu sx={{ color: "#9e9e9e" }} />
-              )}
-              {/* theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon /> */}
-            </IconButton>
-            <AvatarMenu />
-          </Toolbar>
-        </AppBar>
-      ) : (
-        <AppBarDesktop
-          position="fixed"
-          open={open}
-          variant="outlined"
-          elevation={0}
-          sx={{ bgcolor: "white", color: "black", zIndex: 9 }}
-        >
-          <Toolbar
-            sx={{
-              justifyContent: "space-between",
-              ml: !open ? (ismobile ? "55px" : "65px") : "-10px",
-              transition: "0.5s all",
+              <IconButton
+                sx={{ p: "10px", color: "#9e9e9e", mr: "5px" }}
+                onClick={open ? handleDrawerClose : handleDrawerOpen}
+              >
+                {open ? (
+                  <Close sx={{ color: "#9e9e9e" }} />
+                ) : (
+                  <Menu sx={{ color: "#9e9e9e" }} />
+                )}
+                {/* theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon /> */}
+              </IconButton>
+              <AvatarMenu />
+            </Toolbar>
+          </AppBarDesktop>
+        )}
+
+        {/* SideBar */}
+        {ismobile ? (
+          <Drawer
+            open={open}
+            onClose={() => {
+              setOpen(false);
+            }}
+            PaperProps={{
+              sx: {
+                width: "250px",
+                zIndex: "999999",
+                backgroundImage: `url(${niceBg})`,
+                backgroundColor: "#222222",
+              },
             }}
           >
-            <IconButton
-              sx={{ p: "10px", color: "#9e9e9e", mr: "5px" }}
-              onClick={open ? handleDrawerClose : handleDrawerOpen}
-            >
-              {open ? (
-                <Close sx={{ color: "#9e9e9e" }} />
-              ) : (
-                <Menu sx={{ color: "#9e9e9e" }} />
-              )}
-              {/* theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon /> */}
-            </IconButton>
-            <AvatarMenu />
-          </Toolbar>
-        </AppBarDesktop>
-      )}
+            <DrawerHeader>
+              <Typography variant="h6" color={colors.grey[200]}>
+                {!open && !ismobile ? `AD` : `Admin Dashboard`}
+              </Typography>
+            </DrawerHeader>
+            <Box className="scrollbar">
+              <List>
+                {items.map((role, index) => (
+                  <SidebarItem
+                    key={index}
+                    setOpen={setOpen}
+                    role={role}
+                    open={open}
+                    ismobile={ismobile}
+                  />
+                ))}
+              </List>
+            </Box>
+          </Drawer>
+        ) : (
+          <DrawerDesktop
+            PaperProps={{
+              sx: {
+                zIndex: "999999",
+                backgroundImage: `url(${niceBg})`,
+                backgroundColor: "#222222",
+              },
+            }}
+            variant="permanent"
+            open={open}
+          >
+            <DrawerHeader>
+              <Typography variant="h6" color={colors.grey[200]}>
+                {!open && !ismobile ? `AD` : `Admin Dashboard`}
+              </Typography>
+            </DrawerHeader>
+            <Box className="scrollbar">
+              <List>
+                {items.map((role, index) => (
+                  <SidebarItem key={index} role={role} open={open} />
+                ))}
+              </List>
+            </Box>
+          </DrawerDesktop>
+        )}
 
-      {/* SideBar */}
-      {ismobile ? (
-        <Drawer
-          open={open}
-          onClose={() => {
-            setOpen(false);
-          }}
-          PaperProps={{
-            sx: {
-              width: "250px",
-              zIndex: "999999",
-              backgroundImage: `url(${niceBg})`,
-              backgroundColor: "#222222",
-            },
+        {/* Main */}
+        <Box
+          className="scrollbar"
+          component="main"
+          sx={{
+            flexGrow: 1,
+            pt: "75px",
+            pb: "5px",
+            height: "100%",
+            bgcolor: colors.grey[100],
           }}
         >
-          <DrawerHeader>
-            <Typography variant="h6" color={colors.grey[200]}>
-              {!open && !ismobile ? `AD` : `Admin Dashboard`}
-            </Typography>
-          </DrawerHeader>
-          <Box className="scrollbar">
-            <List>
-              {items.map((role) => (
-                <SidebarItem
-                  key={
-                    role.title ? role.title : (Math.random() * 174183.6) / 32
-                  }
-                  setOpen={setOpen}
-                  role={role}
-                  open={open}
-                  ismobile={ismobile}
-                />
-              ))}
-            </List>
-          </Box>
-        </Drawer>
-      ) : (
-        <DrawerDesktop
-          PaperProps={{
-            sx: {
-              zIndex: "999999",
-              backgroundImage: `url(${niceBg})`,
-              backgroundColor: "#222222",
-            },
-          }}
-          variant="permanent"
-          open={open}
-        >
-          <DrawerHeader>
-            <Typography variant="h6" color={colors.grey[200]}>
-              {!open && !ismobile ? `AD` : `Admin Dashboard`}
-            </Typography>
-          </DrawerHeader>
-          <Box className="scrollbar">
-            <List>
-              {items.map((role, index) => (
-                <SidebarItem key={index} role={role} open={open} />
-              ))}
-            </List>
-          </Box>
-        </DrawerDesktop>
-      )}
-
-      {/* Main */}
-      <Box
-        className="scrollbar"
-        component="main"
-        sx={{
-          flexGrow: 1,
-          pt: "75px",
-          pb: "5px",
-          height: "100%",
-          bgcolor: colors.grey[100],
-        }}
-      >
-        <Box sx={{ px: "20px" }}>{children}</Box>
+          <Box sx={{ px: "20px" }}>{children}</Box>
+        </Box>
       </Box>
-    </Box>
+    </motion.div>
   );
 }

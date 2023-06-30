@@ -24,17 +24,21 @@ import api from "../../api/API";
 import { useQuery } from "@tanstack/react-query";
 import GetSettings from "../../api/GetSettings";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { motion } from "framer-motion";
+import { AdminMotionProps } from "../../utils/ConfigMotion";
+import useAdminAuth from "../../hooks/useAdminAuth";
 
 type Currency = currencies;
 const Settings = () => {
   const Theme = useTheme();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.adminAuth.value);
+  const { VerifyToken } = useAdminAuth();
   useLayoutEffect(() => {
     dispatch(SetName("Settings"));
+    VerifyToken();
   });
-
   const { data, status } = useQuery({
     queryKey: ["settings"],
     queryFn: () => GetSettings(auth.accessToken),
@@ -109,7 +113,7 @@ const Settings = () => {
   if (status == "loading") return <LoadingSpinner />;
   if (status == "error") return <LoadingSpinner />;
   return (
-    <>
+    <motion.div {...AdminMotionProps}>
       <Typography variant="h5" paddingBottom={Theme.spacing(2)}>
         {page}
       </Typography>
@@ -222,7 +226,7 @@ const Settings = () => {
           </Button>
         </Box>
       </Box>
-    </>
+    </motion.div>
   );
 };
 

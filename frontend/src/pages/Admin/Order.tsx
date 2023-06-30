@@ -13,6 +13,9 @@ import { LogOut } from "../../store/slice/AdminAuthSlice";
 import CalculateAmount from "../../utils/CalculateAmount";
 import GetSettings from "../../api/GetSettings";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { motion } from "framer-motion";
+import { AdminMotionProps } from "../../utils/ConfigMotion";
+import useAdminAuth from "../../hooks/useAdminAuth";
 
 type Order = {
   _id: string;
@@ -32,10 +35,12 @@ const OrderPage = () => {
   const auth = useSelector((state: RootState) => state.adminAuth.value);
   const page = useSelector((state: RootState) => state.Page.value);
 
+  const { VerifyToken } = useAdminAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useLayoutEffect(() => {
     dispatch(SetName("Orders"));
+    VerifyToken();
   });
   const { status, error, data } = useQuery({
     queryKey: ["order"],
@@ -88,12 +93,12 @@ const OrderPage = () => {
     },
   ];
   return (
-    <>
+    <motion.div {...AdminMotionProps}>
       <Typography variant="h5" paddingBottom={Theme.spacing(4)}>
         {page}
       </Typography>
       <Paper
-        elevation={2}
+        className="FancyBoxShadow"
         sx={{
           maxWidth: "100%",
         }}
@@ -120,7 +125,7 @@ const OrderPage = () => {
           }}
         ></DataGrid>
       </Paper>
-    </>
+    </motion.div>
   );
 };
 

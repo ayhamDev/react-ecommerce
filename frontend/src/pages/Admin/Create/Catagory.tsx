@@ -12,7 +12,6 @@ import {
   Box,
   Paper,
   TextField,
-  Typography,
   useTheme,
   Snackbar,
   Button,
@@ -20,14 +19,18 @@ import {
 import { useSelector } from "react-redux";
 import api from "../../../api/API";
 import { RootState } from "../../../store/Store";
+import { AdminMotionProps } from "../../../utils/ConfigMotion";
+import { motion } from "framer-motion";
+import useAdminAuth from "../../../hooks/useAdminAuth";
 
 const CatagoryCreate = () => {
   const dispacth = useDispatch();
   const navigate = useNavigate();
+  const { VerifyToken } = useAdminAuth();
   useLayoutEffect(() => {
     dispacth(SetName("Product Details"));
+    VerifyToken();
   });
-
   // Redux
   const auth = useSelector((state: RootState) => state.adminAuth.value);
 
@@ -75,7 +78,7 @@ const CatagoryCreate = () => {
   };
 
   return (
-    <Box>
+    <motion.div {...AdminMotionProps}>
       <Box
         display={"flex"}
         flexDirection={"column"}
@@ -141,7 +144,7 @@ const CatagoryCreate = () => {
           Create
         </Button>
       </Box>
-    </Box>
+    </motion.div>
   );
 };
 

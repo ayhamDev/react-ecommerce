@@ -35,6 +35,9 @@ import { LogOut } from "../../../store/slice/AdminAuthSlice";
 import CalculateAmount from "../../../utils/CalculateAmount";
 import api from "../../../api/API";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { motion } from "framer-motion";
+import { AdminMotionProps } from "../../../utils/ConfigMotion";
+import useAdminAuth from "../../../hooks/useAdminAuth";
 const availabilityString = ["Out Of Stock", "In Stock"];
 
 const OrderDetails = () => {
@@ -42,13 +45,14 @@ const OrderDetails = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { VerifyToken } = useAdminAuth();
   useLayoutEffect(() => {
     dispatch(SetName("Order Details"));
+    VerifyToken();
   });
   const Theme = useTheme();
   const auth = useSelector((state: RootState) => state.adminAuth.value);
   const page = useSelector((state: RootState) => state.Page.value);
-
   let { status, data } = useQuery({
     queryKey: ["order", orderId],
     queryFn: () => GetOrder(auth.accessToken, userId, orderId),
@@ -105,7 +109,7 @@ const OrderDetails = () => {
   data.products = data?.products.filter((product) => product.productId != null);
 
   return (
-    <>
+    <motion.div {...AdminMotionProps}>
       <Box
         paddingBottom={Theme.spacing(4)}
         display={"flex"}
@@ -333,7 +337,7 @@ const OrderDetails = () => {
           </Button>
         </Box>
       </Box>
-    </>
+    </motion.div>
   );
 };
 

@@ -14,6 +14,9 @@ import { LogOut } from "../../store/slice/AdminAuthSlice";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import GetSettings from "../../api/GetSettings";
 import { RootState } from "../../store/Store";
+import { motion } from "framer-motion";
+import { AdminMotionProps } from "../../utils/ConfigMotion";
+import useAdminAuth from "../../hooks/useAdminAuth";
 const availabilityString = ["Out Of Stock", "In Stock"];
 type Product = {
   _id: string;
@@ -25,8 +28,10 @@ type Product = {
 };
 const Product = () => {
   const dispatch = useDispatch();
+  const { VerifyToken } = useAdminAuth();
   useLayoutEffect(() => {
     dispatch(SetName("Products"));
+    VerifyToken();
   });
 
   const auth = useSelector((state: RootState) => state.adminAuth.value);
@@ -93,12 +98,12 @@ const Product = () => {
     },
   ];
   return (
-    <>
+    <motion.div {...AdminMotionProps}>
       <Typography variant="h5" paddingBottom={Theme.spacing(4)}>
         {page}
       </Typography>
       <Paper
-        elevation={2}
+        className="FancyBoxShadow"
         sx={{
           maxWidth: "100%",
         }}
@@ -125,7 +130,7 @@ const Product = () => {
           }}
         ></DataGrid>
       </Paper>
-    </>
+    </motion.div>
   );
 };
 

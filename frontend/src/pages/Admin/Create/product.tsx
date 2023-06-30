@@ -36,6 +36,8 @@ import {
   Description,
   SettingsSuggestOutlined,
 } from "@mui/icons-material";
+import { AdminMotionProps } from "../../../utils/ConfigMotion";
+import { motion } from "framer-motion";
 type ImageUploadLoading = {
   url: string;
   isLoading: boolean;
@@ -47,8 +49,11 @@ type ImageUploadLoading = {
 const ProductCreate = () => {
   const dispacth = useDispatch();
   const navigate = useNavigate();
+  const { VerifyToken } = useAdminAuth();
+
   useLayoutEffect(() => {
     dispacth(SetName("Create Product"));
+    VerifyToken();
   });
   const FileTypes = ["image/png", "image/jpg", "image/jpeg"];
 
@@ -428,7 +433,7 @@ const ProductCreate = () => {
   };
 
   return (
-    <Box>
+    <motion.div {...AdminMotionProps}>
       <Box
         display={"flex"}
         flexDirection={"column"}
@@ -737,7 +742,7 @@ const ProductCreate = () => {
           Create
         </Button>
       </Box>
-    </Box>
+    </motion.div>
   );
 };
 

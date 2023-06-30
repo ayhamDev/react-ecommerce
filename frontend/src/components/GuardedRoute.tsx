@@ -13,7 +13,8 @@ interface GuardedRouteProps {
    * Route to be redirected to
    * @default '/'
    */
-  redirectRoute?: string;
+  redirectRoute: string;
+  Container?: React.JSX.ElementType;
 }
 
 /**

@@ -13,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 import { LogOut } from "../../store/slice/AdminAuthSlice";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { RootState } from "../../store/Store";
+import { motion } from "framer-motion";
+import { AdminMotionProps } from "../../utils/ConfigMotion";
+import useAdminAuth from "../../hooks/useAdminAuth";
 
 type Catagory = {
   _id: string;
@@ -22,8 +25,10 @@ type Catagory = {
 const CatagoryPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { VerifyToken } = useAdminAuth();
   useLayoutEffect(() => {
     dispatch(SetName("Catagories"));
+    VerifyToken();
   });
   const page = useSelector((state: RootState) => state.Page.value);
 
@@ -66,12 +71,12 @@ const CatagoryPage = () => {
   ];
 
   return (
-    <>
+    <motion.div {...AdminMotionProps}>
       <Typography variant="h5" paddingBottom={Theme.spacing(4)}>
         {page}
       </Typography>
       <Paper
-        elevation={2}
+        className="FancyBoxShadow"
         sx={{
           marginBottom: Theme.spacing(2),
         }}
@@ -98,7 +103,7 @@ const CatagoryPage = () => {
           }}
         ></DataGrid>
       </Paper>
-    </>
+    </motion.div>
   );
 };
 

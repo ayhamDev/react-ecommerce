@@ -11,11 +11,16 @@ import {
   AccountCircle,
 } from "@mui/icons-material";
 import { Box, colors, useTheme } from "@mui/material";
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import DashboardPart from "../../components/Admin/DashboardPart";
 import isMobile from "is-mobile";
+import useAdminAuth from "../../hooks/useAdminAuth";
 
 export default function Dashboard({ children }) {
+  const { VerifyToken } = useAdminAuth();
+  useLayoutEffect(() => {
+    VerifyToken();
+  });
   const SideBarItems = [
     {
       title: "General",
@@ -59,6 +64,7 @@ export default function Dashboard({ children }) {
     },
   ];
   const Theme = useTheme();
+
   return (
     <DashboardPart items={SideBarItems}>
       {/* Dashboard Content */}

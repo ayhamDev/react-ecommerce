@@ -7,6 +7,9 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { SetName } from "../../store/slice/Page";
 import { Login } from "../../store/slice/AdminAuthSlice";
+import { motion } from "framer-motion";
+import isMobile from "is-mobile";
+import { AdminMotionProps } from "../../utils/ConfigMotion";
 
 const LoginPage = () => {
   const Theme = useTheme();
@@ -45,77 +48,84 @@ const LoginPage = () => {
       justifyContent={"center"}
       alignItems={"center"}
     >
-      <Paper
-        className="FancyBoxShadow"
-        sx={{
-          paddingX: Theme.spacing(4),
-          paddingY: Theme.spacing(3),
-          width: "500px",
-        }}
-      >
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          justifyContent={"center"}
-          alignItems={"center"}
+      <motion.div {...AdminMotionProps}>
+        <Paper
+          className="FancyBoxShadow"
+          sx={{
+            margin: Theme.spacing(2),
+            paddingX: Theme.spacing(isMobile() ? 2 : 4),
+            paddingY: Theme.spacing(3),
+            width: "500px",
+          }}
         >
           <Box
             display={"flex"}
-            alignItems={"center"}
+            flexDirection={"column"}
             justifyContent={"center"}
-            sx={{
-              width: "50px",
-              height: "50px",
-              bgcolor: "#e90d55",
-              color: Theme.palette.grey[200],
-              borderRadius: "100%",
-            }}
+            alignItems={"center"}
           >
-            <LockOutlinedIcon />
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              sx={{
+                width: "50px",
+                height: "50px",
+                bgcolor: "#e90d55",
+                color: Theme.palette.grey[200],
+                borderRadius: "100%",
+              }}
+            >
+              <LockOutlinedIcon />
+            </Box>
+            <Typography
+              paddingTop={Theme.spacing(2)}
+              paddingBottom={Theme.spacing(3)}
+              variant="h5"
+            >
+              ADMIN LOG IN
+            </Typography>
           </Box>
-          <Typography
-            paddingTop={Theme.spacing(2)}
-            paddingBottom={Theme.spacing(3)}
-            variant="h5"
-          >
-            ADMIN LOG IN
-          </Typography>
-        </Box>
-        <form onSubmit={HandleSubmit}>
-          <Box gap={Theme.spacing(3)} display={"flex"} flexDirection={"column"}>
-            <TextField
-              id="email"
-              inputRef={emailRef}
-              name="email"
-              type="email"
-              label="E-mail"
-              variant="outlined"
-              autoFocus
-              fullWidth
-              required
-            />
-            <TextField
-              id="password"
-              inputRef={passwordRef}
-              name="password"
-              type="password"
-              label="Password"
-              variant="outlined"
-              required
-              fullWidth
-            />
-            {Error ? (
-              <Typography variant="body2" color={"red"}>
-                {Error}
-              </Typography>
-            ) : null}
+          <form onSubmit={HandleSubmit}>
+            <Box
+              gap={Theme.spacing(3)}
+              display={"flex"}
+              flexDirection={"column"}
+            >
+              <TextField
+                id="email"
+                inputRef={emailRef}
+                name="email"
+                type="email"
+                label="E-mail"
+                variant="outlined"
+                autoFocus
+                fullWidth
+                required
+              />
+              <TextField
+                id="password"
+                inputRef={passwordRef}
+                name="password"
+                type="password"
+                label="Password"
+                variant="outlined"
+                required
+                fullWidth
+              />
+              {Error ? (
+                <Typography variant="body2" color={"red"}>
+                  {Error}
+                </Typography>
+              ) : null}
 
-            <Button type="submit" variant="contained" size="large">
-              log in
-            </Button>
-          </Box>
-        </form>
-      </Paper>
+              <Button type="submit" variant="contained" size="large">
+                log in
+              </Button>
+            </Box>
+          </form>
+        </Paper>
+      </motion.div>
     </Box>
   );
 };

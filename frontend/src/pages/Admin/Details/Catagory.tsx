@@ -20,13 +20,18 @@ import { RootState } from "../../../store/Store";
 import isMobile from "is-mobile";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { ArrowBackIosNewRounded } from "@mui/icons-material";
+import { AdminMotionProps } from "../../../utils/ConfigMotion";
+import { motion } from "framer-motion";
+import useAdminAuth from "../../../hooks/useAdminAuth";
 
 const CatagoryDetails = () => {
   const { id } = useParams();
   const dispacth = useDispatch();
   const navigate = useNavigate();
+  const { VerifyToken } = useAdminAuth();
   useLayoutEffect(() => {
     dispacth(SetName("Catagory Details"));
+    VerifyToken();
   });
   const FileTypes = ["image/png", "image/jpg", "image/jpeg"];
 
@@ -106,7 +111,7 @@ const CatagoryDetails = () => {
   if (status == "loading") return <LoadingSpinner />;
   if (data == null) return <Navigate to="/admin/catagory" replace />;
   return (
-    <>
+    <motion.div {...AdminMotionProps}>
       <Box
         paddingBottom={Theme.spacing(4)}
         display={"flex"}
@@ -236,7 +241,7 @@ const CatagoryDetails = () => {
           </Button>
         </Box>
       </Box>
-    </>
+    </motion.div>
   );
 };
 

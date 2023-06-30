@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,11 +12,17 @@ import { useNavigate } from "react-router-dom";
 import { LogOut } from "../../store/slice/AdminAuthSlice";
 import CalculateAmount from "../../utils/CalculateAmount";
 import GetSettings from "../../api/GetSettings";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 type Order = {
   _id: string;
   userId: string;
-  amount: number;
+  amount: {
+    currency: {
+      code: string;
+    };
+    Total: number;
+  };
   status: string;
   products: { productId: object; quantity: number }[];
   createdAt: string;
@@ -24,6 +30,8 @@ type Order = {
 };
 const OrderPage = () => {
   const auth = useSelector((state: RootState) => state.adminAuth.value);
+  const page = useSelector((state: RootState) => state.Page.value);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useLayoutEffect(() => {
@@ -37,17 +45,16 @@ const OrderPage = () => {
 
   const Theme = useTheme();
 
-  if (status == "loading") return <div>Loading...</div>;
-  if (status == "error") return <div>loading...</div>;
+  if (status == "loading") return <LoadingSpinner />;
+  if (status == "error") return <LoadingSpinner />;
   const rows =
     data && typeof data.map == "function"
       ? data?.map((order: Order) => {
           return {
             id: order._id,
             userId: order.userId,
-            amount: order.amount,
             status: order.status,
-            amount: order.amount.Total,
+            amount: `${order.amount.Total} ${order.amount.currency.code}`,
             createdAt: order.createdAt,
           };
         })
@@ -81,34 +88,39 @@ const OrderPage = () => {
     },
   ];
   return (
-    <Paper
-      elevation={2}
-      sx={{
-        maxWidth: "100%",
-      }}
-    >
-      <DataGrid
+    <>
+      <Typography variant="h5" paddingBottom={Theme.spacing(4)}>
+        {page}
+      </Typography>
+      <Paper
+        elevation={2}
         sx={{
-          border: 0,
-          padding: Theme.spacing(2),
+          maxWidth: "100%",
         }}
-        onRowClick={(order) => {
-          navigate(`/admin/order/${order.row.userId}/${order.id}`);
-        }}
-        columns={columns}
-        rows={rows}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
-          },
-        }}
-        density="comfortable"
-        pageSizeOptions={[10, 25, 50, 100]}
-        slots={{
-          toolbar: ToolbarContainer,
-        }}
-      ></DataGrid>
-    </Paper>
+      >
+        <DataGrid
+          sx={{
+            border: 0,
+            padding: Theme.spacing(2),
+          }}
+          onRowClick={(order) => {
+            navigate(`/admin/order/${order.row.userId}/${order.id}`);
+          }}
+          columns={columns}
+          rows={rows}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          density="comfortable"
+          pageSizeOptions={[10, 25, 50, 100]}
+          slots={{
+            toolbar: ToolbarContainer,
+          }}
+        ></DataGrid>
+      </Paper>
+    </>
   );
 };
 

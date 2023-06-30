@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api/API";
 import { useQuery } from "@tanstack/react-query";
 import GetSettings from "../../api/GetSettings";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 type Currency = currencies;
 const Settings = () => {
@@ -103,114 +104,125 @@ const Settings = () => {
     SetTaxPercentage(data?.tax.taxAmount);
     SetDeliveryFee(data?.deliveryFee);
   }, [data]);
-  if (status == "loading") return <div>Loading...</div>;
-  return (
-    <Box
-      paddingY={Theme.spacing(2)}
-      display={"flex"}
-      flexDirection={"column"}
-      gap={Theme.spacing(2)}
-    >
-      <List component={Paper} elevation={2} disablePadding={false}>
-        <ListItem>
-          <Autocomplete
-            id="currency-select"
-            sx={{ width: 300 }}
-            options={currencies}
-            value={CurrentCurrency}
-            autoHighlight
-            getOptionLabel={(option) => {
-              return `${option.code} - ${option.symbolNative}`;
-            }}
-            onChange={(_, newValue) => {
-              console.log(newValue);
+  const page = useSelector((state: RootState) => state.Page.value);
 
-              SetCurrentCurrency(newValue);
-            }}
-            renderOption={(props, option) => (
-              <Box
-                component="li"
-                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                {...props}
-                key={option.code}
-              >
-                {option.code} - {option.symbolNative}
-              </Box>
-            )}
-            renderInput={(params) => (
-              <TextField
-                error={CurrencyError.error}
-                {...params}
-                label="Choose Currency"
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
-                }}
-              />
-            )}
-          />
-        </ListItem>
-        <Typography paddingLeft={Theme.spacing(2)}>
-          {CurrencyError.error && CurrencyError.text}
-        </Typography>
-      </List>
-      <List component={Paper} elevation={2} disablePadding={false}>
-        <ListItem>
-          <ListItemButton
+  if (status == "loading") return <LoadingSpinner />;
+  if (status == "error") return <LoadingSpinner />;
+  return (
+    <>
+      <Typography variant="h5" paddingBottom={Theme.spacing(2)}>
+        {page}
+      </Typography>
+      <Box
+        paddingY={Theme.spacing(2)}
+        display={"flex"}
+        flexDirection={"column"}
+        gap={Theme.spacing(2)}
+      >
+        <List component={Paper} elevation={2} disablePadding={false}>
+          <ListItem>
+            <Autocomplete
+              id="currency-select"
+              sx={{ width: 300 }}
+              options={currencies}
+              value={CurrentCurrency}
+              autoHighlight
+              getOptionLabel={(option) => {
+                return `${option.code} - ${option.symbolNative}`;
+              }}
+              onChange={(_, newValue) => {
+                console.log(newValue);
+
+                SetCurrentCurrency(newValue);
+              }}
+              renderOption={(props, option) => (
+                <Box
+                  component="li"
+                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                  {...props}
+                  key={option.code}
+                >
+                  {option.code} - {option.symbolNative}
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  error={CurrencyError.error}
+                  {...params}
+                  label="Choose Currency"
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: "new-password", // disable autocomplete and autofill
+                  }}
+                />
+              )}
+            />
+          </ListItem>
+          <Typography paddingLeft={Theme.spacing(2)}>
+            {CurrencyError.error && CurrencyError.text}
+          </Typography>
+        </List>
+        <List component={Paper} elevation={2} disablePadding={false}>
+          <ListItem>
+            <ListItemButton
+              onClick={() => {
+                SetUseTax(!UseTax);
+              }}
+              sx={{
+                borderRadius: "15px",
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: "40px" }}>
+                <PaidRounded />
+              </ListItemIcon>
+              <ListItemText>Enable Tax</ListItemText>
+              <Switch edge="end" checked={UseTax} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <TextField
+              label="Tax"
+              disabled={!UseTax}
+              placeholder="Percentage %"
+              value={TaxPercentage || ``}
+              onChange={handleTaxInput}
+              fullWidth
+            />
+            <TextField disabled value="%" sx={{ width: "45px" }} />
+          </ListItem>
+        </List>
+        <List component={Paper} elevation={2} disablePadding={false}>
+          <ListItem>
+            <TextField
+              label="Delivery Fee (in Cents)"
+              placeholder="Amount (in Cents)"
+              value={deliveryFee || ``}
+              onChange={handleDeliveryInput}
+              fullWidth
+            />
+          </ListItem>
+        </List>
+        <Box
+          display={"flex"}
+          justifyContent={"end"}
+          alignItems={"center"}
+          gap={Theme.spacing(2)}
+          paddingTop={Theme.spacing(2)}
+        >
+          <Button
+            variant="outlined"
             onClick={() => {
-              SetUseTax(!UseTax);
+              navigate("/admin");
             }}
           >
-            <ListItemIcon>
-              <PaidRounded />
-            </ListItemIcon>
-            <ListItemText>Tax</ListItemText>
-            <Switch edge="end" checked={UseTax} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <TextField
-            label="Tax"
-            disabled={!UseTax}
-            placeholder="Percentage %"
-            value={TaxPercentage || ``}
-            onChange={handleTaxInput}
-            fullWidth
-          />
-          <TextField disabled value="%" sx={{ width: "45px" }} />
-        </ListItem>
-      </List>
-      <List component={Paper} elevation={2} disablePadding={false}>
-        <ListItem>
-          <TextField
-            label="Delivery Fee (in Cents)"
-            placeholder="Amount (in Cents)"
-            value={deliveryFee || ``}
-            onChange={handleDeliveryInput}
-            fullWidth
-          />
-        </ListItem>
-      </List>
-      <Box
-        display={"flex"}
-        justifyContent={"end"}
-        alignItems={"center"}
-        gap={Theme.spacing(2)}
-        paddingTop={Theme.spacing(2)}
-      >
-        <Button
-          variant="outlined"
-          onClick={() => {
-            navigate("/admin");
-          }}
-        >
-          Cancel
-        </Button>
-        <Button variant="contained" onClick={handleUpdateSettings}>
-          Update
-        </Button>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleUpdateSettings}>
+            Update
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

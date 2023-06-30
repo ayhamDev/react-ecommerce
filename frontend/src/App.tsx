@@ -1,30 +1,37 @@
 import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "./store/Store";
-import loadable from "@loadable/component";
+import GuardedRoute from "./components/GuardedRoute";
+import React, { Suspense } from "react";
 
-const GuardedRoute = loadable(() => import("./components/GuardedRoute"));
-const Overview = loadable(() => import("./pages/Admin/Overview"));
-const SendEmail = loadable(() => import("./pages/Admin/SendEmail"));
-const Product = loadable(() => import("./pages/Admin/Product"));
-const Order = loadable(() => import("./pages/Admin/Order"));
-const Catagory = loadable(() => import("./pages/Admin/Catagory"));
-const User = loadable(() => import("./pages/Admin/User"));
-const Login = loadable(() => import("./pages/Admin/Login"));
-const Dashboard = loadable(() => import("./pages/Admin/Dashboard"));
+import LoadingSpinner from "./components/LoadingSpinner";
+const Overview = React.lazy(() => import("./pages/Admin/Overview"));
+const SendEmail = React.lazy(() => import("./pages/Admin/SendEmail"));
+const Product = React.lazy(() => import("./pages/Admin/Product"));
+const Order = React.lazy(() => import("./pages/Admin/Order"));
+const Catagory = React.lazy(() => import("./pages/Admin/Catagory"));
+const User = React.lazy(() => import("./pages/Admin/User"));
+const Login = React.lazy(() => import("./pages/Admin/Login"));
+const Dashboard = React.lazy(() => import("./pages/Admin/Dashboard"));
 
-const ProductDetails = loadable(() => import("./pages/Admin/Details/product"));
-const ProductCreate = loadable(() => import("./pages/Admin/Create/product"));
+const ProductDetails = React.lazy(
+  () => import("./pages/Admin/Details/product")
+);
+const ProductCreate = React.lazy(() => import("./pages/Admin/Create/product"));
 
-const CatagoryDetails = loadable(
+const CatagoryDetails = React.lazy(
   () => import("./pages/Admin/Details/Catagory")
 );
-const CatagoryCreate = loadable(() => import("./pages/Admin/create/Catagory"));
+const CatagoryCreate = React.lazy(
+  () => import("./pages/Admin/create/Catagory")
+);
 
-const UserDetails = loadable(() => import("./pages/Admin/Details/User"));
-const OrderDetails = loadable(() => import("./pages/Admin/Details/order"));
+const UserDetails = React.lazy(() => import("./pages/Admin/Details/User"));
+const OrderDetails = React.lazy(() => import("./pages/Admin/Details/order"));
 
-const Settings = loadable(() => import("./pages/Admin/Settings"));
+const Settings = React.lazy(() => import("./pages/Admin/Settings"));
+
+import { AnimatePresence } from "framer-motion";
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth.value);
@@ -53,6 +60,7 @@ const App = () => {
           <GuardedRoute
             redirectRoute="/admin/login"
             isRouteAccessible={adminAuth.isAuthenticated}
+            Container={Dashboard}
           />
         }
       >
@@ -60,107 +68,107 @@ const App = () => {
         <Route
           path="/admin"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <Overview />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/sendmail"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <SendEmail />
-            </Dashboard>
+            </Suspense>
           }
         />
         {/* CMS */}
         <Route
           path="/admin/product"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <Product />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/product/create"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <ProductCreate />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/product/:id"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <ProductDetails />
-            </Dashboard>
+            </Suspense>
           }
         />
 
         <Route
           path="/admin/catagory"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <Catagory />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/catagory/create"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <CatagoryCreate />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/catagory/:id"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <CatagoryDetails />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/order"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <Order />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/order/:userId/:orderId"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <OrderDetails />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/user"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <User />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/user/:id"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <UserDetails />
-            </Dashboard>
+            </Suspense>
           }
         />
         <Route
           path="/admin/settings"
           element={
-            <Dashboard>
+            <Suspense fallback={<LoadingSpinner />}>
               <Settings />
-            </Dashboard>
+            </Suspense>
           }
         />
       </Route>
@@ -173,7 +181,14 @@ const App = () => {
           />
         }
       >
-        <Route path="/admin/login" element={<Login />} />
+        <Route
+          path="/admin/login"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <Login />
+            </Suspense>
+          }
+        />
       </Route>
       <Route path="*" element={<h1>404</h1>}></Route>
     </Routes>

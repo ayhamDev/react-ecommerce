@@ -19,6 +19,7 @@ const LoginPage = () => {
   const passwordRef = useRef<null | HTMLInputElement>(null);
   const HandleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
     axios
@@ -28,6 +29,7 @@ const LoginPage = () => {
       })
       .then(function (response) {
         SetError(undefined);
+
         dispatch(Login(response.data));
       })
       .catch(function (error) {
@@ -44,11 +46,11 @@ const LoginPage = () => {
       alignItems={"center"}
     >
       <Paper
-        elevation={3}
+        className="FancyBoxShadow"
         sx={{
           paddingX: Theme.spacing(4),
           paddingY: Theme.spacing(3),
-          width: "400px",
+          width: "500px",
         }}
       >
         <Box
@@ -108,7 +110,7 @@ const LoginPage = () => {
               </Typography>
             ) : null}
 
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" size="large">
               log in
             </Button>
           </Box>

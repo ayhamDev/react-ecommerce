@@ -1,13 +1,64 @@
-body,
 html,
+body,
 #root {
+  margin: 0;
+  padding: 0;
   height: 100%;
 }
 * {
-  user-select: none;
-  user-zoom: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  padding: 0px;
-  margin: 0px;
+  box-sizing: border-box;
+}
+
+.css-h86el7-MuiButtonBase-root-MuiListItemButton-root.Mui-selected {
+  background-color: #424242 !important;
+}
+.scrollbar {
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/* width */
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #424242;
+}
+.scrollbar:hover::-webkit-scrollbar-thumb {
+  background: #616161;
+}
+/* Rectangle 1 */
+.FancyBoxShadow {
+  animation-name: shadowBox;
+  animation-fill-mode: forwards;
+  animation-duration: 1s;
+  animation-play-state: running;
+  animation-timing-function: ease-in;
+  background: #ffffff;
+}
+@keyframes shadowBox {
+  from {
+    box-shadow: 0px 0px 0px rgba(18, 18, 18, 0.06),
+      0px 0px 0px rgba(18, 18, 18, 0.0390071),
+      0px 0px 0px rgba(18, 18, 18, 0.0299155),
+      0px 0px 0px rgba(18, 18, 18, 0.0221335),
+      0px 0px 0px rgba(18, 18, 18, 0.0131208);
+  }
+  to {
+    box-shadow: 0px 173px 130px rgba(18, 18, 18, 0.06),
+      0px 63.1478px 47.4521px rgba(18, 18, 18, 0.0390071),
+      0px 30.6571px 23.0371px rgba(18, 18, 18, 0.0299155),
+      0px 15.0287px 11.2932px rgba(18, 18, 18, 0.0221335),
+      0px 5.94236px 4.46536px rgba(18, 18, 18, 0.0131208);
+  }
+}
+.MuiDataGrid-virtualScroller.css-axafay-MuiDataGrid-virtualScroller {
+  min-height: 100px;
 }

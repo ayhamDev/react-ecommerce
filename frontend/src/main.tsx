@@ -12,12 +12,25 @@ import "@fontsource/roboto/700.css";
 import "./index.css";
 
 const queryClient = new QueryClient();
+import { createTheme, ThemeProvider } from "@mui/material";
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      // light: will be calculated from palette.primary.main,
+      main: "#233044",
+      // dark: will be calculated from palette.primary.main,
+      // contrastText: will be calculated to contrast with palette.primary.main
+    },
+  },
+});
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <App />
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
       </Provider>
       <ReactQueryDevtools />
     </QueryClientProvider>

@@ -7,7 +7,7 @@ import {
 } from "react";
 import { useDispatch } from "react-redux";
 import { SetName } from "../../../store/slice/Page";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -32,7 +32,12 @@ import { useSelector } from "react-redux";
 import api from "../../../api/API";
 import { RootState } from "../../../store/Store";
 import isMobile from "is-mobile";
-import { Clear, CloudUpload } from "@mui/icons-material";
+import {
+  ArrowBackIosNewRounded,
+  Clear,
+  CloudUpload,
+} from "@mui/icons-material";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 type ImageUploadLoading = {
   url: string;
   isLoading: boolean;
@@ -52,6 +57,7 @@ const ProductDetails = () => {
 
   // Redux
   const auth = useSelector((state: RootState) => state.adminAuth.value);
+  const page = useSelector((state: RootState) => state.Page.value);
 
   const Theme = useTheme();
   // Refs
@@ -230,6 +236,7 @@ const ProductDetails = () => {
               text: "This Field Is Required.",
             })
           : null;
+
         UnitState?.length == 0
           ? SetUnitStateError({
               error: true,
@@ -480,11 +487,26 @@ const ProductDetails = () => {
       }
     });
   };
-  if (status == "loading") return <div>loading...</div>;
-  if (data == null) return navigate("/admin/product");
-  if (status == "error") return navigate("/admin/product");
+  if (status == "error") return <Navigate to="/admin/product" replace />;
+  if (status == "loading") return <LoadingSpinner />;
+  if (data == null) return <Navigate to="/admin/product" replace />;
   return (
     <Box>
+      <Box
+        paddingBottom={Theme.spacing(4)}
+        display={"flex"}
+        alignItems={"center"}
+        gap={Theme.spacing(2)}
+      >
+        <IconButton
+          onClick={() => {
+            navigate("/admin/product");
+          }}
+        >
+          <ArrowBackIosNewRounded fontSize="medium" />
+        </IconButton>
+        <Typography variant="h5">{page}</Typography>
+      </Box>
       <Box
         display={"flex"}
         flexDirection={"column"}

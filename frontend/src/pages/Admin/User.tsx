@@ -1,7 +1,7 @@
 import { useLayoutEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { SetName } from "../../store/slice/Page";
-import { Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,6 +10,7 @@ import ToolbarContainer from "../../components/Admin/UserToolbar";
 import GetUsers from "../../api/GetUsers";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "../../store/slice/AdminAuthSlice";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 type User = {
   _id: string;
@@ -19,6 +20,8 @@ type User = {
 };
 const UserPage = () => {
   const auth = useSelector((state: RootState) => state.adminAuth.value);
+  const page = useSelector((state: RootState) => state.Page.value);
+
   const dispacth = useDispatch();
   const navigate = useNavigate();
   useLayoutEffect(() => {
@@ -28,15 +31,10 @@ const UserPage = () => {
     queryKey: ["user"],
     enabled: auth.accessToken != undefined,
     queryFn: () => GetUsers(auth.accessToken),
-    onError: (err) => {
-      if (err.response.status == 403) {
-        dispacth(LogOut());
-      }
-    },
   });
   const Theme = useTheme();
-  if (status == "loading") return <div>Loading...</div>;
-  if (status == "error") return <div>loading...</div>;
+  if (status == "loading") return <LoadingSpinner />;
+  if (status == "error") return <LoadingSpinner />;
   const rows = data?.map((user: User) => {
     return {
       id: user._id,
@@ -69,35 +67,40 @@ const UserPage = () => {
     },
   ];
   return (
-    <Paper
-      elevation={2}
-      sx={{
-        maxWidth: "100%",
-        marginBottom: Theme.spacing(2),
-      }}
-    >
-      <DataGrid
+    <>
+      <Typography variant="h5" paddingBottom={Theme.spacing(4)}>
+        {page}
+      </Typography>
+      <Paper
+        elevation={2}
         sx={{
-          border: 0,
-          padding: Theme.spacing(2),
+          maxWidth: "100%",
+          marginBottom: Theme.spacing(2),
         }}
-        onRowClick={(user) => {
-          navigate(user.id);
-        }}
-        columns={columns}
-        rows={rows}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
-          },
-        }}
-        density="comfortable"
-        pageSizeOptions={[10, 25, 50, 100]}
-        slots={{
-          toolbar: ToolbarContainer,
-        }}
-      ></DataGrid>
-    </Paper>
+      >
+        <DataGrid
+          sx={{
+            border: 0,
+            padding: Theme.spacing(2),
+          }}
+          onRowClick={(user) => {
+            navigate(user.id);
+          }}
+          columns={columns}
+          rows={rows}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          density="comfortable"
+          pageSizeOptions={[10, 25, 50, 100]}
+          slots={{
+            toolbar: ToolbarContainer,
+          }}
+        ></DataGrid>
+      </Paper>
+    </>
   );
 };
 

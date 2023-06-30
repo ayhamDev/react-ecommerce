@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { SetName } from "../../../store/slice/Page";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -10,6 +10,7 @@ import {
   useTheme,
   Snackbar,
   Button,
+  IconButton,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import GetCatagory from "../../../api/GetCatagory";
@@ -17,6 +18,8 @@ import { useSelector } from "react-redux";
 import api from "../../../api/API";
 import { RootState } from "../../../store/Store";
 import isMobile from "is-mobile";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import { ArrowBackIosNewRounded } from "@mui/icons-material";
 
 const CatagoryDetails = () => {
   const { id } = useParams();
@@ -29,6 +32,7 @@ const CatagoryDetails = () => {
 
   // Redux
   const auth = useSelector((state: RootState) => state.adminAuth.value);
+  const page = useSelector((state: RootState) => state.Page.value);
 
   const Theme = useTheme();
   // Refs
@@ -98,124 +102,141 @@ const CatagoryDetails = () => {
     SetTitleState(data?.name);
   }, [data]);
 
-  if (status == "loading") return <div>loading...</div>;
-  if (data == null) return navigate("/admin/catagory");
-  if (status == "error") return navigate("/admin/catagory");
+  if (status == "error") return <Navigate to="/admin/catagory" replace />;
+  if (status == "loading") return <LoadingSpinner />;
+  if (data == null) return <Navigate to="/admin/catagory" replace />;
   return (
-    <Box>
+    <>
       <Box
+        paddingBottom={Theme.spacing(4)}
         display={"flex"}
-        flexDirection={"column"}
+        alignItems={"center"}
         gap={Theme.spacing(2)}
-        flexWrap={"wrap"}
       >
-        <Paper
-          elevation={2}
-          sx={{
-            minWidth: {
-              xs: "260px",
-              sm: "300px",
-            },
-            padding: isMobile() ? Theme.spacing(2) : Theme.spacing(4),
-            flex: "1",
+        <IconButton
+          onClick={() => {
+            navigate("/admin/catagory");
           }}
         >
-          <Box>
-            <Box
-              display={"flex"}
-              flexDirection={"column"}
-              gap={Theme.spacing(4)}
-            >
-              <Typography
-                variant="h6"
-                component={"h6"}
+          <ArrowBackIosNewRounded fontSize="medium" />
+        </IconButton>
+        <Typography variant="h5">{page}</Typography>
+      </Box>
+      <Box>
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          gap={Theme.spacing(2)}
+          flexWrap={"wrap"}
+        >
+          <Paper
+            elevation={2}
+            sx={{
+              minWidth: {
+                xs: "260px",
+                sm: "300px",
+              },
+              padding: isMobile() ? Theme.spacing(2) : Theme.spacing(4),
+              flex: "1",
+            }}
+          >
+            <Box>
+              <Box
                 display={"flex"}
-                alignItems={"center"}
-                flexWrap={"wrap"}
-                sx={{
-                  fontSize: {
-                    xs: "0.85rem",
-                    md: "1.25rem",
-                  },
-                  justifyContent: {
-                    xs: "center",
-                    md: "start",
-                  },
-                }}
+                flexDirection={"column"}
+                gap={Theme.spacing(4)}
               >
-                <Box>Catagory ID: </Box>
-                <Box
-                  ref={ProductIdElementRef}
-                  onClick={async () => {
-                    navigator.clipboard
-                      .writeText(ProductIdElementRef.current?.textContent)
-                      .then(() => {
-                        SetCopied(true);
-                      });
-                  }}
+                <Typography
+                  variant="h6"
+                  component={"h6"}
+                  display={"flex"}
+                  alignItems={"center"}
+                  flexWrap={"wrap"}
                   sx={{
-                    userSelect: "none",
-                    cursor: "pointer",
-                    marginLeft: Theme.spacing(1),
-                    paddingX: Theme.spacing(2),
-                    paddingY: Theme.spacing(1),
-                    bgcolor: Theme.palette.grey[300],
-                    borderRadius: "24px",
+                    fontSize: {
+                      xs: "0.85rem",
+                      md: "1.25rem",
+                    },
+                    justifyContent: {
+                      xs: "center",
+                      md: "start",
+                    },
                   }}
                 >
-                  {id}
-                </Box>
-              </Typography>
-              <TextField
-                id="titleRef"
-                name="title"
-                label="Name"
-                variant="outlined"
-                value={TitleState}
-                onChange={(e) => SetTitleState(e.target.value)}
-                autoFocus
-                fullWidth
-                required
-                error={TitleError.error}
-                helperText={TitleError.text}
-              />
+                  <Box>Catagory ID: </Box>
+                  <Box
+                    ref={ProductIdElementRef}
+                    onClick={async () => {
+                      navigator.clipboard
+                        .writeText(ProductIdElementRef.current?.textContent)
+                        .then(() => {
+                          SetCopied(true);
+                        });
+                    }}
+                    sx={{
+                      userSelect: "none",
+                      cursor: "pointer",
+                      marginLeft: Theme.spacing(1),
+                      paddingX: Theme.spacing(2),
+                      paddingY: Theme.spacing(1),
+                      bgcolor: Theme.palette.grey[300],
+                      borderRadius: "24px",
+                    }}
+                  >
+                    {id}
+                  </Box>
+                </Typography>
+                <TextField
+                  id="titleRef"
+                  name="title"
+                  label="Name"
+                  variant="outlined"
+                  value={TitleState}
+                  onChange={(e) => SetTitleState(e.target.value)}
+                  autoFocus
+                  fullWidth
+                  required
+                  error={TitleError.error}
+                  helperText={TitleError.text}
+                />
+              </Box>
             </Box>
-          </Box>
-          <Snackbar
-            open={copied}
-            message="Copied To Clipboard."
-            autoHideDuration={3000}
-            onClose={handleCloseSnakbar}
-            onClick={() => SetCopied(false)}
-          />
-        </Paper>
-      </Box>
-      <Box
-        width={"100%"}
-        justifyContent={"end"}
-        paddingY={Theme.spacing(3)}
-        display={"flex"}
-        gap={Theme.spacing(2)}
-      >
-        <Button
-          onClick={() => navigate("/admin/catagory")}
-          variant="outlined"
-          disabled={isUpdating}
+            <Snackbar
+              open={copied}
+              message="Copied To Clipboard."
+              autoHideDuration={3000}
+              onClose={handleCloseSnakbar}
+              onClick={() => SetCopied(false)}
+            />
+          </Paper>
+        </Box>
+        <Box
+          width={"100%"}
+          justifyContent={"end"}
+          paddingY={Theme.spacing(3)}
+          display={"flex"}
+          gap={Theme.spacing(2)}
         >
-          Cancel
-        </Button>
-        <Button
-          onClick={DeleteCataogyrHandler}
-          variant="contained"
-          color="error"
-        >
-          Delete
-        </Button>
-        <Button onClick={UpdateCataogyrHandler} variant="contained">
-          Update
-        </Button>
+          <Button
+            onClick={() => navigate("/admin/catagory")}
+            variant="outlined"
+            disabled={isUpdating}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={DeleteCataogyrHandler}
+            variant="contained"
+            color="error"
+          >
+            Delete
+          </Button>
+          <Button onClick={UpdateCataogyrHandler} variant="contained">
+            Update
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

@@ -1,4 +1,7 @@
+import { Box } from "@mui/material";
+import React, { Suspense } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { HashLoader } from "react-spinners";
 
 interface GuardedRouteProps {
   /**
@@ -33,10 +36,31 @@ interface GuardedRouteProps {
  */
 const GuardedRoute = ({
   isRouteAccessible = false,
+  Container,
   redirectRoute = "/",
 }: GuardedRouteProps): JSX.Element => {
+  if (!Container && isRouteAccessible) return <Outlet />;
+  if (!Container && !isRouteAccessible)
+    return <Navigate to={redirectRoute} replace />;
   return isRouteAccessible ? (
-    <Outlet />
+    <Suspense
+      fallback={
+        <Box
+          overflow={"hidden"}
+          position={"absolute"}
+          sx={{ inset: 1, padding: 0 }}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <HashLoader color="#212121" size={100} style={{ padding: 0 }} />
+        </Box>
+      }
+    >
+      <Container>
+        <Outlet />
+      </Container>
+    </Suspense>
   ) : (
     <Navigate to={redirectRoute} replace />
   );

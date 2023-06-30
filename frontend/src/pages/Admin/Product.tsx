@@ -2,15 +2,18 @@ import { useLayoutEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import GetProducts from "../../api/GetProducts";
-import { Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 import ToolbarContainer from "../../components/Admin/ProductToolbar";
 import { useNavigate } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SetName } from "../../store/slice/Page";
 import { LogOut } from "../../store/slice/AdminAuthSlice";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import GetSettings from "../../api/GetSettings";
+import { RootState } from "../../store/Store";
 const availabilityString = ["Out Of Stock", "In Stock"];
 type Product = {
   _id: string;
@@ -25,25 +28,33 @@ const Product = () => {
   useLayoutEffect(() => {
     dispatch(SetName("Products"));
   });
-  const { status, error, data } = useQuery({
+
+  const auth = useSelector((state: RootState) => state.adminAuth.value);
+  const { status: SettingsStatus, data: SettingsData } = useQuery({
+    queryKey: ["settings"],
+    queryFn: () => GetSettings(auth.accessToken),
+  });
+  const { status, data } = useQuery({
+    enabled: SettingsStatus == "success",
     queryKey: ["product"],
     queryFn: GetProducts,
-    onError: (err) => {
-      if (err.response.status == 403) {
-        dispatch(LogOut());
-      }
-    },
   });
+
   const navigate = useNavigate();
   const Theme = useTheme();
-  if (status == "loading") return <div>Loading...</div>;
-  if (status == "error") return <div>Loading...</div>;
+  const page = useSelector((state: RootState) => state.Page.value);
+  if (status == "loading") return <LoadingSpinner />;
+  if (status == "error") return <LoadingSpinner />;
+  if (SettingsStatus == "loading") return <LoadingSpinner />;
+  if (SettingsStatus == "error") return <LoadingSpinner />;
   const rows = data?.map((product: Product) => {
     return {
       id: product._id,
       title: product.title,
       catagory: product.catagory.name,
-      price: `${(product.price / 100).toFixed(2)} EGP`,
+      price: `${(product.price / 100).toFixed(2)} ${
+        SettingsData?.currency.code
+      }`,
       updatedAt: product.updatedAt,
       availability: availabilityString[product.availability],
     };
@@ -82,34 +93,39 @@ const Product = () => {
     },
   ];
   return (
-    <Paper
-      elevation={2}
-      sx={{
-        maxWidth: "100%",
-      }}
-    >
-      <DataGrid
-        onRowClick={(product) => {
-          navigate(product.id);
-        }}
+    <>
+      <Typography variant="h5" paddingBottom={Theme.spacing(4)}>
+        {page}
+      </Typography>
+      <Paper
+        elevation={2}
         sx={{
-          border: 0,
-          padding: Theme.spacing(2),
+          maxWidth: "100%",
         }}
-        columns={columns}
-        rows={rows}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
-          },
-        }}
-        density="comfortable"
-        pageSizeOptions={[10, 25, 50, 100]}
-        slots={{
-          toolbar: ToolbarContainer,
-        }}
-      ></DataGrid>
-    </Paper>
+      >
+        <DataGrid
+          onRowClick={(product) => {
+            navigate(product.id);
+          }}
+          sx={{
+            border: 0,
+            padding: Theme.spacing(2),
+          }}
+          columns={columns}
+          rows={rows}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          density="comfortable"
+          pageSizeOptions={[10, 25, 50, 100]}
+          slots={{
+            toolbar: ToolbarContainer,
+          }}
+        ></DataGrid>
+      </Paper>
+    </>
   );
 };
 

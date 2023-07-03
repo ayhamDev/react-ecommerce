@@ -7,6 +7,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { MuiTelInput } from "mui-tel-input";
+
 import { LockOutlined } from "@mui/icons-material";
 import React, { useRef, useState } from "react";
 import isMobile from "is-mobile";
@@ -40,11 +42,17 @@ const ModalMotion = (props) => {
     </motion.div>
   );
 };
-const LoginModal = (props: ModalProps) => {
+const RegisterModal = (props: ModalProps) => {
+  const nameRef = useRef<HTMLInputElement | null>(null);
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const cityRef = useRef<HTMLInputElement | null>(null);
+  const lineOneRef = useRef<HTMLInputElement | null>(null);
+  const lineTwoRef = useRef<HTMLInputElement | null>(null);
   const [Error, SetError] = useState(false);
   const { LogIn } = useClientAuth();
+  const [PhoneNumber, setPhoneNumber] = React.useState("+20");
+
   const Theme = useTheme();
   const handleModalClose = () => {
     props.SetOpen(false);
@@ -53,14 +61,27 @@ const LoginModal = (props: ModalProps) => {
     e.preventDefault();
     if (
       emailRef.current?.value.length == 0 ||
-      passwordRef.current?.value.length == 0
+      passwordRef.current?.value.length == 0 ||
+      nameRef.current?.value.length == 0 ||
+      cityRef.current?.value.length == 0 ||
+      lineOneRef.current?.value.length == 0 ||
+      lineTwoRef.current?.value.length == 0
     )
       return SetError(true);
     try {
       SetError(false);
-      const res = await api.post("/auth/login", {
+      console.log(PhoneNumber);
+
+      const res = await api.post("/auth/register", {
+        name: nameRef.current?.value,
         email: emailRef.current?.value,
         password: passwordRef.current?.value,
+        phoneNo: PhoneNumber,
+        address: {
+          city: cityRef.current?.value,
+          lineOne: lineOneRef.current?.value,
+          lineTwo: lineTwoRef.current?.value,
+        },
       });
       LogIn(res.data);
       props.SetOpen(false);
@@ -108,11 +129,21 @@ const LoginModal = (props: ModalProps) => {
             paddingBottom={Theme.spacing(3)}
             variant="h5"
           >
-            LOG IN
+            REGISTER
           </Typography>
         </Box>
         <form onSubmit={HandleSubmit}>
           <Box gap={Theme.spacing(3)} display={"flex"} flexDirection={"column"}>
+            <TextField
+              id="name"
+              inputRef={nameRef}
+              name="name"
+              label="Name"
+              variant="outlined"
+              autoFocus
+              fullWidth
+              required
+            />
             <TextField
               id="email"
               inputRef={emailRef}
@@ -120,7 +151,6 @@ const LoginModal = (props: ModalProps) => {
               type="email"
               label="E-mail"
               variant="outlined"
-              autoFocus
               fullWidth
               required
             />
@@ -134,6 +164,38 @@ const LoginModal = (props: ModalProps) => {
               required
               fullWidth
             />
+            <MuiTelInput
+              value={PhoneNumber}
+              onChange={(Value) => setPhoneNumber(Value)}
+            />
+            <TextField
+              id="City"
+              inputRef={cityRef}
+              name="city"
+              label="City"
+              variant="outlined"
+              required
+              fullWidth
+            />
+            <TextField
+              id="LineOne"
+              inputRef={lineOneRef}
+              name="LineOne"
+              label="Address Line 1"
+              variant="outlined"
+              required
+              fullWidth
+            />
+            <TextField
+              id="LineTwo"
+              inputRef={lineTwoRef}
+              name="LineTwo"
+              label="Address Line 2"
+              variant="outlined"
+              required
+              fullWidth
+            />
+
             {Error ? (
               <Typography variant="body2" color={"red"}>
                 Incorrect Email Or Password
@@ -141,7 +203,7 @@ const LoginModal = (props: ModalProps) => {
             ) : null}
 
             <Button type="submit" variant="contained" size="large">
-              log in
+              Register
             </Button>
           </Box>
         </form>
@@ -150,4 +212,4 @@ const LoginModal = (props: ModalProps) => {
   );
 };
 
-export default LoginModal;
+export default RegisterModal;

@@ -29,7 +29,7 @@ const CatagoriesSection = () => {
           sx={{
             cursor: "pointer",
             userSelect: "none",
-            bgcolor: colors.grey[200],
+            bgcolor: colors.amber[100],
             paddingX: 2,
             paddingY: 1,
             borderRadius: "20px",

@@ -36,6 +36,7 @@ export default function ClientMenu(props: {
   };
   const handleClose = () => {
     setAnchorEl(null);
+    document.body.style.overflow = null;
   };
   const { LogOut } = useClientAuth();
 
@@ -54,7 +55,7 @@ export default function ClientMenu(props: {
               {props.auth.User?.name.substring(1, 0).toUpperCase()}
             </Avatar>
           ) : (
-            <AccountCircleRounded fontSize={isMobile() ? "medium" : "large"} />
+            <AccountCircleRounded fontSize={"large"} />
           )}
         </IconButton>
         <IconButton
@@ -63,7 +64,7 @@ export default function ClientMenu(props: {
           }}
         >
           <Badge badgeContent={4} color="primary">
-            <ShoppingCartRounded fontSize={isMobile() ? "medium" : "large"} />
+            <ShoppingCartRounded fontSize={"large"} />
           </Badge>
         </IconButton>
         <Menu
@@ -116,7 +117,7 @@ export default function ClientMenu(props: {
               </Button>
               <Button
                 variant="contained"
-                onClick={() => props.SetRegisterModalOpen(false)}
+                onClick={() => props.SetRegisterModalOpen(true)}
               >
                 Register
               </Button>

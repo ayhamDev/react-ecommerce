@@ -36,6 +36,7 @@ import { HashLoader } from "react-spinners";
 import { Box } from "@mui/material";
 import Page404 from "./pages/404";
 import Home from "./pages/Client/Home";
+import HomeLayout from "./components/Client/HomeLayout";
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth.value);
@@ -44,18 +45,8 @@ const App = () => {
     <AnimatePresence>
       <Routes>
         {/* website */}
-        <Route path="/" element={<Home />} />
-        {/* Auth */}
-        <Route
-          element={
-            <GuardedRoute
-              redirectRoute="/"
-              isRouteAccessible={!auth.isAuthenticated}
-            />
-          }
-        >
-          <Route path="/login" element={<div>Login Page</div>} />
-          <Route path="/register" element={<div>register Page</div>} />
+        <Route element={<HomeLayout />}>
+          <Route path="/" element={<Home />} />
         </Route>
 
         {/* admin */}

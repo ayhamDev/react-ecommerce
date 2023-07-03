@@ -13,7 +13,6 @@ const ClientMotionProps: MotionProps = {
 const ModalSlidDownMotionProps: MotionProps = {
   initial: { opacity: 0.4, translateY: "-250px" },
   animate: { opacity: 1, translateY: "0px" },
-  exit: { opacity: 0.2, translateY: "-250px" },
-  transition: { type: "spring", bounce: 0.4 },
+  transition: { type: "spring", bounce: 0.25 },
 };
 export { AdminMotionProps, ClientMotionProps, ModalSlidDownMotionProps };

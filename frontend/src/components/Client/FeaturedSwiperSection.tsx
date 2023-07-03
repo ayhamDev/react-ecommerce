@@ -31,6 +31,7 @@ const FeaturedSwiperSection = () => {
               borderRadius: "20px",
               width: "100%",
               height: "100%",
+              minHeight: "500px",
               paddingY: 8,
               paddingX: {
                 xs: 6,

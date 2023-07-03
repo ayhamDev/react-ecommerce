@@ -34,6 +34,7 @@ import SearchBar from "../../components/Client/SearchBar";
 import isMobile from "is-mobile";
 import FeaturedSwiperSection from "../../components/Client/FeaturedSwiperSection";
 import CatagoriesSection from "../../components/Client/CatagoriesSection";
+import ProductsSection from "../../components/Client/ProductsSection";
 
 const Home = () => {
   const { auth } = useClientAuth();
@@ -141,6 +142,7 @@ const Home = () => {
         >
           <FeaturedSwiperSection />
           <CatagoriesSection />
+          <ProductsSection />
         </Container>
       </Box>
     </motion.div>

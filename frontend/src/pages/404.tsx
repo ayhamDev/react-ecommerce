@@ -36,7 +36,7 @@ const Page404 = () => {
                 src={Error404}
                 style={{
                   display: "inline-block",
-                  maxWidth: "100%",
+                  maxWidth: "75%",
                   width: 400,
                 }}
               />

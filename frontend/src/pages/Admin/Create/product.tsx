@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import api from "../../../api/API";
 import { RootState } from "../../../store/Store";
 import {
+  ArrowBackIosNewRounded,
   Clear,
   CloudUpload,
   Description,
@@ -38,6 +39,7 @@ import {
 } from "@mui/icons-material";
 import { AdminMotionProps } from "../../../utils/ConfigMotion";
 import { motion } from "framer-motion";
+import useAdminAuth from "../../../hooks/useAdminAuth";
 type ImageUploadLoading = {
   url: string;
   isLoading: boolean;
@@ -49,8 +51,7 @@ type ImageUploadLoading = {
 const ProductCreate = () => {
   const dispacth = useDispatch();
   const navigate = useNavigate();
-  const { VerifyToken } = useAdminAuth();
-
+  const { VerifyToken, admin } = useAdminAuth();
   useLayoutEffect(() => {
     dispacth(SetName("Create Product"));
     VerifyToken();
@@ -58,7 +59,6 @@ const ProductCreate = () => {
   const FileTypes = ["image/png", "image/jpg", "image/jpeg"];
 
   // Redux
-  const auth = useSelector((state: RootState) => state.adminAuth.value);
 
   const Theme = useTheme();
   // Refs
@@ -162,7 +162,7 @@ const ProductCreate = () => {
           },
           {
             headers: {
-              Authorization: `Bearer ${auth.accessToken}`,
+              Authorization: `Bearer ${admin.accessToken}`,
             },
           }
         );
@@ -171,7 +171,7 @@ const ProductCreate = () => {
           try {
             await api.delete(`/image/${img}`, {
               headers: {
-                Authorization: `Bearer ${auth.accessToken}`,
+                Authorization: `Bearer ${admin.accessToken}`,
               },
             });
           } catch (err) {
@@ -232,7 +232,7 @@ const ProductCreate = () => {
             },
             {
               headers: {
-                Authorization: `Bearer ${auth.accessToken}`,
+                Authorization: `Bearer ${admin.accessToken}`,
               },
             }
           );
@@ -240,7 +240,7 @@ const ProductCreate = () => {
             try {
               await api.delete(`/image/${img}`, {
                 headers: {
-                  Authorization: `Bearer ${auth.accessToken}`,
+                  Authorization: `Bearer ${admin.accessToken}`,
                 },
               });
             } catch (err) {
@@ -292,7 +292,7 @@ const ProductCreate = () => {
           const ImageUpload = await api.post("/image", Form, {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${auth.accessToken}`,
+              Authorization: `Bearer ${admin.accessToken}`,
             },
             onUploadProgress: (progressEvent) => {
               const { loaded, total } = progressEvent;
@@ -324,7 +324,7 @@ const ProductCreate = () => {
                   },
                   {
                     headers: {
-                      Authorization: `Bearer ${auth.accessToken}`,
+                      Authorization: `Bearer ${admin.accessToken}`,
                     },
                   }
                 );
@@ -431,9 +431,24 @@ const ProductCreate = () => {
       }
     });
   };
-
+  const page = useSelector((state: RootState) => state.Page.value);
   return (
     <motion.div {...AdminMotionProps}>
+      <Box
+        paddingBottom={Theme.spacing(4)}
+        display={"flex"}
+        alignItems={"center"}
+        gap={Theme.spacing(2)}
+      >
+        <IconButton
+          onClick={() => {
+            navigate("/admin/product");
+          }}
+        >
+          <ArrowBackIosNewRounded fontSize="medium" />
+        </IconButton>
+        <Typography variant="h5">{page}</Typography>
+      </Box>
       <Box
         display={"flex"}
         flexDirection={"column"}
@@ -554,9 +569,9 @@ const ProductCreate = () => {
                   }}
                   required
                 >
-                  {CatagoryData?.map((catagory, index) => (
-                    <MenuItem key={index} value={catagory._id}>
-                      {catagory.name}
+                  {CatagoryData?.map((item, index) => (
+                    <MenuItem key={index} value={item.catagory._id}>
+                      {item.catagory.name}
                     </MenuItem>
                   ))}
                 </Select>

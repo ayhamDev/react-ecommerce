@@ -117,9 +117,9 @@ export default function Dashboard({
     setOpen(false);
   };
   const handleResize = (e) => {
-    if (window.innerWidth <= 800) {
+    if (!ismobile && window.innerWidth < 800) {
       SetIsMobile(true);
-    } else {
+    } else if (ismobile && window.innerWidth >= 800) {
       SetIsMobile(false);
     }
   };
@@ -146,7 +146,12 @@ export default function Dashboard({
           <AppBar
             variant="outlined"
             elevation={0}
-            sx={{ bgcolor: "white", color: "black", zIndex: 9 }}
+            sx={{
+              bgcolor: "rgb(255,255,255,0.70)",
+              color: "black",
+              zIndex: 9,
+              backdropFilter: "blur(10px)",
+            }}
           >
             <Toolbar sx={{ justifyContent: "space-between" }}>
               <IconButton
@@ -167,9 +172,13 @@ export default function Dashboard({
           <AppBarDesktop
             position="fixed"
             open={open}
-            variant="outlined"
-            elevation={0}
-            sx={{ bgcolor: "white", color: "black", zIndex: 9 }}
+            elevation={1}
+            sx={{
+              bgcolor: "rgb(255,255,255,0.70)",
+              color: "black",
+              zIndex: 9,
+              backdropFilter: "blur(10px)",
+            }}
           >
             <Toolbar
               sx={{

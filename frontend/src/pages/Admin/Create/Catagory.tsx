@@ -15,6 +15,8 @@ import {
   useTheme,
   Snackbar,
   Button,
+  IconButton,
+  Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import api from "../../../api/API";
@@ -22,18 +24,17 @@ import { RootState } from "../../../store/Store";
 import { AdminMotionProps } from "../../../utils/ConfigMotion";
 import { motion } from "framer-motion";
 import useAdminAuth from "../../../hooks/useAdminAuth";
+import { ArrowBackIosNewRounded } from "@mui/icons-material";
 
 const CatagoryCreate = () => {
   const dispacth = useDispatch();
   const navigate = useNavigate();
-  const { VerifyToken } = useAdminAuth();
+  const { VerifyToken, admin } = useAdminAuth();
   useLayoutEffect(() => {
-    dispacth(SetName("Product Details"));
+    dispacth(SetName("Create Catagory"));
     VerifyToken();
   });
   // Redux
-  const auth = useSelector((state: RootState) => state.adminAuth.value);
-
   const Theme = useTheme();
   // Refs
   // States
@@ -65,7 +66,7 @@ const CatagoryCreate = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${auth.accessToken}`,
+            Authorization: `Bearer ${admin.accessToken}`,
           },
         }
       );
@@ -76,9 +77,24 @@ const CatagoryCreate = () => {
         : null;
     }
   };
-
+  const page = useSelector((state: RootState) => state.Page.value);
   return (
     <motion.div {...AdminMotionProps}>
+      <Box
+        paddingBottom={Theme.spacing(4)}
+        display={"flex"}
+        alignItems={"center"}
+        gap={Theme.spacing(2)}
+      >
+        <IconButton
+          onClick={() => {
+            navigate("/admin/catagory");
+          }}
+        >
+          <ArrowBackIosNewRounded fontSize="medium" />
+        </IconButton>
+        <Typography variant="h5">{page}</Typography>
+      </Box>
       <Box
         display={"flex"}
         flexDirection={"column"}

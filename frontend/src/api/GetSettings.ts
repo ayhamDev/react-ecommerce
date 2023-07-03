@@ -1,11 +1,5 @@
 import api from "./API";
 
-export default function GetSettings(Token: string | undefined) {
-  return api
-    .get(`/settings`, {
-      headers: {
-        Authorization: `Bearer ${Token}`,
-      },
-    })
-    .then((res) => res.data);
+export default function GetSettings() {
+  return api.get(`/settings`).then((res) => res.data);
 }

@@ -9,7 +9,6 @@ import isSameUserOrAdmin from "../middleware/isSameUserOrAdmin.js";
 import CalculateAmount from "../Utils/CalculateAmount.js";
 import SettingsModel from "../Models/Settings.model.js";
 
-// import CalculateAmount from "../Utils/CalculateAmount.js";
 dotenv.config();
 const Router = express.Router();
 const OrderStatus = [
@@ -17,7 +16,7 @@ const OrderStatus = [
   "Pending",
   "Accepted",
   "Shipping",
-  "Completed",
+  "Delivered",
 ];
 
 Router.get("/", IsAdmin, async (req, res) => {

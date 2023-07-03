@@ -33,15 +33,14 @@ const Settings = () => {
   const Theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const auth = useSelector((state: RootState) => state.adminAuth.value);
-  const { VerifyToken } = useAdminAuth();
+  const { VerifyToken, admin } = useAdminAuth();
   useLayoutEffect(() => {
     dispatch(SetName("Settings"));
     VerifyToken();
   });
   const { data, status } = useQuery({
     queryKey: ["settings"],
-    queryFn: () => GetSettings(auth.accessToken),
+    queryFn: GetSettings,
   });
 
   const [CurrentCurrency, SetCurrentCurrency] = useState<Currency>(
@@ -92,7 +91,7 @@ const Settings = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${auth.accessToken}`,
+            Authorization: `Bearer ${admin.accessToken}`,
           },
         }
       );

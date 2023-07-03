@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { BeatLoader } from "react-spinners";
 
-const LoadingSpinner = () => {
+const LoadingSpinner = (props: { size?: number }) => {
   return (
     <Box
       overflow={"hidden"}
@@ -11,7 +11,11 @@ const LoadingSpinner = () => {
       justifyContent={"center"}
       alignItems={"center"}
     >
-      <BeatLoader color="#212121" margin={5} size={25} />
+      <BeatLoader
+        color="#212121"
+        margin={5}
+        size={props.size ? props.size : 25}
+      />
     </Box>
   );
 };

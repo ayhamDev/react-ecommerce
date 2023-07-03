@@ -27,13 +27,12 @@ const UserDetails = () => {
   const navigate = useNavigate();
   const Theme = useTheme();
   const dispatch = useDispatch();
-  const auth = useSelector((state: RootState) => state.adminAuth.value);
   const page = useSelector((state: RootState) => state.Page.value);
 
-  const { VerifyToken } = useAdminAuth();
+  const { VerifyToken, admin } = useAdminAuth();
   const { status, data } = useQuery({
     queryKey: ["user", id],
-    queryFn: () => GetUser(auth.accessToken, id),
+    queryFn: () => GetUser(admin.accessToken, id),
   });
   useLayoutEffect(() => {
     dispatch(SetName("User Details"));

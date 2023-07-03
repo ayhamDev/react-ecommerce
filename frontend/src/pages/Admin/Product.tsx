@@ -2,9 +2,9 @@ import { useLayoutEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import GetProducts from "../../api/GetProducts";
-import { Paper, Typography } from "@mui/material";
+import { Paper, Typography, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 import ToolbarContainer from "../../components/Admin/ProductToolbar";
 import { useNavigate } from "react-router-dom";
 
@@ -15,8 +15,11 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import GetSettings from "../../api/GetSettings";
 import { RootState } from "../../store/Store";
 import { motion } from "framer-motion";
+
 import { AdminMotionProps } from "../../utils/ConfigMotion";
 import useAdminAuth from "../../hooks/useAdminAuth";
+import moment from "moment";
+import { BorderRight } from "@mui/icons-material";
 const availabilityString = ["Out Of Stock", "In Stock"];
 type Product = {
   _id: string;
@@ -84,17 +87,38 @@ const Product = () => {
     {
       field: "price",
       headerName: "Price",
-      width: 150,
+      width: 200,
     },
     {
       field: "availability",
       headerName: "Availability",
       width: 200,
+      renderCell: (params: GridRenderCellParams<{ value: string }>) => (
+        <Box
+          sx={{
+            paddingY: "10px",
+            paddingX: "15px",
+            bgcolor: Theme.palette.grey[200],
+            borderRadius: "100px",
+            fontWeight: "bold",
+            cursor: "default",
+            userSelect: "none",
+            color:
+              params.value == "In Stock"
+                ? Theme.palette.success.main
+                : Theme.palette.error.main,
+          }}
+        >
+          {params.value}
+        </Box>
+      ),
     },
     {
       field: "updatedAt",
       headerName: "Last Update",
       width: 200,
+      renderCell: (params: GridRenderCellParams<Date>) =>
+        moment(params.value).format("MMMM DD YYYY, h:mm a"),
     },
   ];
   return (
@@ -119,6 +143,9 @@ const Product = () => {
           columns={columns}
           rows={rows}
           initialState={{
+            sorting: {
+              sortModel: [{ field: "updatedAt", sort: "desc" }],
+            },
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },

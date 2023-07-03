@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
 import { SetName } from "../../store/slice/Page";
 import type { RootState } from "../../store/Store";
@@ -16,6 +16,9 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
 import useAdminAuth from "../../hooks/useAdminAuth";
+import { SeverityPill } from "../../components/Admin/SeverityPill";
+import statusMap from "../../utils/PillColors";
+import moment from "moment";
 
 type Order = {
   _id: string;
@@ -32,20 +35,18 @@ type Order = {
   updatedAt: string;
 };
 const OrderPage = () => {
-  const auth = useSelector((state: RootState) => state.adminAuth.value);
   const page = useSelector((state: RootState) => state.Page.value);
 
-  const { VerifyToken } = useAdminAuth();
+  const { VerifyToken, admin } = useAdminAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useLayoutEffect(() => {
     dispatch(SetName("Orders"));
     VerifyToken();
   });
-  const { status, error, data } = useQuery({
+  const { status, data } = useQuery({
     queryKey: ["order"],
-    enabled: auth.accessToken != undefined,
-    queryFn: () => GetOrders(auth.accessToken),
+    queryFn: () => GetOrders(admin?.accessToken),
   });
 
   const Theme = useTheme();
@@ -83,13 +84,20 @@ const OrderPage = () => {
     },
     {
       field: "status",
-      headerName: "status",
+      headerName: "Status",
       width: 200,
+      renderCell: (params: GridRenderCellParams<string>) => (
+        <SeverityPill color={statusMap[params.value]}>
+          {params.value}
+        </SeverityPill>
+      ),
     },
     {
       field: "createdAt",
       headerName: "Created At",
       width: 200,
+      renderCell: (params: GridRenderCellParams<Date>) =>
+        moment(params.value).format("MMMM DD YYYY, h:mm a"),
     },
   ];
   return (
@@ -114,6 +122,9 @@ const OrderPage = () => {
           columns={columns}
           rows={rows}
           initialState={{
+            sorting: {
+              sortModel: [{ field: "createdAt", sort: "desc" }],
+            },
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },

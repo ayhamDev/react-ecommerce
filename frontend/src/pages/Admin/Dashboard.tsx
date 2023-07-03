@@ -10,7 +10,7 @@ import {
   ShoppingCart,
   AccountCircle,
 } from "@mui/icons-material";
-import { Box, colors, useTheme } from "@mui/material";
+import { Box, Container, colors, useTheme } from "@mui/material";
 import React, { useLayoutEffect } from "react";
 import DashboardPart from "../../components/Admin/DashboardPart";
 import isMobile from "is-mobile";
@@ -68,7 +68,14 @@ export default function Dashboard({ children }) {
   return (
     <DashboardPart items={SideBarItems}>
       {/* Dashboard Content */}
-      <Box padding={Theme.spacing(isMobile() ? 0 : 2)}>{children}</Box>
+      <Box
+        padding={Theme.spacing(isMobile() ? 0 : 2)}
+        paddingTop={Theme.spacing(isMobile() ? 2 : 2)}
+      >
+        <Container maxWidth="xl" disableGutters>
+          {children}
+        </Container>
+      </Box>
     </DashboardPart>
   );
 }

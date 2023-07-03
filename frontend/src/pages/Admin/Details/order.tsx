@@ -45,7 +45,7 @@ const OrderDetails = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { VerifyToken } = useAdminAuth();
+  const { VerifyToken, admin } = useAdminAuth();
   useLayoutEffect(() => {
     dispatch(SetName("Order Details"));
     VerifyToken();
@@ -53,9 +53,9 @@ const OrderDetails = () => {
   const Theme = useTheme();
   const auth = useSelector((state: RootState) => state.adminAuth.value);
   const page = useSelector((state: RootState) => state.Page.value);
-  let { status, data } = useQuery({
+  const { status, data } = useQuery({
     queryKey: ["order", orderId],
-    queryFn: () => GetOrder(auth.accessToken, userId, orderId),
+    queryFn: () => GetOrder(admin.accessToken, userId, orderId),
   });
 
   // refs

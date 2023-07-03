@@ -5,11 +5,26 @@ import OrderModel from "../Models/Order.model.js";
 import { body, validationResult } from "express-validator";
 import IsAdmin from "../middleware/IsAdmin.js";
 import dotenv from "dotenv";
+import ProductModel from "../Models/Product.model.js";
 dotenv.config();
 const Router = express.Router();
 
 Router.get("/", async (req, res) => {
-  res.json(await CatagoryModel.find());
+  const Catagories = await CatagoryModel.find();
+  Promise.all(
+    Catagories.map(async (Catagory) => {
+      return {
+        catagory: Catagory,
+        length: (await ProductModel.find({ catagory: Catagory._id })).length,
+      };
+    })
+  )
+    .then((CatagoryProducts) => {
+      res.json(CatagoryProducts);
+    })
+    .catch((err) => {
+      res.status(500).json();
+    });
 });
 Router.get("/:id", async (req, res) => {
   res.json(await CatagoryModel.findById(req.params.id));

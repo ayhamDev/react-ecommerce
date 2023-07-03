@@ -4,12 +4,13 @@ import IsAdmin from "../middleware/IsAdmin.js";
 
 import { body, validationResult } from "express-validator";
 const Router = express.Router();
-Router.get("/", IsAdmin, async (req, res) => {
+Router.get("/", async (req, res) => {
   res.json(await SettingsModel.findOne());
 });
 
 Router.put(
   "/",
+  IsAdmin,
   body("currency").isObject(),
   body("tax").isObject(),
   body("deliveryFee").isNumeric(),

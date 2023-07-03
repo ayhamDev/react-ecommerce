@@ -355,6 +355,7 @@ const ProductDetails = () => {
                     description: descriptionState,
                     price: priceState,
                     catagory: SelectedCatagory,
+                    availability: SelectedAvailability,
                     unit: UnitState,
                     images: images_id.map((img) => {
                       return img;
@@ -675,9 +676,9 @@ const ProductDetails = () => {
                     }}
                     required
                   >
-                    {CatagoryData?.map((catagory, index) => (
-                      <MenuItem key={index} value={catagory._id}>
-                        {catagory.name}
+                    {CatagoryData?.map((item, index) => (
+                      <MenuItem key={index} value={item.catagory._id}>
+                        {item.catagory.name}
                       </MenuItem>
                     ))}
                   </Select>

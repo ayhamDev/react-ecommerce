@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 
 import { useDispatch, useSelector } from "react-redux";
 import { SetName } from "../../store/slice/Page";
@@ -16,6 +16,7 @@ import { RootState } from "../../store/Store";
 import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
 import useAdminAuth from "../../hooks/useAdminAuth";
+import moment from "moment";
 
 type Catagory = {
   _id: string;
@@ -44,11 +45,11 @@ const CatagoryPage = () => {
   const Theme = useTheme();
   if (status == "loading") return <LoadingSpinner />;
   if (status == "error") return <LoadingSpinner />;
-  const rows = data?.map((catagory: Catagory) => {
+  const rows = data?.map((item: Catagory) => {
     return {
-      id: catagory._id,
-      name: catagory.name,
-      updatedAt: catagory.updatedAt,
+      id: item.catagory._id,
+      name: item.catagory.name,
+      updatedAt: item.catagory.updatedAt,
     };
   });
 
@@ -67,6 +68,8 @@ const CatagoryPage = () => {
       field: "updatedAt",
       headerName: "Last Update",
       width: 250,
+      renderCell: (params: GridRenderCellParams<Date>) =>
+        moment(params.value).format("MMMM DD YYYY, h:mm a"),
     },
   ];
 
@@ -92,6 +95,9 @@ const CatagoryPage = () => {
           columns={columns}
           rows={rows}
           initialState={{
+            sorting: {
+              sortModel: [{ field: "updatedAt", sort: "desc" }],
+            },
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },

@@ -8,6 +8,10 @@ const useAdminAuth = () => {
   const dispatch = useDispatch();
 
   return {
+    admin: auth,
+    LogOut: () => {
+      return dispatch(LogOut());
+    },
     VerifyToken: async () => {
       try {
         await api.get("/verifytoken", {
@@ -15,6 +19,7 @@ const useAdminAuth = () => {
             Authorization: `Bearer ${auth.accessToken}`,
           },
         });
+        return true;
       } catch (err) {
         dispatch(LogOut());
         console.log(err);

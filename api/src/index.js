@@ -11,8 +11,7 @@ import AuthRouter from "./Router/Auth.js";
 import CartRouter from "./Router/Cart.js";
 import CatagoryRouter from "./Router/Catagory.js";
 import SettingsRouter from "./Router/Settings.js";
-
-import fs from "fs";
+import StatusRouter from "./Router/Status.js";
 import IsAuthenticated from "./middleware/IsAuthenticated.js";
 import IsSameUserOrAdmin from "./middleware/isSameUserOrAdmin.js";
 // Config
@@ -30,6 +29,8 @@ app.use(express.json());
 app.get("/verifyToken", IsSameUserOrAdmin, (req, res) => {
   res.json(req.user);
 });
+app.use("/status", StatusRouter);
+
 app.use("/product", ProductRouter);
 app.use("/cart", CartRouter);
 app.use("/order", OrderRouter);

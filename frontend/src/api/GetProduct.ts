@@ -1,5 +1,5 @@
 import api from "./API";
 
-export default function GetProducts(id: string) {
+export default function GetProduct(id: string | undefined) {
   return api.get(`/product/${id}`).then((res) => res.data);
 }

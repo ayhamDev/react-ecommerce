@@ -4,6 +4,7 @@ body,
   margin: 0;
   padding: 0;
   height: 100%;
+  background-color: #f3f3f3;
 }
 * {
   box-sizing: border-box;
@@ -19,7 +20,10 @@ body,
 }
 /* width */
 .scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 15px;
+}
+.scrollbar {
+  overflow: overlay;
 }
 
 /* Track */
@@ -29,10 +33,13 @@ body,
 
 /* Handle */
 .scrollbar::-webkit-scrollbar-thumb {
-  background: #424242;
+  background: #222222;
 }
-.scrollbar:hover::-webkit-scrollbar-thumb {
-  background: #616161;
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #444444;
+}
+.MuiCardHeader-action {
+  margin: 0 !important;
 }
 /* Rectangle 1 */
 .FancyBoxShadow {
@@ -42,6 +49,47 @@ body,
   animation-play-state: running;
   animation-timing-function: ease-in;
   background: #ffffff;
+}
+.apexcharts-toolbar {
+  z-index: 8 !important;
+}
+.css-hhhn8f-MuiDataGrid-root .MuiDataGrid-columnHeader:focus,
+.css-hhhn8f-MuiDataGrid-root .MuiDataGrid-cell:focus {
+  outline: none !important;
+}
+.MuiDataGrid-root {
+  user-select: none;
+}
+.swiper-slide {
+  min-height: 512px;
+  border-radius: 20px;
+}
+
+.swiper-button-prev {
+  z-index: 99999999999999999999;
+  left: 30px;
+}
+.swiper-button-next {
+  right: 30px;
+  z-index: 99999999999999999999;
+}
+.swiper,
+.swiper-wrapper,
+.swiper-slide,
+.swiper-slide > .MuiBox-root {
+  border-radius: 20px;
+}
+.swiper-pagination-fraction,
+.swiper-pagination-custom,
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+  bottom: 25px !important;
+}
+.swiper-pagination-fraction,
+.swiper-pagination-custom,
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal span {
+  padding: 6px;
 }
 @keyframes shadowBox {
   from {

@@ -10,6 +10,7 @@ import { Login } from "../../store/slice/AdminAuthSlice";
 import { motion } from "framer-motion";
 import isMobile from "is-mobile";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
+import { heIL } from "@mui/x-data-grid";
 
 const LoginPage = () => {
   const Theme = useTheme();
@@ -48,7 +49,16 @@ const LoginPage = () => {
       justifyContent={"center"}
       alignItems={"center"}
     >
-      <motion.div {...AdminMotionProps}>
+      <motion.div
+        {...AdminMotionProps}
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Paper
           className="FancyBoxShadow"
           sx={{

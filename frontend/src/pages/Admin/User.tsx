@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { SetName } from "../../store/slice/Page";
 import { Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../store/Store";
 import ToolbarContainer from "../../components/Admin/UserToolbar";
@@ -14,17 +14,18 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
 import useAdminAuth from "../../hooks/useAdminAuth";
+import moment from "moment";
 
 type User = {
   _id: string;
   name: string;
   email: number;
   phoneNo: string;
+  createdAt: Date;
 };
 const UserPage = () => {
-  const auth = useSelector((state: RootState) => state.adminAuth.value);
   const page = useSelector((state: RootState) => state.Page.value);
-  const { VerifyToken } = useAdminAuth();
+  const { VerifyToken, admin } = useAdminAuth();
   const dispacth = useDispatch();
   const navigate = useNavigate();
   useLayoutEffect(() => {
@@ -33,8 +34,7 @@ const UserPage = () => {
   });
   const { status, data } = useQuery({
     queryKey: ["user"],
-    enabled: auth.accessToken != undefined,
-    queryFn: () => GetUsers(auth.accessToken),
+    queryFn: () => GetUsers(admin.accessToken),
   });
   const Theme = useTheme();
   if (status == "loading") return <LoadingSpinner />;
@@ -45,6 +45,7 @@ const UserPage = () => {
       name: user.name,
       email: user.email,
       phoneNo: user.phoneNo,
+      createdAt: user.createdAt,
     };
   });
 
@@ -68,6 +69,13 @@ const UserPage = () => {
       field: "phoneNo",
       headerName: "Phone Number",
       width: 250,
+    },
+    {
+      field: "createdAt",
+      headerName: "Registered At",
+      width: 250,
+      renderCell: (params: GridRenderCellParams<Date>) =>
+        moment(params.value).format("MMMM DD YYYY, h:mm a"),
     },
   ];
   return (
@@ -93,6 +101,9 @@ const UserPage = () => {
           columns={columns}
           rows={rows}
           initialState={{
+            sorting: {
+              sortModel: [{ field: "createdAt", sort: "desc" }],
+            },
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },

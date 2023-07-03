@@ -6,6 +6,7 @@ import { IconButton, Avatar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { LogOut } from "../../store/slice/AdminAuthSlice";
+import { AccountCircleRounded } from "@mui/icons-material";
 
 export default function AvatarMenu(props: { src?: string; children?: string }) {
   const navigate = useNavigate();
@@ -27,9 +28,8 @@ export default function AvatarMenu(props: { src?: string; children?: string }) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        sx={{ p: 0 }}
       >
-        <Avatar {...props} alt="Remy Sharp" />
+        <AccountCircleRounded fontSize="large" />
       </IconButton>
       <Menu
         elevation={2}

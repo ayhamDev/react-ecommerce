@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "./store/Store";
 import GuardedRoute from "./components/GuardedRoute";
@@ -34,6 +34,8 @@ const Settings = React.lazy(() => import("./pages/Admin/Settings"));
 import { AnimatePresence } from "framer-motion";
 import { HashLoader } from "react-spinners";
 import { Box } from "@mui/material";
+import Page404 from "./pages/404";
+import Home from "./pages/Client/Home";
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth.value);
@@ -42,7 +44,7 @@ const App = () => {
     <AnimatePresence>
       <Routes>
         {/* website */}
-        <Route path="/" element={<div>Home</div>} />
+        <Route path="/" element={<Home />} />
         {/* Auth */}
         <Route
           element={
@@ -210,7 +212,7 @@ const App = () => {
             }
           />
         </Route>
-        <Route path="*" element={<h1>404</h1>}></Route>
+        <Route path="*" element={<Page404 />}></Route>
       </Routes>
     </AnimatePresence>
   );

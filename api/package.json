@@ -4,8 +4,8 @@
   "description": "this is the api.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/index.js",
-    "start": "node ./src/index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "engines": {
     "node": ">=16 <18"

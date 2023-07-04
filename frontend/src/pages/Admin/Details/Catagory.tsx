@@ -26,14 +26,13 @@ import useAdminAuth from "../../../hooks/useAdminAuth";
 
 const CatagoryDetails = () => {
   const { id } = useParams();
-  const dispacth = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { VerifyToken } = useAdminAuth();
   useLayoutEffect(() => {
-    dispacth(SetName("Catagory Details"));
+    dispatch(SetName("Catagory Details"));
     VerifyToken();
   });
-  const FileTypes = ["image/png", "image/jpg", "image/jpeg"];
 
   // Redux
   const auth = useSelector((state: RootState) => state.adminAuth.value);
@@ -233,10 +232,15 @@ const CatagoryDetails = () => {
             onClick={DeleteCataogyrHandler}
             variant="contained"
             color="error"
+            disabled={isUpdating}
           >
             Delete
           </Button>
-          <Button onClick={UpdateCataogyrHandler} variant="contained">
+          <Button
+            disabled={isUpdating}
+            onClick={UpdateCataogyrHandler}
+            variant="contained"
+          >
             Update
           </Button>
         </Box>

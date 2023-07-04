@@ -869,10 +869,15 @@ const ProductDetails = () => {
             onClick={DeleteProductHandler}
             variant="contained"
             color="error"
+            disabled={isUpdating}
           >
             Delete
           </Button>
-          <Button onClick={UpdateProductHandler} variant="contained">
+          <Button
+            disabled={isUpdating}
+            onClick={UpdateProductHandler}
+            variant="contained"
+          >
             Update
           </Button>
         </Box>

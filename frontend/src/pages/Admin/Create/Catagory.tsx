@@ -58,6 +58,7 @@ const CatagoryCreate = () => {
     }
   };
   const CreateCataogyrHandler = async () => {
+    SetIsUpdating(true);
     try {
       await api.post(
         `/catagory`,
@@ -70,8 +71,10 @@ const CatagoryCreate = () => {
           },
         }
       );
+      SetIsUpdating(false);
       navigate("/admin/catagory");
     } catch (err) {
+      SetIsUpdating(false);
       TitleState.length == 0
         ? SetTitleError({ error: true, text: "This Field Is Required" })
         : null;
@@ -156,7 +159,11 @@ const CatagoryCreate = () => {
         >
           Cancel
         </Button>
-        <Button onClick={CreateCataogyrHandler} variant="contained">
+        <Button
+          disabled={isUpdating}
+          onClick={CreateCataogyrHandler}
+          variant="contained"
+        >
           Create
         </Button>
       </Box>

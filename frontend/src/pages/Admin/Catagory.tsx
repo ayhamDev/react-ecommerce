@@ -9,7 +9,7 @@ import { SetName } from "../../store/slice/Page";
 import ToolbarContainer from "../../components/Admin/CatagoryToolbar";
 import GetCatagory from "../../api/GetCatagories";
 import { useLayoutEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { LogOut } from "../../store/slice/AdminAuthSlice";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { RootState } from "../../store/Store";
@@ -18,6 +18,7 @@ import { AdminMotionProps } from "../../utils/ConfigMotion";
 import useAdminAuth from "../../hooks/useAdminAuth";
 import moment from "moment";
 
+type Item = { catagory: Catagory };
 type Catagory = {
   _id: string;
   name: string;
@@ -45,7 +46,7 @@ const CatagoryPage = () => {
   const Theme = useTheme();
   if (status == "loading") return <LoadingSpinner />;
   if (status == "error") return <LoadingSpinner />;
-  const rows = data?.map((item: Catagory) => {
+  const rows = data?.map((item: Item) => {
     return {
       id: item.catagory._id,
       name: item.catagory.name,

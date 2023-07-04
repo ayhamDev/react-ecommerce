@@ -1,8 +1,4 @@
 import {
-  AttachMoneyRounded,
-  AccountBoxRounded,
-  NewspaperRounded,
-  CampaignRounded,
   AnalyticsRounded,
   EmailRounded,
   Inventory,
@@ -11,7 +7,7 @@ import {
   AccountCircle,
 } from "@mui/icons-material";
 import { Box, Container, colors, useTheme } from "@mui/material";
-import React, { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import DashboardPart from "../../components/Admin/DashboardPart";
 import isMobile from "is-mobile";
 import useAdminAuth from "../../hooks/useAdminAuth";
@@ -29,11 +25,6 @@ export default function Dashboard({ children }) {
           label: "Overview",
           icon: <AnalyticsRounded sx={{ color: colors.grey[500] }} />,
           path: "/admin",
-        },
-        {
-          label: "Emails",
-          icon: <EmailRounded sx={{ color: colors.grey[500] }} />,
-          path: "/admin/sendmail",
         },
       ],
     },

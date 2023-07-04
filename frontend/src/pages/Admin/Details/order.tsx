@@ -63,8 +63,10 @@ const OrderDetails = () => {
   const ProductIdElementRef = useRef<HTMLElement | null>(null);
 
   // States
-  const [copied, SetCopied] = useState(false);
-  const [Status, setStatus] = useState("Pending");
+  const [copied, SetCopied] = useState<boolean>(false);
+  const [Status, setStatus] = useState<string>("Pending");
+
+  const [isUpdating, SetisUpdating] = useState<boolean>(false);
 
   const handleCloseSnakbar = (_, reason: string) => {
     if (reason === "clickaway") {
@@ -78,6 +80,7 @@ const OrderDetails = () => {
     setStatus(event.target.value);
   };
   const UpdateProductHandler = async () => {
+    SetisUpdating(true);
     try {
       const res = await api.put(
         `/order/${orderId}/status`,
@@ -91,9 +94,11 @@ const OrderDetails = () => {
         }
       );
       if (res.status == 200) {
+        SetisUpdating(false);
         navigate("/admin/order");
       }
     } catch (err) {
+      SetisUpdating(false);
       console.log(err);
     }
   };
@@ -329,10 +334,18 @@ const OrderDetails = () => {
           display={"flex"}
           gap={Theme.spacing(2)}
         >
-          <Button onClick={() => navigate("/admin/order")} variant="outlined">
+          <Button
+            disabled={isUpdating}
+            onClick={() => navigate("/admin/order")}
+            variant="outlined"
+          >
             Cancel
           </Button>
-          <Button onClick={UpdateProductHandler} variant="contained">
+          <Button
+            disabled={isUpdating}
+            onClick={UpdateProductHandler}
+            variant="contained"
+          >
             Update
           </Button>
         </Box>

@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "./store/Store";
 import GuardedRoute from "./components/GuardedRoute";
@@ -6,7 +6,6 @@ import React, { Suspense } from "react";
 
 import LoadingSpinner from "./components/LoadingSpinner";
 const Overview = React.lazy(() => import("./pages/Admin/Overview"));
-const SendEmail = React.lazy(() => import("./pages/Admin/SendEmail"));
 const Product = React.lazy(() => import("./pages/Admin/Product"));
 const Order = React.lazy(() => import("./pages/Admin/Order"));
 const Catagory = React.lazy(() => import("./pages/Admin/Catagory"));
@@ -35,8 +34,6 @@ import { AnimatePresence } from "framer-motion";
 import { HashLoader } from "react-spinners";
 import { Box } from "@mui/material";
 import Page404 from "./pages/404";
-import Home from "./pages/Client/Home";
-import HomeLayout from "./components/Client/HomeLayout";
 
 const App = () => {
   const auth = useSelector((state: RootState) => state.auth.value);
@@ -44,11 +41,6 @@ const App = () => {
   return (
     <AnimatePresence>
       <Routes>
-        {/* website */}
-        <Route element={<HomeLayout />}>
-          <Route path="/" element={<Home />} />
-        </Route>
-
         {/* admin */}
 
         <Route
@@ -69,14 +61,7 @@ const App = () => {
               </Suspense>
             }
           />
-          <Route
-            path="/admin/sendmail"
-            element={
-              <Suspense fallback={<LoadingSpinner />}>
-                <SendEmail />
-              </Suspense>
-            }
-          />
+
           {/* CMS */}
           <Route
             path="/admin/product"
@@ -159,6 +144,7 @@ const App = () => {
               </Suspense>
             }
           />
+
           <Route
             path="/admin/settings"
             element={

@@ -12,7 +12,6 @@ import CartRouter from "./Router/Cart.js";
 import CatagoryRouter from "./Router/Catagory.js";
 import SettingsRouter from "./Router/Settings.js";
 import StatusRouter from "./Router/Status.js";
-import IsAuthenticated from "./middleware/IsAuthenticated.js";
 import IsSameUserOrAdmin from "./middleware/isSameUserOrAdmin.js";
 // Config
 dotenv.config();

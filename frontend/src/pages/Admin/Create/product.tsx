@@ -753,7 +753,11 @@ const ProductCreate = () => {
         >
           Cancel
         </Button>
-        <Button onClick={UpdateProductHandler} variant="contained">
+        <Button
+          disabled={isUpdating}
+          onClick={UpdateProductHandler}
+          variant="contained"
+        >
           Create
         </Button>
       </Box>

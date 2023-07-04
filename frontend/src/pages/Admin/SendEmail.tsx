@@ -1,5 +1,4 @@
-import React, { useLayoutEffect } from "react";
-import Dashboard from "./Dashboard";
+import { useLayoutEffect } from "react";
 import useAdminAuth from "../../hooks/useAdminAuth";
 
 const SendEmail = () => {

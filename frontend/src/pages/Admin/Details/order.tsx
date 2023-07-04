@@ -31,14 +31,11 @@ import isMobile from "is-mobile";
 import GetOrder from "../../../api/GetOrder";
 import { ArrowBackIosNewRounded, ExpandCircleDown } from "@mui/icons-material";
 import { SetName } from "../../../store/slice/Page";
-import { LogOut } from "../../../store/slice/AdminAuthSlice";
-import CalculateAmount from "../../../utils/CalculateAmount";
 import api from "../../../api/API";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../../utils/ConfigMotion";
 import useAdminAuth from "../../../hooks/useAdminAuth";
-const availabilityString = ["Out Of Stock", "In Stock"];
 
 const OrderDetails = () => {
   const { userId, orderId } = useParams();
@@ -68,7 +65,7 @@ const OrderDetails = () => {
 
   const [isUpdating, SetisUpdating] = useState<boolean>(false);
 
-  const handleCloseSnakbar = (_, reason: string) => {
+  const handleCloseSnakbar = (_: any, reason: string) => {
     if (reason === "clickaway") {
       return SetCopied(false);
     }
@@ -111,7 +108,9 @@ const OrderDetails = () => {
   if (status == "loading") return <LoadingSpinner />;
   if (data == null) return <Navigate to="/admin/order" replace />;
 
-  data.products = data?.products.filter((product) => product.productId != null);
+  data.products = data?.products.filter(
+    (product: any) => product.productId != null
+  );
 
   return (
     <motion.div {...AdminMotionProps}>
@@ -163,7 +162,9 @@ const OrderDetails = () => {
             <Box
               ref={ProductIdElementRef}
               onClick={async () => {
+                // @ts-ignore
                 navigator.clipboard
+                  // @ts-ignore
                   .writeText(ProductIdElementRef.current?.textContent)
                   .then(() => {
                     SetCopied(true);
@@ -272,7 +273,7 @@ const OrderDetails = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data?.products?.map((row, index) => (
+                  {data?.products?.map((row: any, index: any) => (
                     <TableRow
                       key={index}
                       sx={{

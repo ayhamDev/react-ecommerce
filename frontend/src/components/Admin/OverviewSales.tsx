@@ -1,7 +1,5 @@
-import { Sync } from "@mui/icons-material";
-
-import { Button, Card, CardContent, CardHeader, SvgIcon } from "@mui/material";
-import { SxProps, alpha, useTheme } from "@mui/material/styles";
+import { Card, CardContent, CardHeader } from "@mui/material";
+import { SxProps, useTheme } from "@mui/material/styles";
 import { Chart } from "./chart";
 import isMobile from "is-mobile";
 import { useEffect, useState } from "react";
@@ -105,7 +103,7 @@ const useChartOptions = () => {
     },
     yaxis: {
       labels: {
-        formatter: (value) => (value > 0 ? `${value}K` : `${value}`),
+        formatter: (value: any) => (value > 0 ? `${value}K` : `${value}`),
         offsetX: -10,
         style: {
           colors: theme.palette.text.secondary,
@@ -115,6 +113,7 @@ const useChartOptions = () => {
   };
 };
 type OverViewSalesProps = {
+  // @ts-ignore
   chartSeries: [];
   sx?: SxProps;
 };
@@ -128,6 +127,7 @@ export const OverviewSales = (props: OverViewSalesProps) => {
       <CardContent>
         <Chart
           height={"400px"}
+          // @ts-ignore
           options={chartOptions}
           series={chartSeries}
           type="bar"

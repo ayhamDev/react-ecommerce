@@ -14,22 +14,11 @@ import isMobile from "is-mobile";
 
 import SidebarItem from "./SidebarItem";
 import { Close } from "@mui/icons-material";
-import {
-  AppBar,
-  Breadcrumbs,
-  colors,
-  Drawer,
-  Link,
-  Typography,
-} from "@mui/material";
+import { AppBar, colors, Drawer, Typography } from "@mui/material";
 import niceBg from "../../assets/img/nice.png";
 import { motion } from "framer-motion";
-import useAdminAuth from "../../hooks/useAdminAuth";
 const drawerWidth = 250;
 
-const iOS =
-  typeof navigator !== "undefined" &&
-  /iPad|iPhone|iPod/.test(navigator.userAgent);
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -116,7 +105,7 @@ export default function Dashboard({
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const handleResize = (e) => {
+  const handleResize = () => {
     if (!ismobile && window.innerWidth < 800) {
       SetIsMobile(true);
     } else if (ismobile && window.innerWidth >= 800) {
@@ -230,6 +219,7 @@ export default function Dashboard({
                   <SidebarItem
                     key={index}
                     setOpen={setOpen}
+                    // @ts-ignore
                     role={role}
                     open={open}
                     ismobile={ismobile}
@@ -258,6 +248,7 @@ export default function Dashboard({
             <Box className="scrollbar">
               <List>
                 {items.map((role, index) => (
+                  // @ts-ignore
                   <SidebarItem key={index} role={role} open={open} />
                 ))}
               </List>

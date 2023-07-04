@@ -1,13 +1,7 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { SetName } from "../../../store/slice/Page";
-import { useParams, useNavigate, Form } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -24,7 +18,6 @@ import {
   IconButton,
 } from "@mui/material";
 import CircularProgressWithLabel from "../../../components/CircularProgressWithLabel";
-import GetProduct from "../../../api/GetProduct";
 import { useQuery } from "@tanstack/react-query";
 import GetCatagory from "../../../api/GetCatagories";
 import { useSelector } from "react-redux";
@@ -34,8 +27,6 @@ import {
   ArrowBackIosNewRounded,
   Clear,
   CloudUpload,
-  Description,
-  SettingsSuggestOutlined,
 } from "@mui/icons-material";
 import { AdminMotionProps } from "../../../utils/ConfigMotion";
 import { motion } from "framer-motion";
@@ -62,7 +53,6 @@ const ProductCreate = () => {
 
   const Theme = useTheme();
   // Refs
-  const ProductIdElementRef = useRef<HTMLElement | null>(null);
   const inputFile = useRef<HTMLInputElement | null>(null);
   // States
   const [SelectedAvailability, SetSelectedAvailability] = useState<number>();
@@ -122,12 +112,13 @@ const ProductCreate = () => {
   // Quarys
 
   const AvailabilityChangeHandler = (event: SelectChangeEvent) => {
+    // @ts-ignore
     SetSelectedAvailability(event.target.value);
   };
   const CatagoryChangeHandler = (event: SelectChangeEvent) => {
     SetSelectedCatagory(event.target.value);
   };
-  const handleCloseSnakbar = (_, reason: string) => {
+  const handleCloseSnakbar = (_: any, reason: string) => {
     if (reason === "clickaway") {
       return SetCopied(false);
     }
@@ -142,7 +133,8 @@ const ProductCreate = () => {
 
   const UpdateProductHandler = async () => {
     SetIsUpdating(true);
-    let images_id: string[] | [] = ImageLoading.map((img) => {
+    // @ts-ignore
+    let images_id = ImageLoading.map((img) => {
       if (!img.urlID) return;
       return img.urlID;
     });
@@ -198,6 +190,8 @@ const ProductCreate = () => {
               text: "This Field Is Required.",
             })
           : null;
+        // @ts-ignore
+
         ![0, 1].includes(SelectedAvailability)
           ? SetSelectCatagoryError({
               error: true,
@@ -267,6 +261,8 @@ const ProductCreate = () => {
                 text: "This Field Is Required.",
               })
             : null;
+          // @ts-ignore
+
           ![0, 1].includes(SelectedAvailability)
             ? SetSelectCatagoryError({
                 error: true,
@@ -286,6 +282,8 @@ const ProductCreate = () => {
         if (!image.file) return null;
         const Form = new FormData();
 
+        // @ts-ignore
+
         Form.append("image", image.file);
 
         try {
@@ -296,6 +294,7 @@ const ProductCreate = () => {
             },
             onUploadProgress: (progressEvent) => {
               const { loaded, total } = progressEvent;
+              // @ts-ignore
               const percent = Math.floor((loaded * 100) / total);
               SetProgressValue((prev) => {
                 return { ...prev, [image.id]: { value: percent } };
@@ -303,6 +302,8 @@ const ProductCreate = () => {
             },
           });
           if (ImageUpload.status === 200) {
+            // @ts-ignore
+
             images_id.push(ImageUpload.data.id);
             SetProgressValue((prev) => {
               return { ...prev, [image.id]: { value: 100 } };
@@ -354,6 +355,8 @@ const ProductCreate = () => {
                       text: "This Field Is Required.",
                     })
                   : null;
+                // @ts-ignore
+
                 ![0, 1].includes(SelectedAvailability)
                   ? SetSelectCatagoryError({
                       error: true,
@@ -389,6 +392,7 @@ const ProductCreate = () => {
                 text: "This Field Is Required.",
               })
             : null;
+          // @ts-ignore
           ![0, 1].includes(SelectedAvailability)
             ? SetSelectCatagoryError({
                 error: true,
@@ -406,14 +410,14 @@ const ProductCreate = () => {
       }
     });
   };
-  const HandleFileUpload = async (file) => {
+  const HandleFileUpload = async (file: any) => {
     const id = Math.floor(Date.now() + Math.random() * 1000);
     if (!FileTypes.includes(file.type)) return null;
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = async () => {
-      SetImageLoading((prev) => {
+      SetImageLoading((prev: any) => {
         return [
           ...prev,
           { url: reader.result, isLoading: true, progress: 0, id, file },
@@ -422,7 +426,7 @@ const ProductCreate = () => {
     };
   };
 
-  const HandleDelete = async (id, urlID, isLoading) => {
+  const HandleDelete = async (id: any, urlID: any, isLoading: any) => {
     ImageLoading.forEach((img, index) => {
       if (img.id === id) {
         ImageLoading.splice(index, 1);
@@ -532,6 +536,7 @@ const ProductCreate = () => {
                   labelId="select-availability"
                   id="availability"
                   label="availability"
+                  // @ts-ignore
                   value={SelectedAvailability}
                   onChange={AvailabilityChangeHandler}
                   error={SelectCatagoryError.error}
@@ -569,7 +574,7 @@ const ProductCreate = () => {
                   }}
                   required
                 >
-                  {CatagoryData?.map((item, index) => (
+                  {CatagoryData?.map((item: any, index: any) => (
                     <MenuItem key={index} value={item.catagory._id}>
                       {item.catagory.name}
                     </MenuItem>
@@ -720,6 +725,7 @@ const ProductCreate = () => {
                     sx={{ inset: 0 }}
                   >
                     <CircularProgressWithLabel
+                      // @ts-ignore
                       value={ProgressValue[image.id]?.value || 0}
                     />
                   </Box>

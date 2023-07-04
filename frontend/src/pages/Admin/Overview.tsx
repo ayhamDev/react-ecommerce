@@ -1,7 +1,7 @@
-import React, { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Grid, Typography, useTheme } from "@mui/material";
 import "chart.js/auto";
 import useAdminAuth from "../../hooks/useAdminAuth";
 import { OverviewItemStatus } from "../../components/Admin/OverviewItemStatus";
@@ -23,7 +23,7 @@ const Overview = () => {
   const dispatch = useDispatch();
   useLayoutEffect(() => {});
   const page = useSelector((state: RootState) => state.Page.value);
-  const { VerifyToken, admin } = useAdminAuth();
+  const { VerifyToken } = useAdminAuth();
   useLayoutEffect(() => {
     dispatch(SetName("Overview"));
     VerifyToken();
@@ -78,6 +78,7 @@ const Overview = () => {
         </Grid>
         <Grid item xs={12} lg={8}>
           <OverviewSales
+            // @ts-ignore
             chartSeries={[
               {
                 name: "This year",
@@ -103,6 +104,7 @@ const Overview = () => {
         </Grid>
         <Grid item xs={12} md={12} lg={8}>
           <OverviewOrders
+            // @ts-ignore
             orders={[
               {
                 id: "f69f88012978187a6c12897f",

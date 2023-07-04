@@ -16,7 +16,13 @@ const CustomToolbar = (props: Props) => {
     >
       <GridToolbarExport />
       {props.createBtn ? (
-        <Button variant="contained" onClick={() => navigate(props.createPage)}>
+        <Button
+          variant="contained"
+          onClick={() =>
+            // @ts-ignore
+            navigate(props.createPage)
+          }
+        >
           {props.createText}
         </Button>
       ) : null}

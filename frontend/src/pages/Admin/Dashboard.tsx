@@ -1,18 +1,20 @@
 import {
   AnalyticsRounded,
-  EmailRounded,
   Inventory,
   Bookmark,
   ShoppingCart,
   AccountCircle,
 } from "@mui/icons-material";
 import { Box, Container, colors, useTheme } from "@mui/material";
-import { useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import DashboardPart from "../../components/Admin/DashboardPart";
 import isMobile from "is-mobile";
 import useAdminAuth from "../../hooks/useAdminAuth";
-
-export default function Dashboard({ children }) {
+export default function Dashboard({
+  children,
+}: {
+  children: React.JSX.Element;
+}) {
   const { VerifyToken } = useAdminAuth();
   useLayoutEffect(() => {
     VerifyToken();

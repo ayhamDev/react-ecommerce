@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Chart } from "./chart";
 
-const useChartOptions = (labels) => {
+const useChartOptions = (labels: any) => {
   const theme = useTheme();
 
   return {
@@ -90,6 +90,7 @@ export const OverviewStatus = (props: OverviewStatusProps) => {
       <CardContent>
         <Chart
           height={300}
+          // @ts-ignore
           options={chartOptions}
           series={chartSeries}
           type="donut"
@@ -114,6 +115,7 @@ export const OverviewStatus = (props: OverviewStatusProps) => {
                   alignItems: "center",
                 }}
               >
+                {/* @ts-ignore */}
                 {iconMap[label]}
                 <Typography
                   sx={{ my: 1 }}

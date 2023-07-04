@@ -1,9 +1,4 @@
-import {
-  ArrowUpwardRounded,
-  ArrowDownwardRounded,
-  Money,
-  Title,
-} from "@mui/icons-material";
+import { ArrowUpwardRounded, ArrowDownwardRounded } from "@mui/icons-material";
 
 import {
   Avatar,

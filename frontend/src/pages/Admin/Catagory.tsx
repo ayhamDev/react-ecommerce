@@ -9,14 +9,14 @@ import { SetName } from "../../store/slice/Page";
 import ToolbarContainer from "../../components/Admin/CatagoryToolbar";
 import GetCatagory from "../../api/GetCatagories";
 import { useLayoutEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { LogOut } from "../../store/slice/AdminAuthSlice";
+
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { RootState } from "../../store/Store";
 import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
 import useAdminAuth from "../../hooks/useAdminAuth";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 type Item = { catagory: Catagory };
 type Catagory = {
@@ -34,14 +34,9 @@ const CatagoryPage = () => {
   });
   const page = useSelector((state: RootState) => state.Page.value);
 
-  const { status, error, data } = useQuery({
+  const { status, data } = useQuery({
     queryKey: ["catagory"],
     queryFn: GetCatagory,
-    onError: (err) => {
-      if (err.response.status == 403) {
-        dispatch(LogOut());
-      }
-    },
   });
   const Theme = useTheme();
   if (status == "loading") return <LoadingSpinner />;
@@ -91,7 +86,7 @@ const CatagoryPage = () => {
             padding: Theme.spacing(2),
           }}
           onRowClick={(catagory) => {
-            navigate(catagory.id);
+            navigate(`${catagory.id}`);
           }}
           columns={columns}
           rows={rows}

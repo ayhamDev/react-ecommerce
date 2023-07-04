@@ -1,14 +1,13 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { IconButton, Avatar } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { LogOut } from "../../store/slice/AdminAuthSlice";
 import { AccountCircleRounded } from "@mui/icons-material";
 
-export default function AvatarMenu(props: { src?: string; children?: string }) {
+export default function AvatarMenu() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

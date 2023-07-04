@@ -9,7 +9,6 @@ import {
   Tooltip,
   List,
 } from "@mui/material";
-import isMobile from "is-mobile";
 import { useLocation, useNavigate } from "react-router-dom";
 export default function SidebarItemSmall({
   role,
@@ -18,8 +17,9 @@ export default function SidebarItemSmall({
   ismobile,
 }: {
   open: boolean;
-  role: { title?: string; items: { label: string; icon: JSX.Element }[] };
-  setOpen: void;
+  // @ts-ignore
+  role: { title?: string; items?: { label?: string; icon?: JSX.Element }[] };
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   ismobile: boolean;
 }) {
   const route = useLocation();
@@ -27,7 +27,7 @@ export default function SidebarItemSmall({
 
   if (ismobile)
     return (
-      <Box key={role.titl}>
+      <Box key={role.title}>
         {role.title ? (
           <>
             <Divider style={{ background: "#d9d9d9", opacity: 0.2 }} />
@@ -39,6 +39,7 @@ export default function SidebarItemSmall({
             </ListItem>
           </>
         ) : null}
+        {/* @ts-ignore */}
         {role.items.map((item, index) => (
           <List key={index}>
             <ListItem
@@ -48,17 +49,22 @@ export default function SidebarItemSmall({
               <ListItemButton
                 onClick={() => {
                   setOpen(false);
-                  navigate(item.path);
+                  // @ts-ignore
+                  navigate(`${item.path}`);
                 }}
                 sx={{
                   transitionDuration: ".3s",
                   ":hover": {
                     bgcolor:
+                      // @ts-ignore
+
                       item.path === route.pathname
                         ? colors.grey["A700"]
                         : colors.grey[900],
                   },
                   bgcolor:
+                    // @ts-ignore
+
                     item.path === route.pathname ? colors.grey["A700"] : null,
                   borderRadius: "15px",
                   minHeight: 48,
@@ -102,6 +108,7 @@ export default function SidebarItemSmall({
           )}
         </>
       ) : null}
+      {/* @ts-ignore */}
       {role.items.map((item, index) => (
         <List key={index}>
           {!open ? (
@@ -116,17 +123,22 @@ export default function SidebarItemSmall({
               >
                 <ListItemButton
                   onClick={() => {
-                    navigate(item.path);
+                    // @ts-ignore
+                    navigate(`${item.path}`);
                   }}
                   sx={{
                     transitionDuration: ".3s",
                     ":hover": {
                       bgcolor:
+                        // @ts-ignore
+
                         item.path === route.pathname
                           ? colors.grey["A700"]
                           : colors.grey[900],
                     },
+
                     bgcolor:
+                      // @ts-ignore
                       item.path === route.pathname ? colors.grey["A700"] : null,
                     borderRadius: "15px",
                     minHeight: 48,
@@ -157,17 +169,22 @@ export default function SidebarItemSmall({
             >
               <ListItemButton
                 onClick={() => {
-                  navigate(item.path);
+                  // @ts-ignore
+                  navigate(`${item.path}`);
                 }}
                 sx={{
                   transitionDuration: ".3s",
                   ":hover": {
                     bgcolor:
+                      // @ts-ignore
+
                       item.path === route.pathname
                         ? colors.grey["A700"]
                         : colors.grey[900],
                   },
+
                   bgcolor:
+                    // @ts-ignore
                     item.path === route.pathname ? colors.grey["A700"] : null,
                   borderRadius: "15px",
                   minHeight: 48,

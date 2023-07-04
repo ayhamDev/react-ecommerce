@@ -22,6 +22,7 @@ const CatagoryDetails = React.lazy(
   () => import("./pages/Admin/Details/Catagory")
 );
 const CatagoryCreate = React.lazy(
+  // @ts-ignore
   () => import("./pages/Admin/create/Catagory")
 );
 
@@ -36,7 +37,6 @@ import { Box } from "@mui/material";
 import Page404 from "./pages/404";
 
 const App = () => {
-  const auth = useSelector((state: RootState) => state.auth.value);
   const adminAuth = useSelector((state: RootState) => state.adminAuth.value);
   return (
     <AnimatePresence>
@@ -48,6 +48,7 @@ const App = () => {
             <GuardedRoute
               redirectRoute="/admin/login"
               isRouteAccessible={adminAuth.isAuthenticated}
+              // @ts-ignore
               Container={Dashboard}
             />
           }

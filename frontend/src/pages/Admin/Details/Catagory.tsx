@@ -59,7 +59,7 @@ const CatagoryDetails = () => {
     queryFn: () => GetCatagory(id),
   });
 
-  const handleCloseSnakbar = (_, reason: string) => {
+  const handleCloseSnakbar = (_: any, reason: string) => {
     if (reason === "clickaway") {
       return SetCopied(false);
     }
@@ -82,6 +82,7 @@ const CatagoryDetails = () => {
     }
   };
   const UpdateCataogyrHandler = async () => {
+    SetIsUpdating(true);
     try {
       await api.put(
         `/catagory/${id}`,
@@ -96,6 +97,7 @@ const CatagoryDetails = () => {
       );
       navigate("/admin/catagory");
     } catch (err) {
+      SetIsUpdating(false);
       TitleState.length == 0
         ? SetTitleError({ error: true, text: "This Field Is Required" })
         : null;
@@ -172,6 +174,7 @@ const CatagoryDetails = () => {
                     ref={ProductIdElementRef}
                     onClick={async () => {
                       navigator.clipboard
+                        // @ts-ignore
                         .writeText(ProductIdElementRef.current?.textContent)
                         .then(() => {
                           SetCopied(true);

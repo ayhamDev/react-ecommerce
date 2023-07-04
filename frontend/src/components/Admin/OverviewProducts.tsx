@@ -1,6 +1,5 @@
 import { ArrowForwardIos } from "@mui/icons-material";
 import {
-  Avatar,
   Button,
   Card,
   CardContent,
@@ -13,7 +12,7 @@ import {
   SvgIcon,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-const OverviewProducts = (products) => {
+const OverviewProducts = () => {
   const navigate = useNavigate();
   return (
     <Card>

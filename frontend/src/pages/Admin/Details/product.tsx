@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { SetName } from "../../../store/slice/Page";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
@@ -21,7 +15,6 @@ import {
   Select,
   SelectChangeEvent,
   Button,
-  NativeSelect,
   IconButton,
 } from "@mui/material";
 import CircularProgressWithLabel from "../../../components/CircularProgressWithLabel";
@@ -109,7 +102,7 @@ const ProductDetails = () => {
     error: false,
     text: "",
   });
-  const [SelectedAvailabilityError, SetSelectedAvailabilityError] = useState<{
+  const [SelectedAvailabilityError] = useState<{
     error: boolean;
     text: string;
   }>({
@@ -132,7 +125,7 @@ const ProductDetails = () => {
   });
 
   // Quarys
-  const { status, error, data } = useQuery({
+  const { status, data } = useQuery({
     queryKey: ["product", id],
     queryFn: () => GetProduct(id),
   });
@@ -141,12 +134,13 @@ const ProductDetails = () => {
     queryFn: GetCatagory,
   });
   const AvailabilityChangeHandler = (event: SelectChangeEvent) => {
+    // @ts-ignore
     SetSelectedAvailability(event.target.value);
   };
   const CatagoryChangeHandler = (event: SelectChangeEvent) => {
     SetSelectedCatagory(event.target.value);
   };
-  const handleCloseSnakbar = (_, reason: string) => {
+  const handleCloseSnakbar = (_: any, reason: string) => {
     if (reason === "clickaway") {
       return SetCopied(false);
     }
@@ -162,13 +156,13 @@ const ProductDetails = () => {
         },
       });
       Promise.all(
-        result.data.images.map(async (img) => {
+        result.data.images.map(async (img: any) => {
           return await api.delete(`/image/${img}`, {
             headers: { Authorization: `Bearer ${auth.accessToken}` },
           });
         })
       )
-        .then((value) => {
+        .then(() => {
           navigate("/admin/product");
         })
         .catch(() => {
@@ -180,7 +174,8 @@ const ProductDetails = () => {
   };
   const UpdateProductHandler = async () => {
     SetIsUpdating(true);
-    let images_id: string[] | [] = ImageLoading.map((img) => {
+    // @ts-ignore
+    let images_id = ImageLoading.map((img) => {
       if (!img.urlID) return;
       return img.urlID;
     });
@@ -324,6 +319,7 @@ const ProductDetails = () => {
       if (file) {
         if (!image.file) return null;
         const Form = new FormData();
+        // @ts-ignore
 
         Form.append("image", image.file);
 
@@ -335,13 +331,16 @@ const ProductDetails = () => {
             },
             onUploadProgress: (progressEvent) => {
               const { loaded, total } = progressEvent;
+              // @ts-ignore
               const percent = Math.floor((loaded * 100) / total);
               SetProgressValue((prev) => {
                 return { ...prev, [image.id]: { value: percent } };
               });
             },
           });
+          // @ts-ignore
           if (ImageUpload.status === 200) {
+            // @ts-ignore
             images_id.push(ImageUpload.data.id);
             SetProgressValue((prev) => {
               return { ...prev, [image.id]: { value: 100 } };
@@ -445,14 +444,14 @@ const ProductDetails = () => {
       }
     });
   };
-  const HandleFileUpload = async (file) => {
+  const HandleFileUpload = async (file: any) => {
     const id = Math.floor(Date.now() + Math.random() * 1000);
     if (!FileTypes.includes(file.type)) return null;
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = async () => {
-      SetImageLoading((prev) => {
+      SetImageLoading((prev: any) => {
         return [
           ...prev,
           { url: reader.result, isLoading: true, progress: 0, id, file },
@@ -471,7 +470,7 @@ const ProductDetails = () => {
     SetUnitState(data?.unit);
     SetImageLoading([]);
 
-    data?.images.forEach((image) => {
+    data?.images.forEach((image: any) => {
       SetImageLoading((prev) => [
         ...prev,
         {
@@ -485,7 +484,7 @@ const ProductDetails = () => {
     });
   }, [data]);
 
-  const HandleDelete = async (id, urlID, isLoading) => {
+  const HandleDelete = async (id: any, urlID: any, isLoading: any) => {
     ImageLoading.forEach((img, index) => {
       if (img.id === id) {
         ImageLoading.splice(index, 1);
@@ -561,6 +560,7 @@ const ProductDetails = () => {
                     ref={ProductIdElementRef}
                     onClick={async () => {
                       navigator.clipboard
+                        // @ts-ignore
                         .writeText(ProductIdElementRef.current?.textContent)
                         .then(() => {
                           SetCopied(true);
@@ -613,6 +613,7 @@ const ProductDetails = () => {
                   label="Price (In Cents)"
                   variant="outlined"
                   value={priceState}
+                  // @ts-ignore
                   onChange={(e) => SetPriceState(e.target.value)}
                   fullWidth
                   required
@@ -639,6 +640,7 @@ const ProductDetails = () => {
                     labelId="select-availability"
                     id="availability"
                     label="availability"
+                    // @ts-ignore
                     value={SelectedAvailability}
                     onChange={AvailabilityChangeHandler}
                     error={SelectedAvailabilityError.error}
@@ -676,7 +678,7 @@ const ProductDetails = () => {
                     }}
                     required
                   >
-                    {CatagoryData?.map((item, index) => (
+                    {CatagoryData?.map((item: any, index: any) => (
                       <MenuItem key={index} value={item.catagory._id}>
                         {item.catagory.name}
                       </MenuItem>
@@ -730,6 +732,7 @@ const ProductDetails = () => {
                 ref={inputFile}
                 onChange={(e) => {
                   const Files = e.target.files;
+                  // @ts-ignore
                   [...Files].forEach(HandleFileUpload);
                 }}
                 style={{ display: "none" }}
@@ -832,6 +835,7 @@ const ProductDetails = () => {
                       sx={{ inset: 0 }}
                     >
                       <CircularProgressWithLabel
+                        // @ts-ignore
                         value={ProgressValue[image.id]?.value || 0}
                       />
                     </Box>

@@ -9,7 +9,6 @@ import type { RootState } from "../../store/Store";
 import ToolbarContainer from "../../components/Admin/UserToolbar";
 import GetUsers from "../../api/GetUsers";
 import { useNavigate } from "react-router-dom";
-import { LogOut } from "../../store/slice/AdminAuthSlice";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
@@ -96,7 +95,7 @@ const UserPage = () => {
             padding: Theme.spacing(2),
           }}
           onRowClick={(user) => {
-            navigate(user.id);
+            navigate(`${user.id}`);
           }}
           columns={columns}
           rows={rows}

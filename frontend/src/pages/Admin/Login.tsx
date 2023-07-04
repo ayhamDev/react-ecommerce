@@ -10,7 +10,6 @@ import { Login } from "../../store/slice/AdminAuthSlice";
 import { motion } from "framer-motion";
 import isMobile from "is-mobile";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
-import { heIL } from "@mui/x-data-grid";
 
 const LoginPage = () => {
   const Theme = useTheme();

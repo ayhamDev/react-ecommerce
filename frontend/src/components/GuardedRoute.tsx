@@ -14,7 +14,7 @@ interface GuardedRouteProps {
    * @default '/'
    */
   redirectRoute: string;
-  Container?: React.JSX.ElementType;
+  Container?: React.JSX.Element;
 }
 
 /**
@@ -58,6 +58,7 @@ const GuardedRoute = ({
         </Box>
       }
     >
+      {/* @ts-ignore*/}
       <Container>
         <Outlet />
       </Container>

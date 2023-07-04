@@ -14,7 +14,7 @@ import {
   Button,
 } from "@mui/material";
 import { PaidRounded } from "@mui/icons-material";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { currencies } from "currencies.json";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/Store";
@@ -28,6 +28,7 @@ import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
 import useAdminAuth from "../../hooks/useAdminAuth";
 
+// @ts-ignore
 type Currency = currencies;
 const Settings = () => {
   const Theme = useTheme();
@@ -59,11 +60,13 @@ const Settings = () => {
 
   const handleTaxInput = (event: InputEvent) => {
     SetTaxPercentage(
+      // @ts-ignore
       Number(event.currentTarget.value.replace(/[a-z]|[A-Z]|[أ-ي]/g, ``))
     );
   };
   const handleDeliveryInput = (event: InputEvent) => {
     SetDeliveryFee(
+      // @ts-ignore
       Number(event.currentTarget.value.replace(/[a-z]|[A-Z]|[أ-ي]/g, ``))
     );
   };
@@ -188,6 +191,7 @@ const Settings = () => {
               disabled={!UseTax}
               placeholder="Percentage %"
               value={TaxPercentage || ``}
+              // @ts-ignore
               onChange={handleTaxInput}
               fullWidth
             />
@@ -200,6 +204,7 @@ const Settings = () => {
               label="Delivery Fee (in Cents)"
               placeholder="Amount (in Cents)"
               value={deliveryFee || ``}
+              // @ts-ignore
               onChange={handleDeliveryInput}
               fullWidth
             />

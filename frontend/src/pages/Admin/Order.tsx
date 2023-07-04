@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Paper, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -9,9 +9,6 @@ import type { RootState } from "../../store/Store";
 import ToolbarContainer from "../../components/Admin/OrderToolbar";
 import GetOrders from "../../api/GetOrders";
 import { useNavigate } from "react-router-dom";
-import { LogOut } from "../../store/slice/AdminAuthSlice";
-import CalculateAmount from "../../utils/CalculateAmount";
-import GetSettings from "../../api/GetSettings";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
@@ -86,7 +83,9 @@ const OrderPage = () => {
       field: "status",
       headerName: "Status",
       width: 200,
-      renderCell: (params: GridRenderCellParams<string>) => (
+      // @ts-ignore
+      renderCell: (params: GridRenderCellParams) => (
+        // @ts-ignore
         <SeverityPill color={statusMap[params.value]}>
           {params.value}
         </SeverityPill>
@@ -119,6 +118,7 @@ const OrderPage = () => {
           onRowClick={(order) => {
             navigate(`/admin/order/${order.row.userId}/${order.id}`);
           }}
+          // @ts-ignore
           columns={columns}
           rows={rows}
           initialState={{

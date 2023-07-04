@@ -1,13 +1,7 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { SetName } from "../../../store/slice/Page";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -49,7 +43,7 @@ const CatagoryCreate = () => {
     error: false,
     text: "",
   });
-  const handleCloseSnakbar = (_, reason: string) => {
+  const handleCloseSnakbar = (_: any, reason: string) => {
     if (reason === "clickaway") {
       return SetCopied(false);
     }

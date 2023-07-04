@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { SetName } from "../../store/slice/Page";
-import { LogOut } from "../../store/slice/AdminAuthSlice";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import GetSettings from "../../api/GetSettings";
 import { RootState } from "../../store/Store";
@@ -19,7 +18,6 @@ import { motion } from "framer-motion";
 import { AdminMotionProps } from "../../utils/ConfigMotion";
 import useAdminAuth from "../../hooks/useAdminAuth";
 import moment from "moment";
-import { BorderRight } from "@mui/icons-material";
 const availabilityString = ["Out Of Stock", "In Stock"];
 type Product = {
   _id: string;
@@ -37,10 +35,9 @@ const Product = () => {
     VerifyToken();
   });
 
-  const auth = useSelector((state: RootState) => state.adminAuth.value);
   const { status: SettingsStatus, data: SettingsData } = useQuery({
     queryKey: ["settings"],
-    queryFn: () => GetSettings(auth.accessToken),
+    queryFn: GetSettings,
   });
   const { status, data } = useQuery({
     enabled: SettingsStatus == "success",
@@ -134,12 +131,13 @@ const Product = () => {
       >
         <DataGrid
           onRowClick={(product) => {
-            navigate(product.id);
+            navigate(`${product.id}`);
           }}
           sx={{
-            border: 0,
+            border: "none",
             padding: Theme.spacing(2),
           }}
+          // @ts-ignore
           columns={columns}
           rows={rows}
           initialState={{

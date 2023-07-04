@@ -10,7 +10,6 @@ import {
   Typography,
   useTheme,
   Snackbar,
-  Button,
   Tooltip,
   IconButton,
 } from "@mui/material";
@@ -44,7 +43,7 @@ const UserDetails = () => {
   // States
   const [copied, SetCopied] = useState(false);
 
-  const handleCloseSnakbar = (_, reason: string) => {
+  const handleCloseSnakbar = (_: any, reason: string) => {
     if (reason === "clickaway") {
       return SetCopied(false);
     }
@@ -106,6 +105,8 @@ const UserDetails = () => {
             ref={ProductIdElementRef}
             onClick={async () => {
               navigator.clipboard
+                // @ts-ignore
+
                 .writeText(ProductIdElementRef.current?.textContent)
                 .then(() => {
                   SetCopied(true);
@@ -138,6 +139,7 @@ const UserDetails = () => {
               sx={{ cursor: "pointer" }}
               onClick={(e) => {
                 navigator.clipboard
+                  // @ts-ignore
                   .writeText(e.currentTarget?.textContent)
                   .then(() => {
                     SetCopied(true);
@@ -175,6 +177,7 @@ const UserDetails = () => {
               sx={{ cursor: "pointer" }}
               onClick={(e) => {
                 navigator.clipboard
+                  // @ts-ignore
                   .writeText(e.currentTarget?.textContent)
                   .then(() => {
                     SetCopied(true);
@@ -193,6 +196,7 @@ const UserDetails = () => {
               sx={{ cursor: "pointer" }}
               onClick={(e) => {
                 navigator.clipboard
+                  // @ts-ignore
                   .writeText(e.currentTarget?.textContent)
                   .then(() => {
                     SetCopied(true);

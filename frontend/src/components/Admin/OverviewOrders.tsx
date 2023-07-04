@@ -1,11 +1,8 @@
 import moment from "moment";
 import {
-  Box,
   Button,
   Card,
-  CardActions,
   CardHeader,
-  Divider,
   SvgIcon,
   Table,
   TableBody,
@@ -20,6 +17,7 @@ import { ArrowForwardIos } from "@mui/icons-material";
 import statusMap from "../../utils/PillColors";
 import { useNavigate } from "react-router-dom";
 type OverviewOrdersProps = {
+  // @ts-ignore
   orders: [];
   sx: SxProps;
 };
@@ -61,17 +59,40 @@ export const OverviewOrders = (props: OverviewOrdersProps) => {
           </TableHead>
           <TableBody>
             {orders.map((order) => {
+              // @ts-ignore
+
               const createdAt = moment(order.createdAt).format(
                 "MMMM DD YYYY, h:mm a"
               );
 
               return (
-                <TableRow hover key={order.id}>
-                  <TableCell>{order.ref}</TableCell>
-                  <TableCell>{order.customer.name}</TableCell>
+                <TableRow
+                  key={
+                    // @ts-ignore
+
+                    order.id
+                  }
+                >
+                  <TableCell>
+                    {
+                      // @ts-ignore
+                      order.ref
+                    }
+                  </TableCell>
+
+                  <TableCell>
+                    {
+                      // @ts-ignore
+
+                      order.customer.name
+                    }
+                  </TableCell>
+
                   <TableCell>{createdAt}</TableCell>
                   <TableCell>
+                    {/* @ts-ignore */}
                     <SeverityPill color={statusMap[order.status]}>
+                      {/* @ts-ignore */}
                       {order.status}
                     </SeverityPill>
                   </TableCell>

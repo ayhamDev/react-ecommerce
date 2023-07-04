@@ -7,7 +7,6 @@ import {
   Divider,
   List,
   ListItem,
-  ListItemButton,
   ListItemText,
   SvgIcon,
 } from "@mui/material";

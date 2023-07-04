@@ -13,7 +13,7 @@ import {
 } from "@mui/icons-material";
 import { OverviewSales } from "../../components/Admin/OverviewSales";
 import { OverviewStatus } from "../../components/Admin/OverviewStatus";
-import OverviewProducts from "../../components/Admin/OverviewProducts";
+import OverviewProducts from "../../components/Admin/OverviewCustomers";
 import { OverviewOrders } from "../../components/Admin/OverviewOrders";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/Store";

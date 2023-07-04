@@ -47,7 +47,7 @@ export const OverviewOrders = (props: OverviewOrdersProps) => {
           </Button>
         }
       />
-      <CardContent sx={{ overflowY: "auto", height: "fill" }}>
+      <CardContent sx={{ overflowY: "auto", maxHeight: "500px" }}>
         <Table sx={{ minWidth: 800 }}>
           <TableHead>
             <TableRow>

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "./store/Store";
 import GuardedRoute from "./components/GuardedRoute";
@@ -38,6 +38,9 @@ const App = () => {
   return (
     <AnimatePresence>
       <Routes>
+        {/* Client */}
+
+        <Route path="/" element={<Navigate to={"/admin"} replace />}></Route>
         {/* admin */}
 
         <Route

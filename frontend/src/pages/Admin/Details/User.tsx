@@ -162,7 +162,7 @@ const UserDetails = () => {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  navigate(`/admin/sendmail?to=${data.email}`);
+                  open(`mailto:${data.email}","_blank`);
                 }}
               >
                 <Typography variant="h6">{data.email}</Typography>

@@ -21,10 +21,7 @@ const ProductCreate = React.lazy(() => import("./pages/Admin/Create/product"));
 const CatagoryDetails = React.lazy(
   () => import("./pages/Admin/Details/Catagory")
 );
-const CatagoryCreate = React.lazy(
-  // @ts-ignore
-  () => import("./pages/Admin/create/Catagory")
-);
+import CatagoryCreate from "./pages/Admin/Create/CatagoryCreate";
 
 const UserDetails = React.lazy(() => import("./pages/Admin/Details/User"));
 const OrderDetails = React.lazy(() => import("./pages/Admin/Details/order"));

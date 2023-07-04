@@ -28,9 +28,7 @@ const CatagoryCreate = () => {
     dispacth(SetName("Create Catagory"));
     VerifyToken();
   });
-  // Redux
   const Theme = useTheme();
-  // Refs
   // States
   const [isUpdating, SetIsUpdating] = useState(false);
 

@@ -1,18 +1,18 @@
 import dotenv from "dotenv";
 import cors from "cors";
 import express from "express";
-import ConnectToDatabase from "./Utils/db.js";
+import ConnectToDatabase from "./src/Utils/db.js";
 
-import ProductRouter from "./Router/Product.js";
-import ImageRouter from "./Router/Image.js";
-import OrderRouter from "./Router/Order.js";
-import UserRouter from "./Router/User.js";
-import AuthRouter from "./Router/Auth.js";
-import CartRouter from "./Router/Cart.js";
-import CatagoryRouter from "./Router/Catagory.js";
-import SettingsRouter from "./Router/Settings.js";
-import StatusRouter from "./Router/Status.js";
-import IsSameUserOrAdmin from "./middleware/isSameUserOrAdmin.js";
+import ProductRouter from "./src/Router/Product.js";
+import ImageRouter from "./src/Router/Image.js";
+import OrderRouter from "./src/Router/Order.js";
+import UserRouter from "./src/Router/User.js";
+import AuthRouter from "./src/Router/Auth.js";
+import CartRouter from "./src/Router/Cart.js";
+import CatagoryRouter from "./src/Router/Catagory.js";
+import SettingsRouter from "./src/Router/Settings.js";
+import StatusRouter from "./src/Router/Status.js";
+import IsSameUserOrAdmin from "./src/middleware/isSameUserOrAdmin.js";
 // Config
 dotenv.config();
 ConnectToDatabase();

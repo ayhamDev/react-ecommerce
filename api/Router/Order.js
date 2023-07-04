@@ -58,6 +58,7 @@ Router.post(
       const UserCart = await Cart.findOne({ userId: req.user.id }).populate(
         "products.productId"
       );
+      console.log(UserCart);
       const Settings = await SettingsModel.findOne();
       const UserCartCalculated = CalculateAmount(UserCart);
       const addons =

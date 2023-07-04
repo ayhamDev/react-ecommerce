@@ -12,4 +12,4 @@ const CalculateAmount = (UserCart) => {
       : 0;
   return amount;
 };
-export default CalculateAmount;
+module.exports = CalculateAmount;

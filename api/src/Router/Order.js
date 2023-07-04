@@ -1,13 +1,13 @@
-import express from "express";
-import dotenv from "dotenv";
-import Order from "../Models/Order.model.js";
-import Cart from "../Models/Cart.model.js";
-import { body, validationResult } from "express-validator";
-import IsAuthenticated from "../middleware/IsAuthenticated.js";
-import IsAdmin from "../middleware/IsAdmin.js";
-import isSameUserOrAdmin from "../middleware/isSameUserOrAdmin.js";
-import CalculateAmount from "../Utils/CalculateAmount.js";
-import SettingsModel from "../Models/Settings.model.js";
+const express = require("express");
+const dotenv = require("dotenv");
+const Order = require("../Models/Order.model.js");
+const Cart = require("../Models/Cart.model.js");
+const { body, validationResult } = require("express-validator");
+const IsAuthenticated = require("../middleware/isAuthenticated.js");
+const IsAdmin = require("../middleware/isAdmin.js");
+const isSameUserOrAdmin = require("../middleware/isSameUserOrAdmin.js");
+const CalculateAmount = require("../Utils/CalculateAmount.js");
+const SettingsModel = require("../Models/Settings.model.js");
 
 dotenv.config();
 const Router = express.Router();
@@ -174,4 +174,4 @@ Router.delete("/:orderId", IsAuthenticated, async (req, res) => {
       res.status(500).json(err);
     });
 });
-export default Router;
+module.exports = Router;

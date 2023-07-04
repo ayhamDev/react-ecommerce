@@ -1,9 +1,8 @@
-import express from "express";
-import Product from "../Models/Product.model.js";
-import ImageModel from "../Models/Image.model.js";
-import { body, validationResult } from "express-validator";
-import IsAdmin from "../middleware/IsAdmin.js";
-import dotenv from "dotenv";
+const express = require("express");
+const Product = require("../Models/Product.model.js");
+const { body, validationResult } = require("express-validator");
+const IsAdmin = require("../middleware/isAdmin.js");
+const dotenv = require("dotenv");
 dotenv.config();
 const Router = express.Router();
 
@@ -105,4 +104,4 @@ Router.post(
   }
 );
 
-export default Router;
+module.exports = Router;

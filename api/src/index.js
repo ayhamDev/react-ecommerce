@@ -1,18 +1,18 @@
-import dotenv from "dotenv";
-import cors from "cors";
-import express from "express";
-import ConnectToDatabase from "./src/Utils/db.js";
+const dotenv = require("dotenv");
+const cors = require("cors");
+const express = require("express");
+const ConnectToDatabase = require("./Utils/db.js");
 
-import ProductRouter from "./src/Router/Product.js";
-import ImageRouter from "./src/Router/Image.js";
-import OrderRouter from "./src/Router/Order.js";
-import UserRouter from "./src/Router/User.js";
-import AuthRouter from "./src/Router/Auth.js";
-import CartRouter from "./src/Router/Cart.js";
-import CatagoryRouter from "./src/Router/Catagory.js";
-import SettingsRouter from "./src/Router/Settings.js";
-import StatusRouter from "./src/Router/Status.js";
-import IsSameUserOrAdmin from "./src/middleware/isSameUserOrAdmin.js";
+const ProductRouter = require("./Router/Product.js");
+const ImageRouter = require("./Router/Image.js");
+const OrderRouter = require("./Router/Order.js");
+const UserRouter = require("./Router/User.js");
+const AuthRouter = require("./Router/Auth.js");
+const CartRouter = require("./Router/Cart.js");
+const CatagoryRouter = require("./Router/Catagory.js");
+const SettingsRouter = require("./Router/Settings.js");
+const StatusRouter = require("./Router/Status.js");
+const IsSameUserOrAdmin = require("./middleware/isSameUserOrAdmin.js");
 // Config
 dotenv.config();
 ConnectToDatabase();

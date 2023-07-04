@@ -1,11 +1,12 @@
-import express from "express";
-import User from "../Models/User.model.js";
-import Cart from "../Models/Cart.model.js";
-import bcrypt from "bcrypt";
-import Jwt from "jsonwebtoken";
-import { body, validationResult } from "express-validator";
-import dotenv from "dotenv";
-dotenv.config();
+const express = require("express");
+const User = require("../Models/User.model.js");
+const Cart = require("../Models/Cart.model.js");
+
+const bcrypt = require("bcrypt");
+const Jwt = require("jsonwebtoken");
+const { body, validationResult } = require("express-validator");
+
+require("dotenv").config();
 const Router = express.Router();
 
 Router.post("/", (req, res) => {
@@ -123,4 +124,4 @@ Router.post(
     });
   }
 );
-export default Router;
+module.exports = Router;

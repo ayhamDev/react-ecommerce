@@ -1,8 +1,8 @@
-import express from "express";
-import SettingsModel from "../Models/Settings.model.js";
-import IsAdmin from "../middleware/IsAdmin.js";
+const express = require("express");
+const SettingsModel = require("../Models/Settings.model.js");
+const IsAdmin = require("../middleware/isAdmin.js");
 
-import { body, validationResult } from "express-validator";
+const { body, validationResult } = require("express-validator");
 const Router = express.Router();
 Router.get("/", async (req, res) => {
   res.json(await SettingsModel.findOne());
@@ -15,6 +15,8 @@ Router.put(
   body("tax").isObject(),
   body("deliveryFee").isNumeric(),
   async (req, res) => {
+    const results = validationResult(req);
+    if (!results.isEmpty()) return res.status(400).json(results.array());
     try {
       const Settings = await SettingsModel.findOne();
       Settings.currency = req.body.currency;
@@ -30,4 +32,4 @@ Router.put(
     }
   }
 );
-export default Router;
+module.exports = Router;

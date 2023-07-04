@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import SettingsModel from "../Models/Settings.model.js";
+const mongoose = require("mongoose");
+const SettingsModel = require("../Models/Settings.model.js");
 
-export default function ConnectToDatabase() {
+module.exports = function ConnectToDatabase() {
   mongoose
     .connect(process.env.MONGODB, {
       useNewUrlParser: true,
@@ -37,4 +37,4 @@ export default function ConnectToDatabase() {
     .catch((e) => {
       console.log(e);
     });
-}
+};

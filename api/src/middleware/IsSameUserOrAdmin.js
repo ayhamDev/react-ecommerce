@@ -1,8 +1,8 @@
-import jwt from "jsonwebtoken";
-import User from "../Models/User.model.js";
-import dotenv from "dotenv";
-dotenv.config();
-export default async function IsSameUserOrAdmin(req, res, next) {
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const User = require("../Models/User.model.js");
+
+module.exports = async function isSameUserOrAdmin(req, res, next) {
   const bearerHeader = req.headers.authorization;
   if (!bearerHeader || !bearerHeader?.split(" ")[1])
     return res.status(403).json({ msg: "not authorized." });
@@ -30,4 +30,4 @@ export default async function IsSameUserOrAdmin(req, res, next) {
   } catch (e) {
     return res.status(403).json(e);
   }
-}
+};

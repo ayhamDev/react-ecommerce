@@ -1,11 +1,10 @@
-import express from "express";
-import CatagoryModel from "../Models/Catagory.model.js";
-import Product from "../Models/Product.model.js";
-import OrderModel from "../Models/Order.model.js";
-import { body, validationResult } from "express-validator";
-import IsAdmin from "../middleware/IsAdmin.js";
-import dotenv from "dotenv";
-import ProductModel from "../Models/Product.model.js";
+const express = require("express");
+const CatagoryModel = require("../Models/Catagory.model.js");
+const Product = require("../Models/Product.model.js");
+const isAdmin = require("../middleware/isAdmin.js");
+const { body, validationResult } = require("express-validator");
+const dotenv = require("dotenv");
+const ProductModel = require("../Models/Product.model.js");
 dotenv.config();
 const Router = express.Router();
 
@@ -30,7 +29,7 @@ Router.get("/:id", async (req, res) => {
   res.json(await CatagoryModel.findById(req.params.id));
 });
 
-// Router.use(IsAdmin);
+Router.use(isAdmin);
 Router.post(
   "/",
   body("name").isString().isLength({ min: 1 }),
@@ -95,4 +94,4 @@ Router.delete("/:id", async (req, res) => {
   }
 });
 
-export default Router;
+module.exports = Router;

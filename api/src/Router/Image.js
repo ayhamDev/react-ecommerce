@@ -1,10 +1,8 @@
-import express, { json } from "express";
-import IsAdmin from "../middleware/IsAdmin.js";
-import ImageModel from "../Models/Image.model.js";
-import multer from "multer";
-import dotenv from "dotenv";
-import ProductModel from "../Models/Product.model.js";
-import mongoose from "mongoose";
+const express = require("express");
+const IsAdmin = require("../middleware/isAdmin.js");
+const ImageModel = require("../Models/Image.model.js");
+const multer = require("multer");
+const dotenv = require("dotenv");
 dotenv.config();
 const imageTypes = ["image/jpeg", "image/png"];
 
@@ -47,4 +45,4 @@ Router.delete("/:id", IsAdmin, async (req, res) => {
   }
 });
 
-export default Router;
+module.exports = Router;

@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "this is the api.",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js"
   },
   "engines": {
     "node": ">=16 <18"

@@ -20,7 +20,7 @@ const OverviewProducts = () => {
         action={
           <Button
             onClick={() => {
-              navigate("/admin/product");
+              navigate("/admin/user");
             }}
             endIcon={
               <SvgIcon fontSize="small">

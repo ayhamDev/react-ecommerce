@@ -210,7 +210,7 @@ export default function Dashboard({
           >
             <DrawerHeader>
               <Typography variant="h6" color={colors.grey[200]}>
-                {!open && !ismobile ? `AD` : `Admin Dashboard`}
+                {!open && !ismobile ? `Apx` : `Appexly`}
               </Typography>
             </DrawerHeader>
             <Box className="scrollbar">

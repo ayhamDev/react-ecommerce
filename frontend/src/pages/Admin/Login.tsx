@@ -1,4 +1,11 @@
-import { Box, Paper, Typography, TextField, Button } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useRef, useState, FormEvent, useLayoutEffect } from "react";
@@ -18,10 +25,12 @@ const LoginPage = () => {
     dispatch(SetName("Admin Login"));
   });
   const [Error, SetError] = useState(undefined);
+  const [isloading, SetIsloading] = useState(false);
   const emailRef = useRef<null | HTMLInputElement>(null);
   const passwordRef = useRef<null | HTMLInputElement>(null);
   const HandleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    SetIsloading(true);
 
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
@@ -32,10 +41,12 @@ const LoginPage = () => {
       })
       .then(function (response) {
         SetError(undefined);
+        SetIsloading(false);
 
         dispatch(Login(response.data));
       })
       .catch(function (error) {
+        SetIsloading(false);
         if (error.response?.data?.msg) return SetError(error.response.data.msg);
       });
   };
@@ -128,8 +139,13 @@ const LoginPage = () => {
                 </Typography>
               ) : null}
 
-              <Button type="submit" variant="contained" size="large">
-                log in
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                disabled={isloading}
+              >
+                {isloading ? <CircularProgress size={"28px"} /> : "Login"}
               </Button>
             </Box>
           </form>
